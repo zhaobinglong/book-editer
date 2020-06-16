@@ -50,6 +50,7 @@ button {
 .nav {
     width: 20%;
     float: left;
+    min-width: 200px;
 }
 
 .nav-pills > li {
@@ -670,7 +671,7 @@ button {
     float: left;
     display: block;
     width: 20%;
-    height: 300px;
+    min-width: 200px;
     list-style: none;
     background-color: #e6e6e6
 }
