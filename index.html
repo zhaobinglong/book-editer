@@ -107,7 +107,7 @@
         <li role="presentation" class="controls">
             <a href="#" class="unActive-a"><span>CONTROLS <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
             <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
-                <div class="controls-col" v-for="item in controls">
+                <div class="controls-col" v-for="item in controls" :class="item.bottomLine ? 'bottom-line' : ''" v-if="!item.hidden">
                     <div>
                        <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>
                         <span>{{ item.title }}</span>
@@ -116,6 +116,79 @@
                         <input class="switch switch-anim" type="checkbox" checked="" v-model="item.checked">
                     </div>
                 </div>
+                
+                <!-- 电话区域 -->
+                <div class="controls-col" >
+                    <div>
+                       <span class="icon iconfont icontelphone"></span>
+                        <span>电话</span>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                <div class="controls-col " :class="setPhone? '':'bottom-line'">
+                    <div>
+                        <span>Enable</span>
+                    </div>
+                    <div>
+                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setPhone">
+                    </div>
+                </div>
+                <div v-if="setPhone" :class="setPhone? 'bottom-line':''">
+                      <div class="form-group" v-for="item in form.phone">
+                        <label for="exampleInputEmail1">{{ item.label }}</label>
+                        <input type="email" class="form-control"  placeholder="">
+                      </div>         
+                </div>
+
+                <!--在线客服区域 -->
+                <div class="controls-col" >
+                    <div>
+                       <span class="icon iconfont iconchat"></span>
+                        <span>在线客服</span>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                <div class="controls-col " :class="setStaff? '':'bottom-line'" >
+                    <div>
+                        <span>Enable</span>
+                    </div>
+                    <div>
+                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setStaff">
+                    </div>
+                </div>
+                <div v-if="setStaff" :class="setStaff? 'bottom-line':''" >
+                  <div class="form-group" v-for="item in form.staff">
+                    <label for="exampleInputEmail1">{{ item.label }}</label>
+                    <input type="email" class="form-control"  placeholder="">
+                  </div>        
+                </div>
+
+                <!-- 邮件区域 -->
+                <div class="controls-col" >
+                    <div>
+                        <span class="icon iconfont iconEMAIL"></span>
+                        <span>邮件</span>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                <div class="controls-col" :class="setEmail ? '':'bottom-line'">
+                    <div>
+                        <span>Enable</span>
+                    </div>
+                    <div>
+                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setEmail">
+                    </div>
+                </div>
+                <div v-if="setEmail" :class="setEmail ? 'bottom-line':''">
+                      <div class="form-group" v-for="item in form.email">
+                        <label for="exampleInputEmail1">{{ item.label }}</label>
+                        <input type="email" class="form-control"  placeholder="">
+                      </div>
+                </div>                
+
                 <div class="controls-col" >
                     <div>
                        <span class="icon iconfont" ></span>
@@ -136,14 +209,20 @@
         <li role="presentation" class="password">
             <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
             <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
-                <div>
-                    <span>Fsade</span>
-                    <input class="switch switch-anim" type="checkbox" checked="">
+                <div class="controls-col">
+                    <span>Enable</span>
+                    <div>
+                      <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord" style="width: 50px;">
+                    </div>
                 </div>
-                <span style="margin-top: 15px;">设置密码</span>
-                <div>
-                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
-                </div>
+                <form v-if="setPassWord">
+                    <span style="margin-top: 15px;">设置密码</span>
+                    <div>
+                        <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                    </div>                    
+                </form>
+                <div v-else>Set a password to share your flipbook width select viewers only.</div>
+                
             </div>
         </li>
 
@@ -285,14 +364,11 @@
     <!-- <label><input class="mui-switch mui-switch-anim" type="checkbox" checked> 默认选中</label> -->
     
     <!-- 主编辑区 -->
-    <div class="container">
         <div class="main">
             <div class="picture"></div>
             <div class="page-footer">
                 <div class="btn-group" role="group" aria-label="...">
-                    <button v-if="item.checked" type="button" class="btn btn-default btn-lg" v-for="item in controls" @click="clickTopButton(item)">
-                      <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>{{ item.title }}
-                    </button>
+                    <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px;" ></span >
                 </div>
             </div> 
         </div>
@@ -323,7 +399,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 
     <!-- 右侧搜索区 -->
     <ul class="search-box">
@@ -368,25 +444,58 @@
       data: {
         searchKey: '',
         searchDialog: false,
+        setPassWord: false,
+        setPhone: false,
+        setStaff: false,
+        setEmail: false,
+        form: {
+          email: [
+            {label: '服务器', value: ''},
+            {label: '端口', value: ''},
+            {label: '密码', value: ''},
+            {label: '账户', value: ''},
+            {label: '欢迎词', value: ''},
+            {label: '签名', value: ''}
+          ],
+          staff: [
+            {label: '客服widget', value: ''},
+          ],
+          phone: [
+            {label: '号码', value: ''},
+          ]
+        },
         message: 'Hello Vue!',
         controls: [
-          {'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
-          {'title': '打印', 'icon': 'iconprint', 'checked': false},
-          {'title': '下载', 'icon': 'iconxiazai', 'checked': false},
-          {'title': 'Text Selection', 'icon': 'glyphicon-check', 'checked': false},
-          {'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false},
-          {'title': '声音', 'icon': 'iconmute-off', 'checked': false},
-          {'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
-          {'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
-          {'title': '搜索', 'icon': 'iconsearch', 'checked': false},
+          {'group':1, 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
+          {'group':1, 'title': '下载', 'icon': 'iconxiazai', 'checked': false},
+          {'group':2, 'title': 'Text Selection', 'icon': 'glyphicon-check', 'checked': false},
+          {'group':2, 'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
+          {'group':3, 'title': '声音', 'icon': 'iconmute-off', 'checked': false},
+          {'group':4, 'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
+          {'group':5, 'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+          {'group':1, 'title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
           // {'title': 'Default Navigation',  'checked': false},
           // {'title': 'Contacts Button',  'checked': false},
-          {'title': '电话', 'icon': 'icontelphone', 'checked': false},
-          {'title': '在线客服', 'icon': 'iconchat', 'checked': false},
-          {'title': '邮件', 'icon': 'iconEMAIL', 'checked': false},
+          {'group':1, 'title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
+          {'group':1, 'title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true},
+          {'group':1, 'title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true},
         ]
       },
-
+      computed: {
+        icons: function () {
+          let arr = this.controls.filter(item => item.checked )
+          console.log(arr)
+          arr.map((item, index) => {
+            console.log(item.group, index)
+            if (index < arr.length-1 ) {
+                if (item.group != arr[index + 1].group)
+                item.rightLine = true
+            }
+            return item
+          })
+          return arr
+        }
+      },     
       mounted() {      
          // window.addEventListener("beforeunload", e => {
          //    this.beforeunloadHandler(e);
@@ -399,6 +508,13 @@
         // });
       },
       methods: {
+        setIconClass (item) {
+          if (item.rightLine) {
+            return 'right-line ' + item.icon
+          } else {
+            return item.icon
+          }
+        },
         save () {
             this.$message({
               message: '保存成功',
