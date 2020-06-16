@@ -8,7 +8,8 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/index.css">
-    <link rel="stylesheet" href="./css/font.css">
+    <!-- <link rel="stylesheet" href="./css/font.css"> -->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1876940_yveuqwmsmt.css">
     <link rel="stylesheet" href="./css/switch.css">
     <!-- <script src="./Document_files/jquery.min.js"></script> -->
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
@@ -41,14 +42,23 @@
 
     <!-- 左侧菜单栏区域 -->
     <ul class="nav nav-pills nav-stacked sidebar">
-<!--         <li role="presentation" class="active">
-            <span href="#"><span class="glyphicon glyphicon-menu-left"></span> Home</span>
+        <li role="presentation" class="active">
+            <span @click="goBack">
+                <span class="glyphicon glyphicon-menu-left"></span> Home
+            </span>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Save 
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
+                    Save <span class="caret"></span>
                 </button>
+                <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
+                    <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Make setting default for future flipbooks
+                    </label>
+                  </div>
+                </form>
             </div>
-        </li> -->
+        </li>
         
         <!-- 名字和描述区域 -->
         <li role="presentation" class="name-desc">
@@ -62,15 +72,10 @@
                  <textarea type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1"></textarea>
             </div>
         </li>
-        <li role="presentation" class="skin">
-            <a href="#" class="unActive-a">
-                <span>SKIN <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
-            </a>
-            <div role="presentation" class="menu-down show-menu" style="display: block;">
-                <div class="brand-col">
-                    <span>White Style</span>
-                    <!-- <button class="brand-btns logo">White Style</button> -->
-                </div>
+        <li role="presentation" >
+            <div class="unActive-a flex" style="padding: 10px 17px">
+                <span>SKIN </span>
+                <span style="color: #999">White Style ···</span>
             </div>
         </li>
 
@@ -104,18 +109,46 @@
             <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
                 <div class="controls-col" v-for="item in controls">
                     <div>
-                        <span class="glyphicon" :class="item.icon ? item.icon : ''"></span>
+                       <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>
                         <span>{{ item.title }}</span>
                     </div>
                     <div>
                         <input class="switch switch-anim" type="checkbox" checked="" v-model="item.checked">
                     </div>
                 </div>
+                <div class="controls-col" >
+                    <div>
+                       <span class="icon iconfont" ></span>
+                        <span>Default Navigation</span>
+                    </div>
+                    <button class="brand-btns favicon">Default ···</button>
+                </div>
+                <div class="controls-col" >
+                    <div>
+                       <span class="icon iconfont" ></span>
+                        <span>Contacts Button</span>
+                    </div>
+                    <button class="brand-btns favicon">Default ···</button>
+                </div>
             </div>
         </li>
 
         <li role="presentation" class="password">
-            <a href="#" class="unActive-a"><span>PASSWORD <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+            <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+                <div>
+                    <span>Fsade</span>
+                    <input class="switch switch-anim" type="checkbox" checked="">
+                </div>
+                <span style="margin-top: 15px;">设置密码</span>
+                <div>
+                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </li>
+
+<!--         <li role="presentation" class="password">
+            <a href="#" class="unActive-a"><span>电话 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
             <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
                 <div>
                     <span>Fsade</span>
@@ -123,11 +156,38 @@
                 </div>
                 <span style="margin-top: 15px;">Set Password</span>
                 <div>
-                    <input type="password">
-                    <i class="eye"></i>
+                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
                 </div>
             </div>
-        </li>
+        </li> -->
+<!--         <li role="presentation" class="password">
+            <a href="#" class="unActive-a"><span>邮件 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+                <div>
+                    <span>Fsade</span>
+                    <input class="switch switch-anim" type="checkbox" checked="">
+                </div>
+                <span style="margin-top: 15px;">Set Password</span>
+                <div>
+                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </li> -->
+<!--         <li role="presentation" class="password">
+            <a href="#" class="unActive-a"><span>在线客服 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+                <div>
+                    <span>Fsade</span>
+                    <input class="switch switch-anim" type="checkbox" checked="">
+                </div>
+                <span style="margin-top: 15px;">Set Password</span>
+                <div>
+                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </li> -->
+        <!-- 目录区域 -->
+
     </ul>
 
     <ul class="nav nav-pills nav-stacked skinbar">
@@ -226,14 +286,16 @@
     
     <!-- 主编辑区 -->
     <div class="container">
-        <div class="page-header">
-            <div class="btn-group" role="group" aria-label="...">
-                <button v-if="item.checked" type="button" class="btn btn-default btn-lg" v-for="item in controls" @click="clickTopButton(item)">
-                  <span class="glyphicon" :class="item.icon? item.icon : ''" aria-hidden="true"></span>{{ item.title }}
-                </button>
-            </div>
+        <div class="main">
+            <div class="picture"></div>
+            <div class="page-footer">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button v-if="item.checked" type="button" class="btn btn-default btn-lg" v-for="item in controls" @click="clickTopButton(item)">
+                      <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>{{ item.title }}
+                    </button>
+                </div>
+            </div> 
         </div>
-        <div class="picture"></div>
 
         <!-- 换肤 -->
         <div class="skin-panel">
@@ -308,20 +370,56 @@
         searchDialog: false,
         message: 'Hello Vue!',
         controls: [
-          {'title': 'Share', 'icon': 'glyphicon-share', 'checked': false},
-          {'title': 'Print', 'icon': 'glyphicon-print', 'checked': false},
-          {'title': 'Download', 'icon': 'glyphicon-download', 'checked': false},
+          {'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
+          {'title': '打印', 'icon': 'iconprint', 'checked': false},
+          {'title': '下载', 'icon': 'iconxiazai', 'checked': false},
           {'title': 'Text Selection', 'icon': 'glyphicon-check', 'checked': false},
-          {'title': 'Thumbnails', 'icon': 'glyphicon-th-large', 'checked': false},
-          {'title': 'Notes', 'icon': 'glyphicon-edit', 'checked': false},
+          {'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false},
+          {'title': '声音', 'icon': 'iconmute-off', 'checked': false},
+          {'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
+          {'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+          {'title': '搜索', 'icon': 'iconsearch', 'checked': false},
+          // {'title': 'Default Navigation',  'checked': false},
+          // {'title': 'Contacts Button',  'checked': false},
+          {'title': '电话', 'icon': 'icontelphone', 'checked': false},
+          {'title': '在线客服', 'icon': 'iconchat', 'checked': false},
+          {'title': '邮件', 'icon': 'iconEMAIL', 'checked': false},
         ]
       },
+
+      mounted() {      
+         // window.addEventListener("beforeunload", e => {
+         //    this.beforeunloadHandler(e);
+         // });
+
+      },
+      destroyed() {
+        // window.removeEventListener("beforeunload", e => {
+        //     this.beforeunloadHandler(e);
+        // });
+      },
       methods: {
+        save () {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            });  
+        },
+        goBack () {
+          window.history.back(-1); 
+        },
+        beforeunloadHandler(e) {
+          e = e || window.event;
+          if (e) {
+            e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存";
+          }
+          return "您是否确认离开此页面-您输入的数据可能不会被保存";
+        },
         clickTopButton (item) {
             console.log(item)
             this.$message({
               message: '你点击了' + item.title + '按钮',
-              type: 'inso'
+              type: 'info'
             });             
         },
         search () {
@@ -356,13 +454,7 @@
             $('.branding').children(".menu-down").stop(true).toggleClass('show-menu')
             $('.branding').children(".menu-down").slideToggle(300);
         })
-        $('.skin').children('a').click(function () {
-            $('.sidebar').find('a').attr("class","unActive-a");
-            $(this).stop(true).attr("class","active-a");
-            $('.skin').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.skin').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.skin').children(".menu-down").slideToggle(300);
-        })
+
         $('.controls').children('a').click(function () {
             $('.sidebar').find('a').attr("class","unActive-a");
             $(this).stop(true).attr("class","active-a");

@@ -51,6 +51,9 @@ button {
     width: 20%;
     float: left;
     min-width: 200px;
+    position: fixed;
+    height: 100vh;
+    overflow-y:scroll;
 }
 
 .nav-pills > li {
@@ -58,14 +61,12 @@ button {
 }
 
 .nav-stacked li.active {
-    overflow: hidden;
     background-color: #f4f7f9;
     border-top: 1px solid #dadbdf;
     border-bottom: 1px solid #eceeef;
 }
 
 .nav-pills > li.active > span {
-    float: left;
     color: #68a0b7;
     background-color: #f4f7f9;
     line-height: 40px;
@@ -165,7 +166,16 @@ button {
     border: 1px solid #eee;
     margin-top: 5px;
 }
-
+.brand-btns {
+    float: right;
+    width: 80px;
+    line-height: 30px;
+    background: #fff;
+    color: #77777c;
+    border: 1px solid #eee;
+    margin-top: 5px;
+    white-space: nowrap;
+}
 .controls-col {
     display: flex;
     justify-content: space-between;
@@ -539,20 +549,25 @@ button {
 /* 中间 */
 .container {
     position: relative;
-    float: left;
     width: 60%;
     height: 650px;
     background: #fafafa;
 }
 
-.container .picture {
-    position: absolute;
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh
+}
+.main .picture {
     width: 400px;
     height: 250px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: #eee;
+}
+.main .page-footer {
+    padding-top: 20px;
 }
 
 /* 换肤面板 */
@@ -673,7 +688,10 @@ button {
     width: 20%;
     min-width: 200px;
     list-style: none;
-    background-color: #e6e6e6
+    background-color: #e6e6e6;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .search-box li {
@@ -764,4 +782,8 @@ button {
     line-height: 40px;
     height: 40px;
     color: #afafaf;
+}
+.flex {
+    display: flex!important;
+    justify-content: space-between;
 }
