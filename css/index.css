@@ -44,8 +44,8 @@ body {
     background-color: #EFEFEF;
 }
 .container-fluid {
-    overflow: hidden;
-    display: flex
+    display: flex;
+    padding: 0;
 }
 
 .active-a {
@@ -57,14 +57,12 @@ body {
 }
 
 .nav {
-    width: 20%;
-    float: left;
-    min-width: 200px;
+    width: 250px;
     position: fixed;
     height: 100vh;
-    overflow-y: scroll;
-    overflow-x: visible;
+    overflow-y: auto;
     background-color: #FFF;
+    z-index: 4
 }
 
 .nav-pills > li {
@@ -562,13 +560,20 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0 20%;
+    margin: 0 250px;
     width: 100%;
+    position: relative;
+}
+.main .header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 0 20px;
 }
 .main .picture {
     width: 400px;
     height: 250px;
-    background: #eee;
+    background: #ccc;
 }
 .main .page-footer {
     padding-top: 20px;
@@ -689,8 +694,7 @@ body {
 .search-box {
     float: left;
     display: block;
-    width: 20%;
-    min-width: 200px;
+    width: 250px;
     list-style: none;
     background-color: #e6e6e6;
     position: absolute;

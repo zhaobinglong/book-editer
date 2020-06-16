@@ -209,64 +209,27 @@
         <li role="presentation" class="password">
             <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
             <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
-                <div class="controls-col">
-                    <span>Enable</span>
+
+                <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
                     <div>
-                      <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord" style="width: 50px;">
+                        <span>Enable</span>
+                    </div>
+                    <div>
+                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
                     </div>
                 </div>
+
+
                 <form v-if="setPassWord">
                     <span style="margin-top: 15px;">设置密码</span>
                     <div>
                         <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
                     </div>                    
                 </form>
-                <div v-else>Set a password to share your flipbook width select viewers only.</div>
+                <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
                 
             </div>
         </li>
-
-<!--         <li role="presentation" class="password">
-            <a href="#" class="unActive-a"><span>电话 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
-                <div>
-                    <span>Fsade</span>
-                    <input class="switch switch-anim" type="checkbox" checked="">
-                </div>
-                <span style="margin-top: 15px;">Set Password</span>
-                <div>
-                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
-                </div>
-            </div>
-        </li> -->
-<!--         <li role="presentation" class="password">
-            <a href="#" class="unActive-a"><span>邮件 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
-                <div>
-                    <span>Fsade</span>
-                    <input class="switch switch-anim" type="checkbox" checked="">
-                </div>
-                <span style="margin-top: 15px;">Set Password</span>
-                <div>
-                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
-                </div>
-            </div>
-        </li> -->
-<!--         <li role="presentation" class="password">
-            <a href="#" class="unActive-a"><span>在线客服 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
-                <div>
-                    <span>Fsade</span>
-                    <input class="switch switch-anim" type="checkbox" checked="">
-                </div>
-                <span style="margin-top: 15px;">Set Password</span>
-                <div>
-                    <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
-                </div>
-            </div>
-        </li> -->
-        <!-- 目录区域 -->
-
     </ul>
 
     <ul class="nav nav-pills nav-stacked skinbar">
@@ -365,10 +328,15 @@
     
     <!-- 主编辑区 -->
         <div class="main">
+            <div class="header">
+                <form class="form-inline">
+                Welcome Guide to FlippingBook online | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
+                </form>
+            </div>
             <div class="picture"></div>
             <div class="page-footer">
                 <div class="btn-group" role="group" aria-label="...">
-                    <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px;" ></span >
+                    <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px;" @click="clickIcon(item)"></span >
                 </div>
             </div> 
         </div>
@@ -449,6 +417,10 @@
         setStaff: false,
         setEmail: false,
         form: {
+          info: [
+            {label: 'name', value: ''},
+            {label: 'desc', value: ''},
+          ],
           email: [
             {label: '服务器', value: ''},
             {label: '端口', value: ''},
@@ -468,18 +440,44 @@
         controls: [
           {'group':1, 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
           {'group':1, 'title': '下载', 'icon': 'iconxiazai', 'checked': false},
-          {'group':2, 'title': 'Text Selection', 'icon': 'glyphicon-check', 'checked': false},
-          {'group':2, 'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
-          {'group':3, 'title': '声音', 'icon': 'iconmute-off', 'checked': false},
-          {'group':4, 'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
-          {'group':5, 'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
-          {'group':1, 'title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
+          {'group':1, 'title': 'Text Selection', 'icon': 'glyphicon-check', 'checked': false},
+          {'group':1, 'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
+          {'group':2, 'title': '声音', 'icon': 'iconmute-off', 'checked': false},
+          {'group':2, 'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
+          {'group':2, 'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+          {'group':2, 'title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
           // {'title': 'Default Navigation',  'checked': false},
           // {'title': 'Contacts Button',  'checked': false},
-          {'group':1, 'title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
-          {'group':1, 'title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true},
-          {'group':1, 'title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true},
+          {'group':3, 'title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true, 'label':'setPhone'},
+          {'group':4, 'title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, 'label':'setStaff'},
+          {'group':5, 'title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true, 'label':'setEmail'},
         ]
+      },
+      watch: {
+        setPhone: function (newValue, oldValue) {
+          this.controls.map((item, index) => {
+            if (item.label == 'setPhone') {
+                item.checked = newValue
+                this.$set(this.controls, index, item)
+            }
+          })
+        },   
+        setStaff: function (newValue, oldValue) {
+          this.controls.map((item, index) => {
+            if (item.label == 'setStaff') {
+                item.checked = newValue
+                this.$set(this.controls, index, item)
+            }
+          })
+        }, 
+        setEmail: function (newValue, oldValue) {
+          this.controls.map((item, index) => {
+            if (item.label == 'setEmail') {
+                item.checked = newValue
+                this.$set(this.controls, index, item)
+            }
+          })
+        },      
       },
       computed: {
         icons: function () {
@@ -488,11 +486,18 @@
           arr.map((item, index) => {
             console.log(item.group, index)
             if (index < arr.length-1 ) {
-                if (item.group != arr[index + 1].group)
-                item.rightLine = true
+                if (item.group != arr[index + 1].group) {
+                  item.rightLine = true   
+                } else {
+                  item.rightLine = false 
+                } 
             }
             return item
           })
+          // 最有一个icon的右侧不能有分隔符号
+          if (arr.length > 0) {
+            arr[arr.length-1].rightLine = false
+          }
           return arr
         }
       },     
@@ -508,6 +513,17 @@
         // });
       },
       methods: {
+        clickIcon (item) {
+            console.log(item)
+            this.$alert(`你点击了${item.title}按钮`, '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+              }
+            });
+        },
+        handleClose () {
+
+        },
         setIconClass (item) {
           if (item.rightLine) {
             return 'right-line ' + item.icon
@@ -516,10 +532,10 @@
           }
         },
         save () {
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            });  
+            // this.$message({
+            //   message: '保存成功',
+            //   type: 'success'
+            // });  
         },
         goBack () {
           window.history.back(-1); 
