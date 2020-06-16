@@ -671,8 +671,8 @@ button {
     display: block;
     width: 20%;
     height: 300px;
-    background: #000;
     list-style: none;
+    background-color: #e6e6e6
 }
 
 .search-box li {
@@ -682,7 +682,6 @@ button {
 
 .search-box .title {
     width: 100%;
-    background: #e6e6e6;
     font-weight: bold;
 }
 
