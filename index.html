@@ -16,6 +16,10 @@
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
   crossorigin="anonymous"></script>
     <script src="./Document_files/bootstrap.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <!-- 右键菜单 -->
     <!-- <link rel="stylesheet" href="../../context/css/style.css"> -->
     <!-- <link rel="stylesheet" href="../../context/css/nprogress.css"> -->
@@ -222,7 +226,7 @@
     <div class="container">
         <div class="page-header">
             <div class="btn-group" role="group" aria-label="...">
-                <button v-if="item.checked" type="button" class="btn btn-default btn-lg" v-for="item in controls">
+                <button v-if="item.checked" type="button" class="btn btn-default btn-lg" v-for="item in controls" @click="clickTopButton(item)">
                   <span class="glyphicon" :class="item.icon? item.icon : ''" aria-hidden="true"></span>{{ item.title }}
                 </button>
             </div>
@@ -266,9 +270,9 @@
         </li>
         <!-- <li> -->
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for...">
+              <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Go!</button>
+                <button class="btn btn-default" type="button" @click="search">Go!</button>
               </span>
             </div>
         <!-- </li> -->
@@ -281,12 +285,25 @@
             <span>...此页上还有4个结果。</span>
         </li>
     </ul>
+    <el-dialog
+      title="搜索"
+      :visible.sync="searchDialog"
+      width="30%"
+      :before-close="handleClose">
+      <span>{{ searchKey ? searchKey : '搜索内容为空' }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="searchDialog = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
 </div>
 <script type="text/javascript">
     // vue接管列表数据渲染
     var app = new Vue({
       el: '#app',
       data: {
+        searchKey: '',
+        searchDialog: false,
         message: 'Hello Vue!',
         controls: [
           {'title': 'Share', 'icon': 'glyphicon-share', 'checked': false},
@@ -296,6 +313,28 @@
           {'title': 'Thumbnails', 'icon': 'glyphicon-th-large', 'checked': false},
           {'title': 'Notes', 'icon': 'glyphicon-edit', 'checked': false},
         ]
+      },
+      methods: {
+        clickTopButton (item) {
+            console.log(item)
+            this.$message({
+              message: '你点击了' + item.title + '按钮',
+              type: 'inso'
+            });             
+        },
+        search () {
+            if (this.searchKey) {
+                this.$message({
+                  message: '向后台发出搜索请求，等待响应',
+                  type: 'success'
+                });                
+            } else {
+                this.$message({
+                  message: '搜索内容不能为空',
+                  type: 'warning'
+                });
+            }
+        }
       }
     })
 </script>
