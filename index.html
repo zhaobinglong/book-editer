@@ -89,7 +89,7 @@
                  <textarea type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1"></textarea>
             </div>
         </li>
-        <li role="presentation" >
+        <li role="presentation" @click="clickSelectSkin">
             <div class="unActive-a flex" style="padding: 10px 17px">
                 <span>SKIN </span>
                 <span style="color: #999">White Style ···</span>
@@ -353,17 +353,25 @@
     
     <!-- 主编辑区 -->
         <div class="main">
-            <div class="header">
-                <form class="form-inline">
-                Welcome Guide to FlippingBook online | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
-                </form>
-            </div>
-            <div class="picture"></div>
-            <div class="page-footer">
-                <div class="btn-group" role="group" aria-label="...">
-                    <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px;" @click="clickIcon(item)"></span >
+<!--             <div class="">
+                <ul class="nav nav-pills nav-stacked sidebar">
+                </ul>
+            </div> -->
+            <div>
+                <div class="header">
+                    <form class="form-inline">
+                    Welcome Guide to FlippingBook online | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
+                    </form>
                 </div>
-            </div> 
+
+                <div class="picture"></div>
+                <div class="page-footer">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px;" @click="clickIcon(item)"></span >
+                    </div>
+                </div>                 
+            </div>
+          
         </div>
 
         <!-- 换肤 -->
@@ -429,18 +437,91 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- skin皮肤选择器 -->
+    <el-dialog
+      title="SELECT SKIN"
+      :visible.sync="dialogSkin"
+      width="50%">
+        <el-form ref="form" :model="form" label-width="190px">
+            <el-form-item label="Keep current background">
+                <el-switch v-model="form.delivery"></el-switch>
+            </el-form-item>
+        </el-form>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" @click="clickSkinItem(item)" >
+            <el-image
+              style="width: 100%; display: block;border: 2px solid #FFF"
+              :class="item.checked ? 'skinChecked' : ''"
+              :src="item.url"
+              :fit="fit"></el-image>
+            <p style="text-align: center;" ><span :class="item.checked ? 'skinTextChecked':''">{{ item.name }}</span></p>
+          </div>
+        </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogSkin = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveSkin">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- logo选择器 -->
+    <el-dialog
+      title="EDIT LOGO"
+      :visible.sync="dialogLogo"
+      width="50%">
+        <el-form ref="form" :model="form" label-width="190px">
+            <el-form-item label="Keep current background">
+                <el-switch v-model="form.delivery"></el-switch>
+            </el-form-item>
+        </el-form>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" @click="clickSkinItem(item)" >
+            <el-image
+              style="width: 100%; display: block;border: 2px solid #FFF"
+              :class="item.checked ? 'skinChecked' : ''"
+              :src="item.url"
+              :fit="fit"></el-image>
+            <p style="text-align: center;" ><span :class="item.checked ? 'skinTextChecked':''">{{ item.name }}</span></p>
+          </div>
+        </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogSkin = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveSkin">OK</el-button>
+      </span>
+    </el-dialog>
 </div>
+<div class="demo-image">
+  <div class="block" v-for="fit in fits" :key="fit">
+    <span class="demonstration">{{ fit }}</span>
+    <el-image
+      style="width: 100px; height: 100px"
+      :src="url"
+      :fit="fit"></el-image>
+  </div>
+</div>
+
 <script type="text/javascript">
     // vue接管列表数据渲染
     var app = new Vue({
       el: '#app',
       data: {
+        skins: [
+          {index: 1, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+          {index: 2, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+          {index: 3, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+          {index: 4, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+          {index: 5, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+          {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+          {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+        ],
         searchKey: '',
         searchDialog: false,
         setPassWord: false,
         setPhone: false,
         setStaff: false,
         setEmail: false,
+        dialogSkin: false,
+        dialogLogo: false
         form: {
           info: [
             {label: 'name', value: ''},
@@ -573,6 +654,34 @@
         // });
       },
       methods: {
+        clickSkinItem (item) {
+          this.skins = this.skins.map(i => {
+            if (i.index === item.index) {
+                i.checked = true
+            } else {
+                i.checked = false
+            }
+            return i
+          })
+        },
+        clickSelectSkin () {
+            this.dialogSkin = true
+        },
+        saveSkin () {
+            let hadSelect = this.skins.some(item => item.checked)
+            if (hadSelect) {
+                this.$message({
+                  message: '保存成功',
+                  type: 'success'
+                });
+            } else {
+                this.$message({
+                  message: '没有选择不能保存',
+                  type: 'warning'
+                });                
+            }  
+            this.dialogSkin = false
+        },
         clickIcon (item) {
             console.log(item)
             this.$alert(`你点击了${item.title}按钮`, '提示', {
