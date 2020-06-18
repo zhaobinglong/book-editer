@@ -61,11 +61,11 @@
     <ul class="nav nav-pills nav-stacked sidebar">
         <li role="presentation" class="active">
             <span @click="goBack">
-                <span class="glyphicon glyphicon-menu-left"></span> Home
+                <span class="glyphicon glyphicon-menu-left"></span>首页
             </span>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                    Save <span class="caret"></span>
+                    保存 <span class="caret"></span>
                 </button>
 <!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
                     <div class="checkbox">
@@ -355,7 +355,7 @@
 
     <!-- skin皮肤选择器 -->
     <el-dialog
-      title="SELECT SKIN"
+      title="选择皮肤"
       :visible.sync="dialogSkin"
       width="50%">
         <el-form ref="form" :model="form" label-width="190px">
@@ -380,7 +380,7 @@
 
     <!-- logo选择器 -->
     <el-dialog
-      title="EDIT LOGO"
+      title="编辑logo"
       :visible.sync="dialogLogo"
       width="40%">
         <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
