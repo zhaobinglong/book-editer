@@ -112,11 +112,14 @@
                 </div>
                 <div class="brand-col">
                     <span>Color Palette</span>
-                    <button class="brand-btns color-palette" @click="dialogColor = true">Custiom ···</button>
+                    <el-color-picker v-model="form.color"></el-color-picker>
+<!--                     <button class="brand-btns color-palette" @click="dialogColor = true"> 
+                        <el-color-picker v-model="color2"></el-color-picker>
+                    </button> -->
                 </div>
                 <div class="brand-col">
                     <span>Favicon</span>
-                    <button class="brand-btns favicon">Default ···</button>
+                    <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
                 </div>
             </div>
         </li>
@@ -211,14 +214,23 @@
                        <span class="icon iconfont" ></span>
                         <span>Default Navigation</span>
                     </div>
-                    <button class="brand-btns favicon">Default ···</button>
+                     <el-popover
+                      placement="right"
+                      width="200"
+                      trigger="click">
+                      <div>
+                         <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
+                      </div>
+                      <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
+                    </el-popover>
+                    
                 </div>
                 <div class="controls-col" >
                     <div>
                        <span class="icon iconfont" ></span>
                         <span>Contacts Button</span>
                     </div>
-                    <button class="brand-btns favicon">Default ···</button>
+                    <button class="brand-btns favicon" @click="dialogButton = true">Default ···</button>
                 </div>
             </div>
         </li>
@@ -276,7 +288,7 @@
     </ul>
 
 
-    <div class="mask-logo">
+<!--     <div class="mask-logo">
         <div class="mask-logo-head">
             <span>EDIT LOGO</span>
             <span class="glyphicon glyphicon-remove close-mask-logo"></span>
@@ -302,10 +314,10 @@
                 <button class="skin-cancel">Cancel</button>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
-    <div class="mask-bgimg">
+<!--     <div class="mask-bgimg">
         <div class="mask-bgimg-head">
             <span>EDIT BACKGROUND</span>
             <span class="glyphicon glyphicon-remove close-mask-bgimg"></span>
@@ -319,10 +331,10 @@
                 <button class="skin-cancel">Cancel</button>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
-    <div class="mask-favicon">
+<!--     <div class="mask-favicon">
         <div class="mask-favicon-head">
             <span>EDIT LOGO</span>
             <span class="glyphicon glyphicon-remove close-mask-favicon"></span>
@@ -334,8 +346,6 @@
             <p>or select existing file</p>
             <div class="item">
                 <button>Browse Logo Image</button>
-                <p>这是一段描述文字这是一段描述文字这是一段描述文字这是一段描述文字</p>
-                <!-- <input value="这是一段文字" /> -->
             </div>
         </div>
         <div class="mask-favicon-footer">
@@ -345,7 +355,7 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
     <!-- <input class="switch switch-anim" type="checkbox" checked> -->
 
@@ -375,7 +385,7 @@
         </div>
 
         <!-- 换肤 -->
-        <div class="skin-panel">
+<!--         <div class="skin-panel">
             <div class="skin-panel-head">
                 <span>SELECT SKIN</span>
                 <span class="glyphicon glyphicon-remove close-skin-panel"></span>
@@ -383,7 +393,6 @@
             <div class="skin-panel-body">
                 <div>
                     <span style="padding-right: 20px;">Keep current background</span>
-                    <!-- <input type="checkbox" name="my-checkbox" checked> -->
                     <input class="switch switch-anim" type="checkbox" checked="">
                 </div>
                 <div class="skin-box">
@@ -399,7 +408,7 @@
                     <button class="skin-cancel">Cancel</button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
     <!-- 右侧搜索区 -->
@@ -468,7 +477,20 @@
       title="EDIT LOGO"
       :visible.sync="dialogLogo"
       width="40%">
-        <el-image :src="form.logo"></el-image>
+        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
+           <el-image :src="form.logo" v-if="form.logo"></el-image> 
+            <el-popover
+              placement="right"
+              width="200"
+              trigger="click">
+              <div>
+                 <p @click="logoSetting">Back to Default</p>
+                 <p @click="logoSetting">Remove</p>
+              </div>
+              <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
+            </el-popover>
+        </div>
+        
         <el-upload
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
@@ -477,13 +499,36 @@
           :file-list="fileList"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">xxxxxxxxxxxxxxxxxxxxxxx</div>
         </el-upload>
-        <el-input v-model="input" placeholder="https://your-website.com"></el-input>
+        <div style="height: 20px;"></div>
+        <el-input v-model="form.logoInput" placeholder="https://your-website.com"></el-input>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogLogo = false">CANCEL</el-button>
         <el-button type="primary" @click="saveLogo">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- button选择器 -->
+    <el-dialog
+      title="EDIT BUTTON"
+      :visible.sync="dialogButton"
+      width="40%">
+
+        <el-form ref="form" :model="form" >
+            <el-form-item label="Show Contacts Button">
+                <el-switch v-model="form.button.delivery"></el-switch>
+            </el-form-item>
+            <el-form-item label="Button Text">
+                <el-input v-model="form.button.text" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="Web Address(URL)">
+                <el-input v-model="form.button.address" placeholder="https://your-website.com"></el-input>
+            </el-form-item>
+        </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogButton = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogButton = false">OK</el-button>
       </span>
     </el-dialog>
 
@@ -507,7 +552,7 @@
         </div>
         
         <div>Import  favicon from  your website</div>
-        <el-input v-model="form.favicon" placeholder="https://your-website.com"></el-input>
+        <el-input v-model="form.faviconInput" placeholder="https://your-website.com"></el-input>
         <div style="margin-top: 20px;">or elect existing file</div>
         <el-upload
           class="upload-demo"
@@ -517,13 +562,11 @@
           :file-list="fileList"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
-          <!-- <div slot="tip" class="el-upload__tip">xxxxxxxxxxxxxxxxxxxxxxx</div> -->
         </el-upload>
-        
-
+    
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveLogo">OK</el-button>
+        <el-button @click="dialogFavicon = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
       </span>
     </el-dialog>
 
@@ -544,16 +587,16 @@
       title="EDIT BACKGROUND"
       :visible.sync="dialogBackground"
       width="40%">
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-        <el-form  label-width="150px" class="demo-dynamic">
+        <div style="background-color: #EFEFEF; text-align: center;" class="mb20">
+            <el-upload
+              class="avatar-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :show-file-list="false">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>            
+        </div>
+        <el-form label-width="140px" ref="form" :model="form">
 
           <el-form-item
             label="Image Placement"
@@ -572,19 +615,22 @@
           >
             <el-popover
               placement="right"
-              width="400"
+              width="180"
               trigger="click">
-              <div class="el-layout">
-                  <h1>good</h1>
+              <div  class="rank">
+                  <span class="rank-item" :class="item.checked ? 'rank-item-checked':''" v-for="item in rank" @click="clickRank(item)">
+                    <i :class="item.icon ? item.icon : ''"></i>
+                  </span>
               </div>
-              <el-select slot="reference" v-model="value" placeholder="请选择">
+              <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
+                <el-input slot="reference" v-model="form.background.filling" placeholder=""></el-input>
             </el-popover>
           </el-form-item>
         </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveLogo">OK</el-button>
+        <el-button @click="dialogBackground = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogBackground = false">OK</el-button>
       </span>
     </el-dialog>
 
@@ -604,6 +650,17 @@
     var app = new Vue({
       el: '#app',
       data: {
+        rank: [
+          {icon: 'el-icon-top-left', checked: false},
+          {icon: 'el-icon-top', checked: false},
+          {icon: 'el-icon-top-right', checked: false},
+          {icon: 'el-icon-back', checked: false},
+          {icon: 'el-icon-rank', checked: false},
+          {icon: 'el-icon-right', checked: false},
+          {icon: 'el-icon-bottom-left', checked: false},
+          {icon: 'el-icon-bottom', checked: false},
+          {icon: 'el-icon-bottom-right', checked: false}
+        ],
         skins: [
           {index: 1, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
           {index: 2, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
@@ -612,6 +669,13 @@
           {index: 5, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
           {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
           {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+        ],
+        navigation: [
+          {value: 'Table of Contents', checked: false},
+          {value: 'Thumbnails', checked: false},
+          {value: 'Notes', checked: false},
+          {value: 'None', checked: false},
+          {value: 'Search', checked: false}
         ],
         fileList: [],
         searchKey: '',
@@ -623,15 +687,26 @@
         dialogSkin: false,
         dialogLogo: false,
         dialogColor: false,
-        dialogBackground: false,
-        dialogFavicon: true,
+        dialogBackground: true,
+        dialogFavicon: false,
+        dialogButton: false,
         form: {
+          color: '#CB2121',
+          navigation: 'Default ...',
+          button: {
+            delivery: '',
+            text: '',
+            address: ''
+          },
           placement: 'fill',
           background: {
-            fit:['fit','fill','fixx']
+            fit:['fit','fill','fixx'],
+            filling: 'center'
           },
           logo: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+          logoInput: '',
           favicon: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+          faviconInput: '',
           info: [
             {label: 'name', value: ''},
             {label: 'desc', value: ''},
@@ -763,6 +838,34 @@
         // });
       },
       methods: {
+        clickRank (item) {
+          console.log(item)
+          this.rank = this.rank.map((i) => {
+            if (i.icon == item.icon) {
+                i.checked = true
+                this.form.background.filling = i.icon
+            } else {
+                i.checked = false
+            }
+            return i
+          })
+          console.log(this.rank)
+        },
+        logoSetting () {
+          this.form.logo = ''
+        },
+        navigationSetting (obj) {
+          console.log(obj)
+          this.navigation = this.navigation.map(item => {
+             if (item.value == obj.value) {
+                item.checked = true
+                this.form.navigation = item.value
+             } else {
+                item.checked = false
+             }
+             return item
+          })
+        },
         input () {
           
         },
@@ -953,9 +1056,9 @@
             $('.mask-bgimg').css('display', 'none')
         })
 
-        $('.favicon').click(function () {
-            $('.mask-favicon').toggle(100)
-        })
+        // $('.favicon').click(function () {
+        //     $('.mask-favicon').toggle(100)
+        // })
 
         $('.close-mask-favicon').click(function () {
             $('.mask-favicon').css('display', 'none')
