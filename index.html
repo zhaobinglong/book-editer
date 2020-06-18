@@ -261,23 +261,26 @@
         </li>
         
         <!-- 目录区 -->
-        <li role="presentation" class="directory">
+<!--         <li role="presentation" class="directory">
             <a href="#" class="unActive-a"><span>篇目 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
             <div role="presentation" class="menu-down show-menu" style="display: block;">
                 <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
             </div>
-        </li>
+        </li> -->
     </ul>
-
-    <ul class="nav nav-pills nav-stacked skinbar">
-        <li role="presentation">
-            <i class="iconfont"></i>
-            篇目 <span class="glyphicon glyphicon-remove skinbar-close"></span>
+    
+    <!-- 目录区 -->
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="showMenu">
+        <li role="presentation" class="menu-item">
+            <span>
+                <i class="el-icon-s-unfold"></i>篇目 
+            </span>
+            <i class="el-icon-close" @click="showMenu = false"></i>
         </li>
         <li role="presentation" class="change-skin"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
         <li role="presentation"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
         <li role="presentation" class="skin-desc">
-            <a href="http://rtake.com:9999/bs-pro/src/pages/index.html#"><span>What is FlippingBook Online？<span class="glyphicon glyphicon-menu-down toggle-arrows"></span></span></a>
+            <a href="#"><span>What is FlippingBook Online？<span class="glyphicon glyphicon-menu-down toggle-arrows"></span></span></a>
             <div role="presentation" class="menu-down">
                 <span>Flipbook Name</span>
                 <span style="margin-top: 15px;">Description</span>
@@ -285,139 +288,42 @@
                 <span style="margin-top: 15px;">Description</span>
             </div>
         </li>
+        <li role="presentation" class="menu-item">
+            <span>
+                <i class="el-icon-s-grid"></i>缩略图
+            </span>
+            <!-- <i class="el-icon-close" @click="showMenu = false"></i> -->
+        </li>
+      <div class="block"  style="text-align: center;">
+        <el-image
+          v-for="item in skins"
+          style="width: 60px; height: 60px; display: block; margin: 10px auto"
+          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-image>
+      </div>            
     </ul>
 
 
-<!--     <div class="mask-logo">
-        <div class="mask-logo-head">
-            <span>EDIT LOGO</span>
-            <span class="glyphicon glyphicon-remove close-mask-logo"></span>
-        </div>
-        <div class="mask-logo-img">
-            <div></div>
-        </div>
-        <div class="mask-logo-edit">
-            <div class="item">
-                <div>
-                    <button>Browse Logo Image</button>
-                    <span>这是一段文字</span>
-                </div>
-                <div>
-                    <span>Enable logo for mobile</span>
-                    <span>这是一段文字</span>
-                </div>
-            </div>
-        </div>
-        <div class="mask-logo-footer">
-            <div>
-                <button class="skin-submit">OK</button>
-                <button class="skin-cancel">Cancel</button>
-            </div>
-        </div>
-    </div> -->
-
-
-<!--     <div class="mask-bgimg">
-        <div class="mask-bgimg-head">
-            <span>EDIT BACKGROUND</span>
-            <span class="glyphicon glyphicon-remove close-mask-bgimg"></span>
-        </div>
-        <div class="mask-bgimg-img">
-            <div class="mask-bgimg-btn">Browse Image...</div>
-        </div>
-        <div class="mask-bgimg-footer">
-            <div>
-                <button class="skin-submit">OK</button>
-                <button class="skin-cancel">Cancel</button>
-            </div>
-        </div>
-    </div> -->
-
-
-<!--     <div class="mask-favicon">
-        <div class="mask-favicon-head">
-            <span>EDIT LOGO</span>
-            <span class="glyphicon glyphicon-remove close-mask-favicon"></span>
-        </div>
-        <div class="mask-favicon-img">
-            <div></div>
-        </div>
-        <div class="mask-favicon-edit">
-            <p>or select existing file</p>
-            <div class="item">
-                <button>Browse Logo Image</button>
-            </div>
-        </div>
-        <div class="mask-favicon-footer">
-            <div>
-                <button class="skin-submit">OK</button>
-                <button class="skin-cancel">Cancel</button>
-            </div>
-
-        </div>
-    </div> -->
-
-    <!-- <input class="switch switch-anim" type="checkbox" checked> -->
-
-    <!-- <label><input class="mui-switch mui-switch-anim" type="checkbox" checked> 默认选中</label> -->
     
     <!-- 主编辑区 -->
         <div class="main">
-<!--             <div class="">
-                <ul class="nav nav-pills nav-stacked sidebar">
-                </ul>
-            </div> -->
-            <div>
-                <div class="header">
-                    <form class="form-inline">
-                    Welcome Guide to FlippingBook online | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
-                    </form>
-                </div>
-
-                <div class="picture"></div>
-                <div class="page-footer">
-                    <div class="btn-group" role="group" aria-label="...">
-                        <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px;" @click="clickIcon(item)"></span >
-                    </div>
-                </div>                 
+            <div class="header">
+                <form class="form-inline" style="text-align: center;">
+                Welcome Guide to FlippingBook online | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
+                </form>
             </div>
-          
+            <div style="flex-grow: 1" class="bookBox">
+              <div class="picture"></div>
+            </div>
+            <div class="page-footer">
+                <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
+            </div>           
         </div>
 
-        <!-- 换肤 -->
-<!--         <div class="skin-panel">
-            <div class="skin-panel-head">
-                <span>SELECT SKIN</span>
-                <span class="glyphicon glyphicon-remove close-skin-panel"></span>
-            </div>
-            <div class="skin-panel-body">
-                <div>
-                    <span style="padding-right: 20px;">Keep current background</span>
-                    <input class="switch switch-anim" type="checkbox" checked="">
-                </div>
-                <div class="skin-box">
-                    <div class="bg-img">
-                        <div></div>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="skin-panel-footer">
-                <div>
-                    <button class="skin-submit">OK</button>
-                    <button class="skin-cancel">Cancel</button>
-                </div>
-            </div>
-        </div> -->
 
 
     <!-- 右侧搜索区 -->
     <ul class="search-box">
-        <li class="title">
-            <!-- <span class="glyphicon glyphicon-search"></span> -->
-            搜索
-            <!-- <span class="glyphicon glyphicon-remove"></span> -->
-        </li>
+        <li class="title">搜索</li>
         <!-- <li> -->
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
@@ -582,6 +488,20 @@
       </span>
     </el-dialog>
 
+    <!--分享对话框 -->
+    <el-dialog
+      title="分享"
+      :visible.sync="dialogShare"
+      width="40%">
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="form.share.qrcode"></el-image>
+      <el-input v-model="form.share.link" placeholder=""></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary"  @click="copy(form.share.link)">复制</el-button>
+      </span>
+    </el-dialog>
+
     <!-- 背景选择器 -->
     <el-dialog
       title="EDIT BACKGROUND"
@@ -635,15 +555,7 @@
     </el-dialog>
 
 </div>
-<div class="demo-image">
-  <div class="block" v-for="fit in fits" :key="fit">
-    <span class="demonstration">{{ fit }}</span>
-    <el-image
-      style="width: 100px; height: 100px"
-      :src="url"
-      :fit="fit"></el-image>
-  </div>
-</div>
+
 
 <script type="text/javascript">
     // vue接管列表数据渲染
@@ -677,6 +589,7 @@
           {value: 'None', checked: false},
           {value: 'Search', checked: false}
         ],
+        showMenu: true,
         fileList: [],
         searchKey: '',
         searchDialog: false,
@@ -687,10 +600,15 @@
         dialogSkin: false,
         dialogLogo: false,
         dialogColor: false,
-        dialogBackground: true,
+        dialogBackground: false,
         dialogFavicon: false,
         dialogButton: false,
+        dialogShare: true,
         form: {
+          share: {
+            link: 'baidu.com',
+            qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
+          },
           color: '#CB2121',
           navigation: 'Default ...',
           button: {
@@ -838,6 +756,12 @@
         // });
       },
       methods: {
+        copy () {
+            this.$message({
+              message: '复制成功',
+              type: 'success'
+            }); 
+        },
         clickRank (item) {
           console.log(item)
           this.rank = this.rank.map((i) => {
@@ -917,11 +841,22 @@
         },
         clickIcon (item) {
             console.log(item)
-            this.$alert(`你点击了${item.title}按钮`, '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-              }
-            });
+            if (item.title == '下载') {
+                this.$alert(`你下载的文件为空`, '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {}
+                });                
+            } else if (item.title == '分享') {
+                this.dialogShare = true
+            } else if (item.title == '缩略图') {
+                this.showMenu = true
+            } else {
+                this.$alert(`你点击了${item.title}按钮`, '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                  }
+                });
+            }
         },
         handleClose () {
 
@@ -968,6 +903,19 @@
                   type: 'warning'
                 });
             }
+        },
+        download (src, fileName) {
+          let x = new XMLHttpRequest();
+          x.open("GET", src, true);
+          x.responseType = 'blob';
+          x.onload = function(e) {
+            let url = window.URL.createObjectURL(x.response)
+            let a = document.createElement('a');
+            a.href = url
+            a.download = fileName
+            a.click()
+          }
+          x.send();
         }
       }
     })

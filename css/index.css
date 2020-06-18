@@ -121,12 +121,18 @@ body {
 .rank-item-checked {
     background-color: #EFEFEF;
 }
+.menu-item {
+    display: flex!important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+}
 .nav {
     width: 250px;
-    position: fixed;
     height: 100vh;
     overflow-y: auto;
     background-color: #FFF;
+    flex-shrink: 0;
 }
 
 .nav-pills > li {
@@ -628,8 +634,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0 250px;
-    width: 100%;
+    position: relative;
+    flex-grow: 1;
     position: relative;
 }
 .main .header {
@@ -638,6 +644,11 @@ body {
     width: 100%;
     padding: 0 20px;
 }
+.main .bookBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .main .picture {
     width: 400px;
     height: 250px;
@@ -645,6 +656,9 @@ body {
 }
 .main .page-footer {
     padding-top: 20px;
+    height: 100px;
+    background-color: #EFEFEF;
+    display: flex;
 }
 
 /* 换肤面板 */
@@ -760,14 +774,9 @@ body {
 
 /* 右侧 */
 .search-box {
-    float: left;
-    display: block;
     width: 250px;
     list-style: none;
     background-color: #e6e6e6;
-    position: absolute;
-    top: 0;
-    right: 0;
     background-color: #FFF;
     height: 100vh
 }
@@ -848,19 +857,18 @@ body {
 
 /* SKIN Bar */
 .skinbar {
-    display: none;
 }
 
 .skinbar li:first-child > i {
     padding-left: 15px;
 }
 
-.skinbar li:first-child > span {
+/*.skinbar li:first-child > span {
     margin-left: 200px;
     line-height: 40px;
     height: 40px;
     color: #afafaf;
-}
+}*/
 .flex {
     display: flex!important;
     justify-content: space-between;
