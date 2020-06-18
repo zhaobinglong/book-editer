@@ -104,15 +104,15 @@
             <div role="presentation" class="menu-down show-menu" style="display: block;">
                 <div class="brand-col">
                     <span>Logo</span>
-                    <button class="brand-btns logo">Custon ···</button>
+                    <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
                 </div>
                 <div class="brand-col">
                     <span>Background Image</span>
-                    <button class="brand-btns bg-image">Default ···</button>
+                    <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
                 </div>
                 <div class="brand-col">
                     <span>Color Palette</span>
-                    <button class="brand-btns color-palette">Custiom ···</button>
+                    <button class="brand-btns color-palette" @click="dialogColor = true">Custiom ···</button>
                 </div>
                 <div class="brand-col">
                     <span>Favicon</span>
@@ -453,8 +453,7 @@
             <el-image
               style="width: 100%; display: block;border: 2px solid #FFF"
               :class="item.checked ? 'skinChecked' : ''"
-              :src="item.url"
-              :fit="fit"></el-image>
+              :src="item.url"></el-image>
             <p style="text-align: center;" ><span :class="item.checked ? 'skinTextChecked':''">{{ item.name }}</span></p>
           </div>
         </div>
@@ -468,27 +467,127 @@
     <el-dialog
       title="EDIT LOGO"
       :visible.sync="dialogLogo"
-      width="50%">
-        <el-form ref="form" :model="form" label-width="190px">
-            <el-form-item label="Keep current background">
-                <el-switch v-model="form.delivery"></el-switch>
-            </el-form-item>
-        </el-form>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" @click="clickSkinItem(item)" >
-            <el-image
-              style="width: 100%; display: block;border: 2px solid #FFF"
-              :class="item.checked ? 'skinChecked' : ''"
-              :src="item.url"
-              :fit="fit"></el-image>
-            <p style="text-align: center;" ><span :class="item.checked ? 'skinTextChecked':''">{{ item.name }}</span></p>
-          </div>
-        </div>
+      width="40%">
+        <el-image :src="form.logo"></el-image>
+        <el-upload
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">xxxxxxxxxxxxxxxxxxxxxxx</div>
+        </el-upload>
+        <el-input v-model="input" placeholder="https://your-website.com"></el-input>
+
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogSkin = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveSkin">OK</el-button>
+        <el-button @click="dialogLogo = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveLogo">OK</el-button>
       </span>
     </el-dialog>
+
+    <!-- favicon选择器 -->
+    <el-dialog
+      title="EDIT FAVICON"
+      :visible.sync="dialogFavicon"
+      width="40%">
+        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
+            <el-image :src="form.favicon" v-if="form.favicon"></el-image>
+            <el-popover
+              placement="right"
+              width="200"
+              trigger="click">
+              <div>
+                 <p @click="faviconSetting">Back to Default</p>
+                 <p @click="faviconSetting">Remove</p>
+              </div>
+              <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
+            </el-popover>
+        </div>
+        
+        <div>Import  favicon from  your website</div>
+        <el-input v-model="form.favicon" placeholder="https://your-website.com"></el-input>
+        <div style="margin-top: 20px;">or elect existing file</div>
+        <el-upload
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <!-- <div slot="tip" class="el-upload__tip">xxxxxxxxxxxxxxxxxxxxxxx</div> -->
+        </el-upload>
+        
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogLogo = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveLogo">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 颜色选择器 -->
+    <el-dialog
+      title="SELECT COLORS"
+      :visible.sync="dialogColor"
+      width="40%">
+      <el-color-picker v-model="color2"></el-color-picker>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogColor = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveColor">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 背景选择器 -->
+    <el-dialog
+      title="EDIT BACKGROUND"
+      :visible.sync="dialogBackground"
+      width="40%">
+        <el-upload
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <el-form  label-width="150px" class="demo-dynamic">
+
+          <el-form-item
+            label="Image Placement"
+          >
+            <el-select v-model="form.placement" placeholder="请选择">
+            <el-option
+              v-for="item in form.background.fit"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+          </el-form-item>
+          <el-form-item
+            label="Filling Form"
+          >
+            <el-popover
+              placement="right"
+              width="400"
+              trigger="click">
+              <div class="el-layout">
+                  <h1>good</h1>
+              </div>
+              <el-select slot="reference" v-model="value" placeholder="请选择">
+            </el-popover>
+          </el-form-item>
+        </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogLogo = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveLogo">OK</el-button>
+      </span>
+    </el-dialog>
+
 </div>
 <div class="demo-image">
   <div class="block" v-for="fit in fits" :key="fit">
@@ -514,6 +613,7 @@
           {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
           {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
         ],
+        fileList: [],
         searchKey: '',
         searchDialog: false,
         setPassWord: false,
@@ -521,8 +621,17 @@
         setStaff: false,
         setEmail: false,
         dialogSkin: false,
-        dialogLogo: false
+        dialogLogo: false,
+        dialogColor: false,
+        dialogBackground: false,
+        dialogFavicon: true,
         form: {
+          placement: 'fill',
+          background: {
+            fit:['fit','fill','fixx']
+          },
+          logo: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+          favicon: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
           info: [
             {label: 'name', value: ''},
             {label: 'desc', value: ''},
@@ -654,6 +763,21 @@
         // });
       },
       methods: {
+        input () {
+          
+        },
+        faviconSetting () {
+
+            this.form.favicon = ''
+            console.log(this.form.favicon)
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+
         clickSkinItem (item) {
           this.skins = this.skins.map(i => {
             if (i.index === item.index) {
@@ -666,6 +790,9 @@
         },
         clickSelectSkin () {
             this.dialogSkin = true
+        },
+        handleLogoDialog () {
+            this.dialogLogo = !this.dialogLogo
         },
         saveSkin () {
             let hadSelect = this.skins.some(item => item.checked)
@@ -681,6 +808,9 @@
                 });                
             }  
             this.dialogSkin = false
+        },
+        saveLogo () {
+          this.dialogLogo = false
         },
         clickIcon (item) {
             console.log(item)
@@ -803,9 +933,9 @@
             $('.skinbar').css('display', 'none')
         })
 
-        $('.logo').click(function () {
-            $('.mask-logo').toggle(100)
-        })
+        // $('.logo').click(function () {
+        //     $('.mask-logo').toggle(100)
+        // })
 
         $('.mask-logo').on('contextmenu', function (e) {
 
@@ -815,9 +945,9 @@
             $('.mask-logo').css('display', 'none')
         })
 
-        $('.bg-image').click(function () {
-            $('.mask-bgimg').toggle(100)
-        })
+        // $('.bg-image').click(function () {
+        //     $('.mask-bgimg').toggle(100)
+        // })
 
         $('.close-mask-bgimg').click(function () {
             $('.mask-bgimg').css('display', 'none')
