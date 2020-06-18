@@ -79,26 +79,26 @@
         
         <!-- 名字和描述区域 -->
         <li role="presentation" class="name-desc">
-            <a href="#" class="unActive-a"><span>NAME &amp; DESCRIPTION <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
+            <a href="#" class="unActive-a"><span>名字和描述 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
             </a>
             <div role="presentation" class="menu-down show-menu" style="display: block;">
-                <span style="margin-top: 15px;">Flipbook Name</span>
+                <span style="margin-top: 15px;">书名</span>
                 <input type="text" class="form-control" placeholder="Flipbook Name" aria-describedby="basic-addon1">
-                <span style="margin-top: 15px;">Description</span>
+                <span style="margin-top: 15px;">描述</span>
                 <!-- <textarea type="text"></textarea> -->
                  <textarea type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1"></textarea>
             </div>
         </li>
         <li role="presentation" @click="clickSelectSkin">
             <div class="unActive-a flex" style="padding: 10px 17px">
-                <span>SKIN </span>
+                <span>皮肤 </span>
                 <span style="color: #999">White Style ···</span>
             </div>
         </li>
 
         <li role="presentation" class="branding">
             <a href="#" class="unActive-a">
-                <span>BRANDING <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
+                <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
             </a>
 
             <div role="presentation" class="menu-down show-menu" style="display: block;">
@@ -107,25 +107,25 @@
                     <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
                 </div>
                 <div class="brand-col">
-                    <span>Background Image</span>
+                    <span>背景图</span>
                     <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
                 </div>
                 <div class="brand-col">
-                    <span>Color Palette</span>
+                    <span>颜色</span>
                     <el-color-picker v-model="form.color"></el-color-picker>
 <!--                     <button class="brand-btns color-palette" @click="dialogColor = true"> 
                         <el-color-picker v-model="color2"></el-color-picker>
                     </button> -->
                 </div>
                 <div class="brand-col">
-                    <span>Favicon</span>
+                    <span>icon</span>
                     <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
                 </div>
             </div>
         </li>
 
         <li role="presentation" class="controls">
-            <a href="#" class="unActive-a"><span>CONTROLS <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+            <a href="#" class="unActive-a"><span>控制 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
             <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
                 <div class="controls-col" v-for="item in controls" :class="item.bottomLine ? 'bottom-line' : ''" v-if="!item.hidden">
                     <div>
