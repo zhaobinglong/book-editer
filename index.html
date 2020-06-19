@@ -58,14 +58,14 @@
     </div> -->
 
     <!-- 左侧菜单栏区域 -->
-    <ul class="nav nav-pills nav-stacked sidebar">
-        <li role="presentation" class="active">
+    <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
+        <div class="menu-item" style="background-color: #CFCFCF">
             <span @click="goBack">
                 <span class="glyphicon glyphicon-menu-left"></span>首页
             </span>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                    保存 <span class="caret"></span>
+                    默认<span class="caret"></span>
                 </button>
 <!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
                     <div class="checkbox">
@@ -75,199 +75,272 @@
                   </div>
                 </form> -->
             </div>
-        </li>
-        
-        <!-- 名字和描述区域 -->
-        <li role="presentation" class="name-desc">
-            <a href="#" class="unActive-a"><span>名字和描述 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
-            </a>
+        </div>
+
+            <el-collapse accordion>
+          <el-collapse-item>
+            <template slot="title">
+              <div style="padding-left: 10px">名字和描述</div>
+            </template>
+
             <div role="presentation" class="menu-down show-menu" style="display: block;">
+
                 <span style="margin-top: 15px;">书名</span>
                 <input type="text" class="form-control" placeholder="Flipbook Name" aria-describedby="basic-addon1">
                 <span style="margin-top: 15px;">描述</span>
                 <!-- <textarea type="text"></textarea> -->
                  <textarea type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1"></textarea>
             </div>
-        </li>
-        <li role="presentation" @click="clickSelectSkin">
+             
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">皮肤</div>
+            </template>
             <div class="unActive-a flex" style="padding: 10px 17px">
-                <span>皮肤 </span>
-                <span style="color: #999">White Style ···</span>
+                <span style="color: #999" @click="clickSelectSkin">White Style ···</span>
             </div>
-        </li>
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">品牌</div>
+            </template>
+            <li role="presentation" class="branding">
+ <!--                <a href="#" class="unActive-a">
+                    <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
+                </a> -->
 
-        <li role="presentation" class="branding">
-            <a href="#" class="unActive-a">
-                <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
-            </a>
+                <div role="presentation" class="menu-down show-menu" style="display: block;">
+                    <div class="brand-col">
+                        <span>Logo</span>
+                        <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>背景图</span>
+                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>颜色</span>
+                        <el-color-picker v-model="form.color"></el-color-picker>
+                    </div>
+                    <div class="brand-col">
+                        <span>icon</span>
+                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
+                    </div>
+                </div>
+            </li>
 
-            <div role="presentation" class="menu-down show-menu" style="display: block;">
-                <div class="brand-col">
-                    <span>Logo</span>
-                    <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
-                </div>
-                <div class="brand-col">
-                    <span>背景图</span>
-                    <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
-                </div>
-                <div class="brand-col">
-                    <span>颜色</span>
-                    <el-color-picker v-model="form.color"></el-color-picker>
-<!--                     <button class="brand-btns color-palette" @click="dialogColor = true"> 
-                        <el-color-picker v-model="color2"></el-color-picker>
-                    </button> -->
-                </div>
-                <div class="brand-col">
-                    <span>icon</span>
-                    <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
-                </div>
-            </div>
-        </li>
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">控制</div>
+            </template>
+           <li role="presentation" class="controls">
+                <!-- <a href="#" class="unActive-a"><span>控制 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
+                <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
+                    <div class="controls-col" v-for="item in controls" :class="item.bottomLine ? 'bottom-line' : ''" v-if="!item.hidden">
+                        <div>
+                           <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>
+                            <span>{{ item.title }}</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="item.checked">
+                        </div>
+                    </div>
+                    
+                    <!-- 电话区域 -->
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont icontelphone"></span>
+                            <span>电话</span>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="controls-col " :class="setPhone? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPhone">
+                        </div>
+                    </div>
+                    <div v-if="setPhone" :class="setPhone? 'bottom-line':''">
+                          <div class="form-group" v-for="item in form.phone">
+                            <label for="exampleInputEmail1">{{ item.label }}</label>
+                            <input type="email" class="form-control"  placeholder="">
+                          </div>         
+                    </div>
 
-        <li role="presentation" class="controls">
-            <a href="#" class="unActive-a"><span>控制 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-            <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
-                <div class="controls-col" v-for="item in controls" :class="item.bottomLine ? 'bottom-line' : ''" v-if="!item.hidden">
-                    <div>
-                       <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>
-                        <span>{{ item.title }}</span>
+                    <!--在线客服区域 -->
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont iconchat"></span>
+                            <span>在线客服</span>
+                        </div>
+                        <div>
+                        </div>
                     </div>
-                    <div>
-                        <input class="switch switch-anim" type="checkbox" checked="" v-model="item.checked">
+                    <div class="controls-col " :class="setStaff? '':'bottom-line'" >
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setStaff">
+                        </div>
                     </div>
-                </div>
-                
-                <!-- 电话区域 -->
-                <div class="controls-col" >
-                    <div>
-                       <span class="icon iconfont icontelphone"></span>
-                        <span>电话</span>
-                    </div>
-                    <div>
-                    </div>
-                </div>
-                <div class="controls-col " :class="setPhone? '':'bottom-line'">
-                    <div>
-                        <span>Enable</span>
-                    </div>
-                    <div>
-                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setPhone">
-                    </div>
-                </div>
-                <div v-if="setPhone" :class="setPhone? 'bottom-line':''">
-                      <div class="form-group" v-for="item in form.phone">
+                    <div v-if="setStaff" :class="setStaff? 'bottom-line':''" >
+                      <div class="form-group" v-for="item in form.staff">
                         <label for="exampleInputEmail1">{{ item.label }}</label>
                         <input type="email" class="form-control"  placeholder="">
-                      </div>         
-                </div>
+                      </div>        
+                    </div>
 
-                <!--在线客服区域 -->
-                <div class="controls-col" >
-                    <div>
-                       <span class="icon iconfont iconchat"></span>
-                        <span>在线客服</span>
+                    <!-- 邮件区域 -->
+                    <div class="controls-col" >
+                        <div>
+                            <span class="icon iconfont iconEMAIL"></span>
+                            <span>邮件</span>
+                        </div>
+                        <div>
+                        </div>
                     </div>
-                    <div>
+                    <div class="controls-col" :class="setEmail ? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setEmail">
+                        </div>
                     </div>
-                </div>
-                <div class="controls-col " :class="setStaff? '':'bottom-line'" >
-                    <div>
-                        <span>Enable</span>
-                    </div>
-                    <div>
-                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setStaff">
-                    </div>
-                </div>
-                <div v-if="setStaff" :class="setStaff? 'bottom-line':''" >
-                  <div class="form-group" v-for="item in form.staff">
-                    <label for="exampleInputEmail1">{{ item.label }}</label>
-                    <input type="email" class="form-control"  placeholder="">
-                  </div>        
-                </div>
+                    <div v-if="setEmail" :class="setEmail ? 'bottom-line':''">
+                          <div class="form-group" v-for="item in form.email">
+                            <label for="exampleInputEmail1">{{ item.label }}</label>
+                            <input type="email" class="form-control"  placeholder="">
+                          </div>
+                    </div>                
 
-                <!-- 邮件区域 -->
-                <div class="controls-col" >
-                    <div>
-                        <span class="icon iconfont iconEMAIL"></span>
-                        <span>邮件</span>
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont" ></span>
+                            <span>Default Navigation</span>
+                        </div>
+                         <el-popover
+                          placement="right"
+                          width="200"
+                          trigger="click">
+                          <div>
+                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
+                          </div>
+                          <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
+                        </el-popover>
+                        
                     </div>
-                    <div>
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont" ></span>
+                            <span>Contacts Button</span>
+                        </div>
+                        <button class="brand-btns favicon" @click="dialogButton = true">Default ···</button>
                     </div>
                 </div>
-                <div class="controls-col" :class="setEmail ? '':'bottom-line'">
-                    <div>
-                        <span>Enable</span>
-                    </div>
-                    <div>
-                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setEmail">
-                    </div>
-                </div>
-                <div v-if="setEmail" :class="setEmail ? 'bottom-line':''">
-                      <div class="form-group" v-for="item in form.email">
-                        <label for="exampleInputEmail1">{{ item.label }}</label>
-                        <input type="email" class="form-control"  placeholder="">
-                      </div>
-                </div>                
+            </li>
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">密码</div>
+            </template>
+            <li role="presentation" class="password">
+<!--                 <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
+                <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
 
-                <div class="controls-col" >
-                    <div>
-                       <span class="icon iconfont" ></span>
-                        <span>Default Navigation</span>
+                    <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
+                        </div>
                     </div>
-                     <el-popover
-                      placement="right"
-                      width="200"
-                      trigger="click">
-                      <div>
-                         <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
-                      </div>
-                      <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
-                    </el-popover>
+
+
+                    <form v-if="setPassWord">
+                        <span style="margin-top: 15px;">设置密码</span>
+                        <div>
+                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                        </div>                    
+                    </form>
+                    <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
                     
                 </div>
-                <div class="controls-col" >
-                    <div>
-                       <span class="icon iconfont" ></span>
-                        <span>Contacts Button</span>
-                    </div>
-                    <button class="brand-btns favicon" @click="dialogButton = true">Default ···</button>
+               </li>
+             </el-collapse-item>
+           </el-collapse>
+        <!-- <ul role="presentation"  style="flex-grow: 1;overflow-y: scroll; height: 100vh" > -->
+            
+            <!-- 名字和描述区域 -->
+<!--             <li role="presentation" class="name-desc">
+
+            </li>
+            <li role="presentation" >
+                <div class="unActive-a flex" style="padding: 10px 17px">
+                    <span>皮肤 </span>
+                    <span style="color: #999" @click="clickSelectSkin">White Style ···</span>
                 </div>
-            </div>
-        </li>
+            </li> -->
 
-        <li role="presentation" class="password">
-            <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-            <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+<!--             <li role="presentation" class="branding">
+                <a href="#" class="unActive-a">
+                    <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
+                </a>
 
-                <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
-                    <div>
-                        <span>Enable</span>
+                <div role="presentation" class="menu-down show-menu" style="display: block;">
+                    <div class="brand-col">
+                        <span>Logo</span>
+                        <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
                     </div>
-                    <div>
-                        <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
+                    <div class="brand-col">
+                        <span>背景图</span>
+                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>颜色</span>
+                        <el-color-picker v-model="form.color"></el-color-picker>
+                    </div>
+                    <div class="brand-col">
+                        <span>icon</span>
+                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
                     </div>
                 </div>
+            </li> -->
+
+ 
+<!--             <li role="presentation" class="password">
+                <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+                <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+
+                    <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
+                        </div>
+                    </div>
 
 
-                <form v-if="setPassWord">
-                    <span style="margin-top: 15px;">设置密码</span>
-                    <div>
-                        <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
-                    </div>                    
-                </form>
-                <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
-                
-            </div>
-        </li>
-        
-        <!-- 目录区 -->
-<!--         <li role="presentation" class="directory">
-            <a href="#" class="unActive-a"><span>篇目 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-            <div role="presentation" class="menu-down show-menu" style="display: block;">
-                <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-            </div>
-        </li> -->
-    </ul>
+                    <form v-if="setPassWord">
+                        <span style="margin-top: 15px;">设置密码</span>
+                        <div>
+                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                        </div>                    
+                    </form>
+                    <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
+                    
+                </div>
+            </li> -->
+        <!-- </ul> -->
+    </div>
     
     <!-- 目录区 -->
     <ul class="nav nav-pills nav-stacked skinbar" v-if="showMenu">
@@ -477,7 +550,7 @@
     </el-dialog>
 
     <!-- 颜色选择器 -->
-    <el-dialog
+<!--     <el-dialog
       title="SELECT COLORS"
       :visible.sync="dialogColor"
       width="40%">
@@ -486,7 +559,7 @@
         <el-button @click="dialogColor = false">CANCEL</el-button>
         <el-button type="primary" @click="saveColor">OK</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
 
     <!--分享对话框 -->
     <el-dialog
@@ -512,7 +585,7 @@
               class="avatar-uploader"
               action="https://jsonplaceholder.typicode.com/posts/"
               :show-file-list="false">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <img v-if="form.background.url" :src="form.background.url" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>            
         </div>
@@ -562,6 +635,9 @@
     var app = new Vue({
       el: '#app',
       data: {
+        menu: {
+            toggleMenu: false
+        },
         rank: [
           {icon: 'el-icon-top-left', checked: false},
           {icon: 'el-icon-top', checked: false},
@@ -609,7 +685,7 @@
             link: 'baidu.com',
             qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
           },
-          color: '#CB2121',
+          color: '#EEE',
           navigation: 'Default ...',
           button: {
             delivery: '',
@@ -618,6 +694,7 @@
           },
           placement: 'fill',
           background: {
+            url:'',
             fit:['fit','fill','fixx'],
             filling: 'center'
           },
@@ -756,6 +833,9 @@
         // });
       },
       methods: {
+        toggleMenu () {
+          this.menu.toggleMenu = !this.menu.toggleMenu
+        },
         copy () {
             this.$message({
               message: '复制成功',

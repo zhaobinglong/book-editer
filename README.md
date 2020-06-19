@@ -23,8 +23,8 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 - 下载（点击下载icon，弹出框）
 - 电话
 - 邮件（点击icon，弹出弹窗，提示发送至邮箱，有一个确定按钮）
-- 1. save, 设为默认
-2. 下滑条滑动时，  home与save所在的div始终存在；
+- save, 设为默认
+- 下滑条滑动时，  home与save所在的div始终存在；
 3. branding与controls 这些组，只有一个处于展开状态
 - 展开的组色彩 #EEE；
 5. 分享，下载，电话，邮件静态页面
