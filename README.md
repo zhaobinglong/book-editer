@@ -16,6 +16,7 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 - 点击图标显示缩略图和目录
 - 图标栏目悬浮在页面底部
 - 页码区域悬浮在页面顶部
+- 
 
 ## 第二阶段开发记录
 - 菜单要互斥，打开一个，其他都要关闭
