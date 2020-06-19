@@ -76,7 +76,7 @@
                 </form> -->
             </div>
         </div>
-
+        <div style="height: 100vh; overflow-y: scroll;">
         <el-collapse accordion>
           <el-collapse-item>
             <template slot="title">
@@ -276,6 +276,7 @@
                </li>
              </el-collapse-item>
            </el-collapse>
+       </div>
         <!-- <ul role="presentation"  style="flex-grow: 1;overflow-y: scroll; height: 100vh" > -->
             
             <!-- 名字和描述区域 -->
@@ -571,17 +572,17 @@
       </span>
     </el-dialog>
 
-    <!-- 颜色选择器 -->
-<!--     <el-dialog
-      title="SELECT COLORS"
-      :visible.sync="dialogColor"
+    <!-- 下载选择器 -->
+    <el-dialog
+      title="下载出版物"
+      :visible.sync="dialogDownload"
       width="40%">
-      <el-color-picker v-model="color2"></el-color-picker>
+
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogColor = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveColor">OK</el-button>
+        <el-button @click="dialogColor = false">取消</el-button>
+        <el-button type="primary" @click="saveColor">下载</el-button>
       </span>
-    </el-dialog> -->
+    </el-dialog>
 
     <!--分享对话框 -->
     <el-dialog
@@ -734,6 +735,7 @@
         dialogFavicon: false,
         dialogButton: false,
         dialogShare: false,
+        dialogDownload: true,
         form: {
           share: {
             link: 'baidu.com',
