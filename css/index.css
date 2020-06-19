@@ -127,6 +127,26 @@ body {
     align-items: center;
     padding: 10px 10px;
 }
+.download {
+    padding: 8px
+}
+.download .download-all {
+    display: flex;
+    background-color: #EFEFEF;
+    padding: 10px;
+}
+.download .download-all span {
+    margin-right: 20px;
+}
+.download .download-all .desc {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.download .download-current {
+    margin-top: 20px;
+
+}
 .nav {
     width: 250px;
     height: 100vh;

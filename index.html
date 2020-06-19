@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)http://rtake.com:9999/bs-pro/src/pages/index.html# -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -576,12 +575,19 @@
     <el-dialog
       title="下载出版物"
       :visible.sync="dialogDownload"
-      width="40%">
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogColor = false">取消</el-button>
-        <el-button type="primary" @click="saveColor">下载</el-button>
-      </span>
+      width="50%">
+      <div class="download">
+          <div class="download-all">
+            <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+            <div class="desc">
+                <p>全部出版物 37.8M</p> 
+                <a href="">下载刊物为PDF文件</a> 
+            </div>
+          </div>
+          <div class="download-current">
+              <a>当前页面(5.2M)</a> 
+          </div>
+      </div>
     </el-dialog>
 
     <!--分享对话框 -->
@@ -978,10 +984,7 @@
         clickIcon (item) {
             console.log(item)
             if (item.title == '下载') {
-                this.$alert(`你下载的文件为空`, '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {}
-                });                
+                this.dialogDownload = true              
             } else if (item.title == '分享') {
                 this.dialogShare = true
             } else if (item.title == '缩略图') {
