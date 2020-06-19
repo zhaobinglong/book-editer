@@ -581,11 +581,11 @@
             <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
             <div class="desc">
                 <p>全部出版物 37.8M</p> 
-                <a href="">下载刊物为PDF文件</a> 
+                <a href="https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki&download_version=1032005140&version_type=1">下载刊物为PDF文件</a> 
             </div>
           </div>
           <div class="download-current">
-              <a>当前页面(5.2M)</a> 
+              <a href="https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki&download_version=1032005140&version_type=1">当前页面(5.2M)</a> 
           </div>
       </div>
     </el-dialog>
@@ -989,7 +989,19 @@
                 this.dialogShare = true
             } else if (item.title == '缩略图') {
                 this.showMenu = true
-            } else {
+            } else if (item.title == '电话') {
+                this.$alert(`拨打电话136-1851-6602`, '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                  }
+                });
+            } else if (item.title == '邮件') {
+                this.$alert(`发送邮件到 570869214@qq.com`, '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                  }
+                });
+            } else{
                 this.$alert(`你点击了${item.title}按钮`, '提示', {
                   confirmButtonText: '确定',
                   callback: action => {

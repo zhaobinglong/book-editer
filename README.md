@@ -21,13 +21,16 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 - 菜单要互斥，打开一个，其他都要关闭
 - 分享弹框
 - 下载弹框（点击下载icon，弹出框）
-- 电话
+- 电话（点击图标，弹框显示电话）
 - 邮件（点击icon，弹出弹窗，提示发送至邮箱，有一个确定按钮）
 - save, 设为默认
 - 下滑条滑动时，  home与save所在的div始终存在；
 - branding与controls 这些组，只有一个处于展开状态
 - 展开的组色彩 #EEE；
-6. 按照接口列表，写出所有js
 - 篇目 改成目录;多层结构
 - 缩略图与目录，都需要点击才显示，而且只能显示一个
 - 缩略图为懒加载
+
+## 第三阶段开发
+- 使用webpack进行打包编译
+- 引入mock.js
