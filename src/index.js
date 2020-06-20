@@ -393,10 +393,7 @@ var app = new Vue({
     // 点击搜索按钮
     async search () {
         if (this.searchKey) {
-          
           this.searchList = await api.search({})
-
-            
         } else {
             this.$message({
               message: '搜索内容不能为空',
