@@ -1,7 +1,7 @@
     
 import './css/index.css'
 
-
+import vSearch from './components/search.vue';
 var api=require("./api/index");
 
 //引入你mock.js文件
@@ -10,6 +10,10 @@ require('./mock/index.js')
 // vue接管列表数据渲染
 var app = new Vue({
   el: '#app',
+
+  components:{
+    vSearch
+  },
   data: {
     treeData: [{
       label: '一级 1',
@@ -90,6 +94,8 @@ var app = new Vue({
     dialogShare: false,
     dialogDownload: false,
     form: {
+      title: '',
+      description: '',
       share: {
         link: 'baidu.com',
         qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
@@ -232,16 +238,20 @@ var app = new Vue({
     }
   },     
   mounted() {      
-     // window.addEventListener("beforeunload", e => {
-     //    this.beforeunloadHandler(e);
-     // });
+     api.getBook({}).then(res => {
+        Object.assign(this.form, res)
+     })
 
+     api.getSetting({}).then(res => {
+        Object.assign(this.form, res)
+     })     
   },
   destroyed() {
     // window.removeEventListener("beforeunload", e => {
     //     this.beforeunloadHandler(e);
     // });
   },
+
   methods: {
     toggleMenu () {
       this.menu.toggleMenu = !this.menu.toggleMenu
@@ -390,20 +400,7 @@ var app = new Vue({
           type: 'info'
         });             
     },
-    // 点击搜索按钮
-    async search () {
-        if (this.searchKey) {
-          
-          this.searchList = await api.search({})
 
-            
-        } else {
-            this.$message({
-              message: '搜索内容不能为空',
-              type: 'warning'
-            });
-        }
-    },
     download (src, fileName) {
       let x = new XMLHttpRequest();
       x.open("GET", src, true);

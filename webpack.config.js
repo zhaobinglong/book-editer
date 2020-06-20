@@ -6,11 +6,21 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WebpackBar = require('webpackbar'); // 打包进度条
 const optimizeCss = require('optimize-css-assets-webpack-plugin') // 压缩css
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin') // 压缩js
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 var baseConfig = {
     mode:'development', //development
     entry: {
         main: './src/index.js'
+    },
+    resolve: {
+        // 自动补全的扩展名
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+            '@': path.resolve('src'),
+            // '@config': resolve('config'),
+            // 'vue$': 'vue/dist/vue.common.js'
+        }
     },
     output: {
         // publicPath:'http://cdn.com.cn', //注入打包后的html中的script标签前缀
@@ -44,10 +54,15 @@ var baseConfig = {
         new optimizeCss(),
         new UglifyJsPlugin({
             test: /\.js($|\?)/i
-        })
+        }),
+        new VueLoaderPlugin()
     ],
     module: {
         rules: [
+              {
+                  test: /\.vue$/,
+                  use: ['vue-loader']
+              },
               {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
