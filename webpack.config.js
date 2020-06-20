@@ -18,6 +18,7 @@ var baseConfig = {
         extensions: ['.js', '.vue', '.json'],
         alias: {
             '@': path.resolve('src'),
+            //  vue: 'vue/dist/vue.js',
             // '@config': resolve('config'),
             // 'vue$': 'vue/dist/vue.common.js'
         }
@@ -59,6 +60,10 @@ var baseConfig = {
     ],
     module: {
         rules: [
+              {
+                test: /\.(woff|svg|eot|ttf)\??.*$/,
+                loader: 'url-loader'
+              },
               {
                   test: /\.vue$/,
                   use: ['vue-loader']

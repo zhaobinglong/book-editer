@@ -1,19 +1,24 @@
     
 import './css/index.css'
+import './css/switch.css'
 
+import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css'; 
 import vSearch from './components/search.vue';
 var api=require("./api/index");
 
 //引入你mock.js文件
 require('./mock/index.js')
 
-// vue接管列表数据渲染
-var app = new Vue({
-  el: '#app',
+Vue.use(ElementUI);
 
-  components:{
-    vSearch
-  },
+// vue接管列表数据渲染
+new Vue({
+  el: '#app',
+  // components:{
+  //   vSearch
+  // },
   data: {
     treeData: [{
       label: '一级 1',
