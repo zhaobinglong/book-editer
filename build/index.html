@@ -6,7 +6,7 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1876940_8s7f2vms0xx.css">
-    <link rel="stylesheet" href="./css/switch.css">
+    <!-- <link rel="stylesheet" href="./css/switch.css"> -->
     <!-- <script src="./Document_files/jquery.min.js"></script> -->
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -31,7 +31,7 @@
     <!-- <script src="../../context/js/tools.js"></script> -->
     <!-- <script src="../../context/js/tween.js"></script> -->
     <!-- <script src="../../context/js/velocity.min.js"></script> -->
-<link href="css/main.b0d05.css" rel="stylesheet"></head>
+<link href="css/main.d3927.css" rel="stylesheet"></head>
 
 <body >
 <div class="container-fluid" id="app">
@@ -82,10 +82,10 @@
             <div role="presentation" class="menu-down show-menu" style="display: block;">
 
                 <span style="margin-top: 15px;">书名</span>
-                <input type="text" class="form-control" placeholder="Flipbook Name" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Flipbook Name" v-model="form.title">
                 <span style="margin-top: 15px;">描述</span>
                 <!-- <textarea type="text"></textarea> -->
-                 <textarea type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1"></textarea>
+                 <textarea type="text" class="form-control" placeholder="Description" v-model="form.description"></textarea>
             </div>
              
           </el-collapse-item>
@@ -531,7 +531,7 @@
       :visible.sync="dialogFavicon"
       width="40%">
         <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-            <el-image :src="form.favicon" v-if="form.favicon"></el-image>
+            <el-image :src="form.favico" v-if="form.favicon"></el-image>
             <el-popover
               placement="right"
               width="200"
@@ -649,5 +649,5 @@
     </el-dialog>
 
 </div>
-<script src="main.b0d0589523.js"></script></body>
+<script src="main.d39273504c.js"></script></body>
 </html>

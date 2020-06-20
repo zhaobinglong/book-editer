@@ -1,6 +1,6 @@
     
 import './css/index.css'
-
+import './css/switch.css'
 
 var api=require("./api/index");
 
@@ -232,10 +232,13 @@ var app = new Vue({
     }
   },     
   mounted() {      
-     // window.addEventListener("beforeunload", e => {
-     //    this.beforeunloadHandler(e);
-     // });
+     api.getBook({}).then(res => {
+        Object.assign(this.form, res)
+     })
 
+     api.getSetting({}).then(res => {
+        Object.assign(this.form, res)
+     })     
   },
   destroyed() {
     // window.removeEventListener("beforeunload", e => {
@@ -394,6 +397,7 @@ var app = new Vue({
     async search () {
         if (this.searchKey) {
           this.searchList = await api.search({})
+          console.log(this.form)
         } else {
             this.$message({
               message: '搜索内容不能为空',
