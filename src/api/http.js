@@ -66,7 +66,6 @@ service.interceptors.response.use(
   /**
   * code为非200是抛错 可结合自己业务进行修改
   */
-    console.log(response)
     const res = response.data;
     if (!response) {
       tryHideFullScreenLoading()

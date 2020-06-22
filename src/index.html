@@ -61,7 +61,7 @@
             </span>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                    保存<span class="caret"></span>
+                    {{ saveBtn }}<span class="caret"></span>
                 </button>
 <!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
                     <div class="checkbox">
@@ -132,18 +132,89 @@
               <div style="padding-left: 10px">控制</div>
             </template>
            <li role="presentation" class="controls">
-                <!-- <a href="#" class="unActive-a"><span>控制 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
+                
                 <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
-                    <div class="controls-col" v-for="item in controls" :class="item.bottomLine ? 'bottom-line' : ''" v-if="!item.hidden">
+                    <!-- 蛋疼，这里定义的数据结构不合适，要想办法 -->
+                    <div class="controls-col "  >
                         <div>
-                           <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>
-                            <span>{{ item.title }}</span>
+                           <span class="icon iconfont" class="iconfenxiang2"></span>
+                            <span>分享</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="item.checked">
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.share">
                         </div>
                     </div>
-                    
+                    <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconxiazai"></span>
+                            <span>下载</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.download">
+                        </div>
+                    </div>
+
+                    <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconxiazai"></span>
+                            <span>Text Selection</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col bottom-line"  >
+                        <div>
+                           <span class="icon iconfont" class="iconview-thumbs"></span>
+                            <span>缩略图</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconmute-off"></span>
+                            <span>声音</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="sound">
+                        </div>
+                    </div>
+
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconfull-screen"></span>
+                            <span>全屏</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconzoom-in"></span>
+                            <span>放大镜</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col bottom-line"  >
+                        <div>
+                           <span class="icon iconfont" class="iconsearch"></span>
+                            <span>搜索</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.search">
+                        </div>
+                    </div>
+
                     <!-- 电话区域 -->
                     <div class="controls-col" >
                         <div>
@@ -153,18 +224,18 @@
                         <div>
                         </div>
                     </div>
-                    <div class="controls-col " :class="setPhone? '':'bottom-line'">
+                    <div class="controls-col " :class="form.contactEnable? '':'bottom-line'">
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPhone">
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.contcontactEnableactTel">
                         </div>
                     </div>
-                    <div v-if="setPhone" :class="setPhone? 'bottom-line':''">
+                    <div v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
                           <div class="form-group" v-for="item in form.phone">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input type="email" class="form-control"  placeholder="">
+                            <input class="form-control"  placeholder="" v-model="form.contactTel">
                           </div>         
                     </div>
 
@@ -177,18 +248,18 @@
                         <div>
                         </div>
                     </div>
-                    <div class="controls-col " :class="setStaff? '':'bottom-line'" >
+                    <div class="controls-col " :class="form.chatEnable? '':'bottom-line'" >
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setStaff">
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.chatEnable">
                         </div>
                     </div>
-                    <div v-if="setStaff" :class="setStaff? 'bottom-line':''" >
+                    <div v-if="form.chatEnable" :class="form.chatEnable? 'bottom-line':''" >
                       <div class="form-group" v-for="item in form.staff">
                         <label for="exampleInputEmail1">{{ item.label }}</label>
-                        <input type="email" class="form-control"  placeholder="">
+                        <input  class="form-control"  placeholder="" v-model="form.chat">
                       </div>        
                     </div>
 
@@ -201,15 +272,15 @@
                         <div>
                         </div>
                     </div>
-                    <div class="controls-col" :class="setEmail ? '':'bottom-line'">
+                    <div class="controls-col" :class="form.emailEnable ? '':'bottom-line'">
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setEmail">
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.emailEnable">
                         </div>
                     </div>
-                    <div v-if="setEmail" :class="setEmail ? 'bottom-line':''">
+                    <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
                           <div class="form-group" v-for="item in form.email">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
                             <input type="email" class="form-control"  placeholder="">
@@ -250,20 +321,20 @@
 <!--                 <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
                 <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
 
-                    <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
+                    <div class="controls-col" :class="form.passwordEnable ? '':'bottom-line'">
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.passwordEnable">
                         </div>
                     </div>
 
 
-                    <form v-if="setPassWord">
+                    <form v-if="form.passwordEnable">
                         <span style="margin-top: 15px;">设置密码</span>
                         <div>
-                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1" v-model="form.password">
                         </div>                    
                     </form>
                     <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>

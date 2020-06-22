@@ -105,8 +105,9 @@ var app = new Vue({
     dialogButton: false,
     dialogShare: false,
     dialogDownload: false,
+    saveBtn: '保存',
     form: {
-      "bookId": 400,
+      "bookId": 1,
       "main": true,
       "skin": "2",
       "logo": "1",
@@ -117,29 +118,22 @@ var app = new Vue({
       "colorPanel": 1,
       "colorBackground": 1,
       "colorLink": 1,
-      "password": "1",
-      "passwordEnable": false,
-      "emailEnable": false,
       "emailWelcome": "1",
       "emailPort": 1,
       "emailServer": "1",
       "emailUsername": "1",
       "emailPassword": "1",
       "emailSign": "1",
-      "chat": "1",
-      "chatEnable": false,
-      "contactEnable": false,
-      "contactTel": "1",
       "external": "1",
       "externalText": "1",
       "externalEnable": false,
-      "download": false,
-      "share": false,
-      "sound": false,
-      "search": false,
+      download: false,
+      share: false,
+      sound: false,
+      search: false,
       "userId": 1,
-      "created": 1592821609902,
-      "updated": 1592822482970,
+      title: '',
+      description: '',
       share: {
         link: 'baidu.com',
         qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
@@ -161,6 +155,13 @@ var app = new Vue({
       logoInput: '',
       favicon: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
       faviconInput: '',
+      chatEnable: false,
+      chat: '',
+      contactTel: '',
+      contactEnable: false,
+      emailEnable: false,
+      password: '',
+      passwordEnable: false,
       info: [
         {label: 'name', value: ''},
         {label: 'desc', value: ''},
@@ -280,15 +281,28 @@ var app = new Vue({
       }
       return arr
     }
-  },     
+  },  
+  watch: {
+      form:{
+        handler:function(val,oldval){
+          console.log(val)
+          this.saveBtn = '保存'
+        },
+        deep:true//对象内部的属性监听，也叫深度监听
+      },
+  } ,  
   mounted() {      
-     api.getBook({}).then(res => {
-        Object.assign(this.form, res)
-     })
+     // api.getBook({}).then(res => {
+     //    Object.assign(this.form, res)
+     // })
 
-     api.getSetting({}).then(res => {
-        Object.assign(this.form, res)
-     })     
+     // api.getSetting({}).then(res => {
+     //    Object.assign(this.form, res)
+     // })   
+     api.getMainSetting({bookId: 2}).then(res => {
+      console.log(res)
+       Object.assign(this.form, res)
+     })  
   },
   destroyed() {
     // window.removeEventListener("beforeunload", e => {
@@ -432,6 +446,7 @@ var app = new Vue({
     save () {
        api.saveSetting(this.form).then(res => {
         console.log(res)
+        this.saveBtn = '已保存'
        })  
     },
     goBack () {

@@ -16,6 +16,15 @@ export const getSetting = data => {
     })
 }
 
+// 获取主要的配置信息
+export const getMainSetting = data => {
+    return service({
+        url: '/book/getMainSetting',
+        method: 'get',
+        params: data
+    })
+}
+
 // 保存配置信息
 export const saveSetting = data => {
     return service({
