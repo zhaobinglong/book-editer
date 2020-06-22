@@ -12,7 +12,7 @@
                 第{{ item.page }}页. {{ item.description }}
             </p>
         </li>
-        <li v-if="searchList.length">加载更多</li>
+        <li class="search-more" v-if="searchList.length" @click="addMore">加载更多</li>
     </ul>
 </template>
 
@@ -27,6 +27,10 @@
             }
         },
         methods: {
+            async addMore() {
+               let moreData = await search({})
+               this.searchList = this.searchList.concat(moreData)
+            },
             clickItem (item) {
                 this.$alert(item.description, '提示', {
                   confirmButtonText: '确定',
@@ -146,6 +150,9 @@
 
 .search-box .text-list span {
     color: #aaa;
+}
+.search-box .search-more {
+    text-align: center;
 }
 
 </style>
