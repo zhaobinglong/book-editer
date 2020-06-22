@@ -20,9 +20,15 @@
         },
         data() {
             return {
-                myList: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+                myList: [],
                 url: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             }
+        },
+        // 组件挂载完毕
+        mounted(){
+          for (var i = 0; i < 1000; i++) {
+              this.myList.push(i)
+          }
         },
         methods: {
             clickItem(item, index) {
@@ -52,8 +58,9 @@
 
 <style scoped>
 .thum-item {
-    width: 160px;
-    margin: 0 auto;
+    width: 100%;
+    padding: 6px 0;
+    cursor: pointer;
 }
 .thum-item:hover {
     background-color: #EFEFEF
