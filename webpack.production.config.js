@@ -8,6 +8,9 @@ const optimizeCss = require('optimize-css-assets-webpack-plugin') // 压缩css
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin') // 压缩js
 const { VueLoaderPlugin } = require('vue-loader');
 
+// 生产环境编译前，需要更改环境变量
+process.env.NODE_ENV = 'production'
+
 var baseConfig = {
     devtool: 'cheap-module-eval-source-map',
     mode:'development', //development
