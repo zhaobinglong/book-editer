@@ -1,5 +1,5 @@
 <template>
-    <ul class="search-box">
+    <ul class="search-box" v-if="showSearchBox">
         <li class="title">搜索</li>
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
@@ -14,20 +14,39 @@
         </li>
         <li class="search-more" v-if="searchList.length" @click="addMore">{{ showMore }}</li>
     </ul>
+    <div v-else class="earch-box-small">
+        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="showSearch"></i>
+    </div>
 </template>
 
 <script>
     import {search} from '@/api/index'
     export default {
-        props: {},
+        props: {
+            navigation: ''
+        },
         data() {
             return {
                 searchKey: '',
                 searchList: [],
-                showMore: '还有10条记录'
+                showMore: '还有10条记录',
+                showBox: false
             }
         },
+        computed: {
+          showSearchBox: function () {
+            if (this.navigation == '搜索' || this.showBox) {
+                return true
+            } else {
+                return false
+            }
+          }
+        }, 
         methods: {
+            showSearch () {
+              // this.$emit('showCityName',data)
+              this.showBox = true
+            },
             async addMore() {
                if (this.showMore == '还有10条记录') {
                    let moreData = await search({})
@@ -157,6 +176,15 @@
 }
 .search-box .search-more {
     text-align: center;
+}
+.earch-box-small {
+    padding: 10px 20px;
+}
+.earch-box-small-tip {
+    background-color: #CFCFCF;
+    display: inline-block;
+    padding: 4px 10px;
+    margin-right: 10px;
 }
 
 </style>

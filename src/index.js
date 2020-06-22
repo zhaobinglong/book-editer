@@ -15,7 +15,7 @@ import thumbnails from '@/components/thumbnail'
 import search from '@/components/search'
 
 //引入你mock.js文件
-// require('./mock/index.js')
+require('./mock/index.js')
 
 
 
@@ -84,11 +84,10 @@ var app = new Vue({
       {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
     ],
     navigation: [
-      {value: 'Table of Contents', checked: false},
-      {value: 'Thumbnails', checked: false},
-      {value: 'Notes', checked: false},
-      {value: 'None', checked: false},
-      {value: 'Search', checked: false}
+      {value: '目录', checked: false},
+      {value: '缩略图', checked: false},
+      {value: '无', checked: false},
+      {value: '搜索', checked: false}
     ],
     showMenu: true,
     fileList: [],
@@ -107,7 +106,7 @@ var app = new Vue({
     dialogShare: false,
     dialogDownload: false,
     form: {
-      "bookId": 3,
+      "bookId": 400,
       "main": true,
       "skin": "2",
       "logo": "1",
@@ -146,7 +145,7 @@ var app = new Vue({
         qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
       },
       color: '#EEE',
-      navigation: 'Default ...',
+      navigation: '目录',
       button: {
         delivery: '',
         text: '',
