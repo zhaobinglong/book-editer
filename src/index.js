@@ -450,6 +450,7 @@ var app = new Vue({
        })  
     },
     goBack () {
+      if (this.saveBtn == '保存') {
         this.$confirm('你的修改不会被保存, 是否继续?', '提示', {
           confirmButtonText: '继续',
           cancelButtonText: '取消',
@@ -462,6 +463,9 @@ var app = new Vue({
             message: '已取消'
           });          
         });
+      } else {
+        
+      }
       
     },
     beforeunloadHandler(e) {

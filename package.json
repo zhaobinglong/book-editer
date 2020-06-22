@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --inline --progesss --color --open",
-    "build": "webpack"
+    "build": "webpack --progress --profile --colors --config webpack.production.config.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
