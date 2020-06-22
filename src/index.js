@@ -387,11 +387,12 @@ var app = new Vue({
         return item.icon
       }
     },
+
+    // 保存修改
     save () {
-        // this.$message({
-        //   message: '保存成功',
-        //   type: 'success'
-        // });  
+       api.saveSetting(this.form).then(res => {
+        console.log(res)
+       })  
     },
     goBack () {
       window.history.back(-1); 

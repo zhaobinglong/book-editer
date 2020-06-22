@@ -39,7 +39,7 @@ export function tryHideFullScreenLoading() {
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? '' : 'https://examlab.cn/uniapi/',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://m.baige.me' : 'http://m.baige.me',
   timeout: 5000                  // 请求超时时间
 });
 

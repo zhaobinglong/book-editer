@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 // mock随机数据
 const Random = Mock.Random;
 
-Mock.mock('/api/query', 'get', () => {
+Mock.mock(/\/api\/query/, 'get', () => {
 	let arr = []
     for (let i = 0; i < 10; i++) {
 		let data = Mock.mock({
@@ -16,7 +16,7 @@ Mock.mock('/api/query', 'get', () => {
 
 
 
-Mock.mock('/api/getBook', 'get', () => {
+Mock.mock(/\api\/getBook/, 'get', () => {
 	let obj = {
 	    "id": Random.integer(100,1000),
 	    "userId": Random.integer(100,1000),
@@ -42,7 +42,7 @@ Mock.mock('/api/getBook', 'get', () => {
 })
 
 
-Mock.mock('/api/fb/getSetting', 'get', () => {
+Mock.mock(/\/api\/fb\/getSetting/, 'get', () => {
 	let controls = {
 	    "id": Random.integer(100,1000),
 	    "bookId": Random.integer(100,1000),

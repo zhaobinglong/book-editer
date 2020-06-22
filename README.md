@@ -30,7 +30,6 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 - 展开的组色彩 #EEE；
 - 篇目 改成目录;多层结构
 - 缩略图与目录，都需要点击才显示，而且只能显示一个
-- 缩略图为懒加载
 
 ## 已对接的接口记录
 - 获取书本信息（名字和描述）

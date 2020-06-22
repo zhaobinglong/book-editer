@@ -16,6 +16,15 @@ export const getSetting = data => {
     })
 }
 
+// 保存配置信息
+export const saveSetting = data => {
+    return service({
+        url: '/api/book/saveSetting',
+        method: 'post',
+        data
+    })
+}
+
 
 export const search = data => {
     return service({
