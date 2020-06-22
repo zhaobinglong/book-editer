@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1876940_8s7f2vms0xx.css">
+    <!-- <link rel="stylesheet" href="./css/switch.css"> -->
+    <!-- <script src="./Document_files/jquery.min.js"></script> -->
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+    <script src="./css/bootstrap.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 右键菜单 -->
+    <!-- <link rel="stylesheet" href="../../context/css/style.css"> -->
+    <!-- <link rel="stylesheet" href="../../context/css/nprogress.css"> -->
+    <!-- <script src="../../context/js/index.js"></script> -->
+    <!-- <script src="../../context/js/lantern.js"></script> -->
+    <!-- <script src="../../context/js/nprogress.js"></script> -->
+    <!-- <script src="../../context/js/object.js"></script> -->
+    <!-- <script src="../../context/js/requestAnimate.js"></script> -->
+    <!-- <script src="../../context/js/startMove.js"></script> -->
+    <!-- <script src="../../context/js/tools.js"></script> -->
+    <!-- <script src="../../context/js/tween.js"></script> -->
+    <!-- <script src="../../context/js/velocity.min.js"></script> -->
+<link href="css/main.6bb3a.css" rel="stylesheet"></head>
+
+<body >
+<div class="container-fluid" id="app">
+<!--     <div class="bar">
+        <span @click="goBack">
+            <span class="glyphicon glyphicon-menu-left"></span> Home
+        </span>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
+                Save <span class="caret"></span>
+            </button>
+            <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
+                <div class="checkbox">
+                <label>
+                  <input type="checkbox"> Make setting default for future flipbooks
+                </label>
+              </div>
+            </form>
+        </div>
+    </div> -->
+
+    <!-- 左侧菜单栏区域 -->
+    <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
+        <div class="menu-item" style="background-color: #CFCFCF">
+            <span @click="goBack">
+                <span class="glyphicon glyphicon-menu-left"></span>首页
+            </span>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
+                    {{ saveBtn }}<span class="caret"></span>
+                </button>
+<!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
+                    <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Make setting default for future flipbooks
+                    </label>
+                  </div>
+                </form> -->
+            </div>
+        </div>
+        <div style="height: 100vh; overflow-y: scroll;">
+        <el-collapse accordion>
+          <el-collapse-item>
+            <template slot="title">
+              <div style="padding-left: 10px">名字和描述</div>
+            </template>
+
+            <div role="presentation" class="menu-down show-menu" style="display: block;">
+
+                <span style="margin-top: 15px;">书名</span>
+                <input type="text" class="form-control" placeholder="Flipbook Name" v-model="form.title">
+                <span style="margin-top: 15px;">描述</span>
+                <!-- <textarea type="text"></textarea> -->
+                 <textarea type="text" class="form-control" placeholder="Description" v-model="form.description"></textarea>
+            </div>
+             
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">皮肤</div>
+            </template>
+            <div class="unActive-a flex" style="padding: 10px 17px">
+                <span style="color: #999" @click="clickSelectSkin">White Style ···</span>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">品牌</div>
+            </template>
+            <li role="presentation" class="branding">
+ <!--                <a href="#" class="unActive-a">
+                    <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
+                </a> -->
+
+                <div role="presentation" class="menu-down show-menu" style="display: block;">
+                    <div class="brand-col">
+                        <span>Logo</span>
+                        <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>背景图</span>
+                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>颜色</span>
+                        <el-color-picker v-model="form.color"></el-color-picker>
+                    </div>
+                    <div class="brand-col">
+                        <span>icon</span>
+                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
+                    </div>
+                </div>
+            </li>
+
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">控制</div>
+            </template>
+           <li role="presentation" class="controls">
+                
+                <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
+                    <!-- 蛋疼，这里定义的数据结构不合适，要想办法 -->
+                    <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconfenxiang2"></span>
+                            <span>分享</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.share">
+                        </div>
+                    </div>
+                    <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconxiazai"></span>
+                            <span>下载</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.download">
+                        </div>
+                    </div>
+
+                    <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconxiazai"></span>
+                            <span>Text Selection</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col bottom-line"  >
+                        <div>
+                           <span class="icon iconfont" class="iconview-thumbs"></span>
+                            <span>缩略图</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconmute-off"></span>
+                            <span>声音</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="sound">
+                        </div>
+                    </div>
+
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconfull-screen"></span>
+                            <span>全屏</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconzoom-in"></span>
+                            <span>放大镜</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col bottom-line"  >
+                        <div>
+                           <span class="icon iconfont" class="iconsearch"></span>
+                            <span>搜索</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.search">
+                        </div>
+                    </div>
+
+                    <!-- 电话区域 -->
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont icontelphone"></span>
+                            <span>电话</span>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="controls-col " :class="form.contactEnable? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.contcontactEnableactTel">
+                        </div>
+                    </div>
+                    <div v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
+                          <div class="form-group" v-for="item in form.phone">
+                            <label for="exampleInputEmail1">{{ item.label }}</label>
+                            <input class="form-control"  placeholder="" v-model="form.contactTel">
+                          </div>         
+                    </div>
+
+                    <!--在线客服区域 -->
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont iconchat"></span>
+                            <span>在线客服</span>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="controls-col " :class="form.chatEnable? '':'bottom-line'" >
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.chatEnable">
+                        </div>
+                    </div>
+                    <div v-if="form.chatEnable" :class="form.chatEnable? 'bottom-line':''" >
+                      <div class="form-group" v-for="item in form.staff">
+                        <label for="exampleInputEmail1">{{ item.label }}</label>
+                        <input  class="form-control"  placeholder="" v-model="form.chat">
+                      </div>        
+                    </div>
+
+                    <!-- 邮件区域 -->
+                    <div class="controls-col" >
+                        <div>
+                            <span class="icon iconfont iconEMAIL"></span>
+                            <span>邮件</span>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="controls-col" :class="form.emailEnable ? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.emailEnable">
+                        </div>
+                    </div>
+                    <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
+                          <div class="form-group" v-for="item in form.email">
+                            <label for="exampleInputEmail1">{{ item.label }}</label>
+                            <input type="email" class="form-control"  placeholder="">
+                          </div>
+                    </div>                
+
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont" ></span>
+                            <span>Default Navigation</span>
+                        </div>
+                         <el-popover
+                          placement="right"
+                          width="200"
+                          trigger="click">
+                          <div>
+                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
+                          </div>
+                          <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
+                        </el-popover>
+                        
+                    </div>
+                    <div class="controls-col" >
+                        <div>
+                           <span class="icon iconfont" ></span>
+                            <span>Contacts Button</span>
+                        </div>
+                        <button class="brand-btns favicon" @click="dialogButton = true">Default ···</button>
+                    </div>
+                </div>
+            </li>
+          </el-collapse-item>
+          <el-collapse-item >
+            <template slot="title">
+              <div style="padding-left: 10px">密码</div>
+            </template>
+            <li role="presentation" class="password">
+<!--                 <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
+                <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+
+                    <div class="controls-col" :class="form.passwordEnable ? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.passwordEnable">
+                        </div>
+                    </div>
+
+
+                    <form v-if="form.passwordEnable">
+                        <span style="margin-top: 15px;">设置密码</span>
+                        <div>
+                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1" v-model="form.password">
+                        </div>                    
+                    </form>
+                    <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
+                    
+                </div>
+               </li>
+             </el-collapse-item>
+           </el-collapse>
+       </div>
+        <!-- <ul role="presentation"  style="flex-grow: 1;overflow-y: scroll; height: 100vh" > -->
+            
+            <!-- 名字和描述区域 -->
+<!--             <li role="presentation" class="name-desc">
+
+            </li>
+            <li role="presentation" >
+                <div class="unActive-a flex" style="padding: 10px 17px">
+                    <span>皮肤 </span>
+                    <span style="color: #999" @click="clickSelectSkin">White Style ···</span>
+                </div>
+            </li> -->
+
+<!--             <li role="presentation" class="branding">
+                <a href="#" class="unActive-a">
+                    <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
+                </a>
+
+                <div role="presentation" class="menu-down show-menu" style="display: block;">
+                    <div class="brand-col">
+                        <span>Logo</span>
+                        <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>背景图</span>
+                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
+                    </div>
+                    <div class="brand-col">
+                        <span>颜色</span>
+                        <el-color-picker v-model="form.color"></el-color-picker>
+                    </div>
+                    <div class="brand-col">
+                        <span>icon</span>
+                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
+                    </div>
+                </div>
+            </li> -->
+
+ 
+<!--             <li role="presentation" class="password">
+                <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
+                <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+
+                    <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
+                        </div>
+                    </div>
+
+
+                    <form v-if="setPassWord">
+                        <span style="margin-top: 15px;">设置密码</span>
+                        <div>
+                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                        </div>                    
+                    </form>
+                    <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
+                    
+                </div>
+            </li> -->
+        <!-- </ul> -->
+    </div>
+    
+    <!-- 目录区 -->
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation =='目录' || form.navigation == '缩略图'">
+        <el-collapse accordion>
+              <el-collapse-item v-if="form.navigation == '目录'">
+                <template slot="title">
+                  <div style="padding-left: 10px;">目录</div>
+                </template>
+                <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
+              </el-collapse-item>
+              <el-collapse-item v-if="form.navigation == '缩略图'">
+                <template slot="title">
+                   <div style="padding-left: 10px;">缩略图</div>
+                </template>
+                <thumbnails :list="skins"></thumbnails>
+              </el-collapse-item>
+
+        </el-collapse>
+        
+<!--         <li role="presentation" class="menu-item">
+            <span>
+                <i class="el-icon-s-unfold"></i>篇目 
+            </span>
+            <i class="el-icon-close" @click="showMenu = false"></i>
+        </li>
+        <li role="presentation" class="change-skin"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
+        <li role="presentation"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
+        <li role="presentation" class="skin-desc">
+            <a href="#"><span>What is FlippingBook Online？<span class="glyphicon glyphicon-menu-down toggle-arrows"></span></span></a>
+            <div role="presentation" class="menu-down">
+                <span>Flipbook Name</span>
+                <span style="margin-top: 15px;">Description</span>
+                <span style="margin-top: 15px;">Description</span>
+                <span style="margin-top: 15px;">Description</span>
+            </div>
+        </li>
+        <li role="presentation" class="menu-item">
+            <span>
+                <i class="el-icon-s-grid"></i>缩略图
+            </span>
+        </li>
+      <div class="block"  style="text-align: center;">
+        <el-image
+          v-for="item in skins"
+          style="width: 60px; height: 60px; display: block; margin: 10px auto"
+          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-image>
+      </div>   -->          
+    </ul>
+
+
+    
+    <!-- 主编辑区 -->
+        <div class="main">
+            <div class="header">
+                <form class="form-inline" style="text-align: center;">
+                Welcome Guide to FlippingBook online | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
+                </form>
+            </div>
+            <div style="flex-grow: 1" class="bookBox">
+              <div class="picture"></div>
+            </div>
+            <div class="page-footer">
+                <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
+            </div>           
+        </div>
+
+
+
+    <!-- 右侧搜索区 -->
+    <search :navigation="form.navigation"></search>
+
+
+
+    <el-dialog
+      title="搜索"
+      :visible.sync="searchDialog"
+      width="30%"
+      :before-close="handleClose">
+      <span>{{ searchKey ? searchKey : '搜索内容为空' }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="searchDialog = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- skin皮肤选择器 -->
+    <el-dialog
+      title="选择皮肤"
+      :visible.sync="dialogSkin"
+      width="50%">
+        <el-form ref="form" :model="form" label-width="190px">
+            <el-form-item label="Keep current background">
+                <el-switch v-model="form.delivery"></el-switch>
+            </el-form-item>
+        </el-form>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" @click="clickSkinItem(item)" >
+            <el-image
+              style="width: 100%; display: block;border: 2px solid #FFF"
+              :class="item.checked ? 'skinChecked' : ''"
+              :src="item.url"></el-image>
+            <p style="text-align: center;" ><span :class="item.checked ? 'skinTextChecked':''">{{ item.name }}</span></p>
+          </div>
+        </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogSkin = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveSkin">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- logo选择器 -->
+    <el-dialog
+      title="编辑logo"
+      :visible.sync="dialogLogo"
+      width="40%">
+        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
+           <el-image :src="form.logo" v-if="form.logo"></el-image> 
+            <el-popover
+              placement="right"
+              width="200"
+              trigger="click">
+              <div>
+                 <p @click="logoSetting">Back to Default</p>
+                 <p @click="logoSetting">Remove</p>
+              </div>
+              <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
+            </el-popover>
+        </div>
+        
+        <el-upload
+          class="upload-demo"
+          action="http://m.baige.me/api/book/saveSettingImage"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
+        <div style="height: 20px;"></div>
+        <el-input v-model="form.logoInput" placeholder="https://your-website.com"></el-input>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogLogo = false">CANCEL</el-button>
+        <el-button type="primary" @click="saveLogo">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- button选择器 -->
+    <el-dialog
+      title="EDIT BUTTON"
+      :visible.sync="dialogButton"
+      width="40%">
+
+        <el-form ref="form" :model="form" >
+            <el-form-item label="Show Contacts Button">
+                <el-switch v-model="form.button.delivery"></el-switch>
+            </el-form-item>
+            <el-form-item label="Button Text">
+                <el-input v-model="form.button.text" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="Web Address(URL)">
+                <el-input v-model="form.button.address" placeholder="https://your-website.com"></el-input>
+            </el-form-item>
+        </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogButton = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogButton = false">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- favicon选择器 -->
+    <el-dialog
+      title="EDIT FAVICON"
+      :visible.sync="dialogFavicon"
+      width="40%">
+        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
+            <el-image :src="form.favico" v-if="form.favicon"></el-image>
+            <el-popover
+              placement="right"
+              width="200"
+              trigger="click">
+              <div>
+                 <p @click="faviconSetting">Back to Default</p>
+                 <p @click="faviconSetting">Remove</p>
+              </div>
+              <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
+            </el-popover>
+        </div>
+        
+        <div>Import  favicon from  your website</div>
+        <el-input v-model="form.faviconInput" placeholder="https://your-website.com"></el-input>
+        <div style="margin-top: 20px;">or elect existing file</div>
+        <el-upload
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
+    
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFavicon = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 下载选择器 -->
+    <el-dialog
+      title="下载出版物"
+      :visible.sync="dialogDownload"
+      width="50%">
+      <div class="download">
+          <div class="download-all">
+            <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+            <div class="desc">
+                <p>全部出版物 37.8M</p> 
+                <a href="https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki&download_version=1032005140&version_type=1">下载刊物为PDF文件</a> 
+            </div>
+          </div>
+          <div class="download-current">
+              <a href="https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki&download_version=1032005140&version_type=1">当前页面(5.2M)</a> 
+          </div>
+      </div>
+    </el-dialog>
+
+    <!--分享对话框 -->
+    <el-dialog
+      title="分享"
+      :visible.sync="dialogShare"
+      width="40%">
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="form.share.qrcode"></el-image>
+      <el-input v-model="form.share.link" placeholder=""></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary"  @click="copy(form.share.link)">复制</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 背景选择器 -->
+    <el-dialog
+      title="EDIT BACKGROUND"
+      :visible.sync="dialogBackground"
+      width="40%">
+        <div style="background-color: #EFEFEF; text-align: center;" class="mb20">
+            <el-upload
+              class="avatar-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :show-file-list="false">
+              <img v-if="form.background.url" :src="form.background.url" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>            
+        </div>
+        <el-form label-width="140px" ref="form" :model="form">
+
+          <el-form-item
+            label="Image Placement"
+          >
+            <el-select v-model="form.placement" placeholder="请选择">
+            <el-option
+              v-for="item in form.background.fit"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+          </el-form-item>
+          <el-form-item
+            label="Filling Form"
+          >
+            <el-popover
+              placement="right"
+              width="180"
+              trigger="click">
+              <div  class="rank">
+                  <span class="rank-item" :class="item.checked ? 'rank-item-checked':''" v-for="item in rank" @click="clickRank(item)">
+                    <i :class="item.icon ? item.icon : ''"></i>
+                  </span>
+              </div>
+              <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
+                <el-input slot="reference" v-model="form.background.filling" placeholder=""></el-input>
+            </el-popover>
+          </el-form-item>
+        </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogBackground = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogBackground = false">OK</el-button>
+      </span>
+    </el-dialog>
+
+</div>
+<script src="main.6bb3a06c0a.js"></script></body>
+</html>
