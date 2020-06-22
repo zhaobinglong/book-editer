@@ -1,6 +1,6 @@
 <template>
     <div >
-        <div  class="thum-item"  style="text-align: center;" v-for="(item, index) in myList" :click="clickItem(item, index)">
+        <div  class="thum-item"  style="text-align: center;" v-for="(item, index) in myList" @click="clickItem(item, index)">
             <img
               v-lazy="url"
               style="width: 60px; height: 60px; display: block; margin: 10px auto"
@@ -26,48 +26,11 @@
         },
         methods: {
             clickItem(item, index) {
+                let page = index + 1
                 this.$message({
-                  message: '你点击了第' + index + '页',
+                  message: `你点击了第${page}页`,
                   type: 'success'
                 }); 
-            },
-            isActive(path) {
-                return path === this.$route.path;
-            },
-            // 关闭单个标签
-            closeTags(index) {
-                const delItem = this.tagsList.splice(index, 1)[0];
-                const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1];
-                if (item) {
-                    delItem.path === this.$route.path && this.$router.push(item.path);
-                }else{
-                    this.$router.push('/');
-                }
-            },
-            // 关闭全部标签
-            closeAll(){
-                this.tagsList = [];
-                this.$router.push('/');
-            },
-            // 关闭其他标签
-            closeOther(){
-                const curItem = this.tagsList.filter(item => {
-                    return item.path === this.$route.path;
-                })
-                this.tagsList = curItem;
-            },
-            // 设置标签
-            setTags(route){
-                const isExist = this.tagsList.some(item => {
-                    return item.path === route.path;
-                })
-                !isExist && this.tagsList.push({
-                    title: route.meta.title,
-                    path: route.path
-                })
-            },
-            handleTags(command){
-                command === 'other' ? this.closeOther() : this.closeAll();
             }
         },
         // computed: {
@@ -92,8 +55,8 @@
     width: 160px;
     margin: 0 auto;
 }
-..thum-item:hover {
-    background-color: #CFCFCF
+.thum-item:hover {
+    background-color: #EFEFEF
 }
 
 </style>
