@@ -61,7 +61,7 @@
             </span>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                    默认<span class="caret"></span>
+                    保存<span class="caret"></span>
                 </button>
 <!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
                     <div class="checkbox">
@@ -354,16 +354,11 @@
                 <template slot="title">
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
-                  <div class="block"  style="text-align: center;">
-                    <el-image
-                      v-for="item in skins"
-                      style="width: 60px; height: 60px; display: block; margin: 10px auto"
-                      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-image>
-                  </div>
+                <thumbnails :list="skins"></thumbnails>
               </el-collapse-item>
 
         </el-collapse>
-
+        
 <!--         <li role="presentation" class="menu-item">
             <span>
                 <i class="el-icon-s-unfold"></i>篇目 
