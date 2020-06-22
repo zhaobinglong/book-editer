@@ -19,7 +19,7 @@ var baseConfig = {
       alias: {
         // 'vue$': 'vue/dist/vue.esm.js',
         '@': path.resolve('src'),
-        // 'static': path.resolve(__dirname, '../static'),
+        'static': path.resolve(__dirname, './src/static'),
       }
     },
     output: {
@@ -33,8 +33,19 @@ var baseConfig = {
        overlay: {
            errors: true,
        },
-        contentBase: './src',
-        inline: true
+      contentBase: './src',
+      inline: true,
+  　　 proxy: {
+        '/api': {// '/api':匹配项
+          target: 'http://m.baige.me/',// 接口的域名
+  　　　　 // secure: false,// 如果是https接口，需要配置这个参数
+          changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
+          // 如果接口本身没有/api需要通过pathRewrite来重写了地址
+  　　　　　pathRewrite: {
+  　　　　　   '^api': ''
+          }
+        }
+      }
     },
     plugins: [
         new ExtractTextPlugin({

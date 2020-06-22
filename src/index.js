@@ -15,7 +15,7 @@ import thumbnails from '@/components/thumbnail'
 import search from '@/components/search'
 
 //引入你mock.js文件
-require('./mock/index.js')
+// require('./mock/index.js')
 
 
 
@@ -107,6 +107,40 @@ var app = new Vue({
     dialogShare: false,
     dialogDownload: false,
     form: {
+      "bookId": 3,
+      "main": true,
+      "skin": "2",
+      "logo": "1",
+      "favico": "1",
+      "background": "1",
+      "backgroundFill": 1,
+      "backgroundPlace": 1,
+      "colorPanel": 1,
+      "colorBackground": 1,
+      "colorLink": 1,
+      "password": "1",
+      "passwordEnable": false,
+      "emailEnable": false,
+      "emailWelcome": "1",
+      "emailPort": 1,
+      "emailServer": "1",
+      "emailUsername": "1",
+      "emailPassword": "1",
+      "emailSign": "1",
+      "chat": "1",
+      "chatEnable": false,
+      "contactEnable": false,
+      "contactTel": "1",
+      "external": "1",
+      "externalText": "1",
+      "externalEnable": false,
+      "download": false,
+      "share": false,
+      "sound": false,
+      "search": false,
+      "userId": 1,
+      "created": 1592821609902,
+      "updated": 1592822482970,
       share: {
         link: 'baidu.com',
         qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'

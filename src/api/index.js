@@ -4,14 +4,14 @@ import service from './http'
 
 export const getBook = data => {
     return service({
-        url: '/api/getBook',
+        url: '/getBook',
         method: 'get'
     })
 }
 
 export const getSetting = data => {
     return service({
-        url: '/api/fb/getSetting',
+        url: '/fb/getSetting',
         method: 'get'
     })
 }
@@ -19,7 +19,7 @@ export const getSetting = data => {
 // 保存配置信息
 export const saveSetting = data => {
     return service({
-        url: '/api/book/saveSetting',
+        url: '/book/saveSetting',
         method: 'post',
         data
     })
@@ -28,7 +28,7 @@ export const saveSetting = data => {
 
 export const search = data => {
     return service({
-        url: '/api/query',
+        url: '/query',
         method: 'get'
     })
 }
