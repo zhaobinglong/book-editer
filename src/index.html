@@ -409,20 +409,10 @@
 
 
     <!-- 右侧搜索区 -->
-    <ul class="search-box">
-        <li class="title">搜索</li>
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button" @click="search">Go!</button>
-              </span>
-            </div>
-        <li class="text-list" v-for="item in searchList">
-            <p class="item">
-                第{{ item.page }}页. {{ item.description }}
-            </p>
-        </li>
-    </ul>
+    <search ></search>
+
+
+
     <el-dialog
       title="搜索"
       :visible.sync="searchDialog"

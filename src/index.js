@@ -12,6 +12,7 @@ Vue.use(VueLazyLoad,{
 
 var api=require("./api/index");
 import thumbnails from '@/components/thumbnail'
+import search from '@/components/search'
 
 //引入你mock.js文件
 require('./mock/index.js')
@@ -23,7 +24,8 @@ var app = new Vue({
   el: '#app',
   components: {
     // mavonEditor
-    thumbnails
+    thumbnails,
+    search
   },
   data: {
     treeData: [{
@@ -408,18 +410,7 @@ var app = new Vue({
           type: 'info'
         });             
     },
-    // 点击搜索按钮
-    async search () {
-        if (this.searchKey) {
-          this.searchList = await api.search({})
-          console.log(this.form)
-        } else {
-            this.$message({
-              message: '搜索内容不能为空',
-              type: 'warning'
-            });
-        }
-    },
+
     download (src, fileName) {
       let x = new XMLHttpRequest();
       x.open("GET", src, true);
