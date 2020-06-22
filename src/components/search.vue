@@ -12,7 +12,7 @@
                 第{{ item.page }}页. {{ item.description }}
             </p>
         </li>
-        <li class="search-more" v-if="searchList.length" @click="addMore">加载更多</li>
+        <li class="search-more" v-if="searchList.length" @click="addMore">{{ showMore }}</li>
     </ul>
 </template>
 
@@ -23,13 +23,17 @@
         data() {
             return {
                 searchKey: '',
-                searchList: []
+                searchList: [],
+                showMore: '还有10条记录'
             }
         },
         methods: {
             async addMore() {
-               let moreData = await search({})
-               this.searchList = this.searchList.concat(moreData)
+               if (this.showMore == '还有10条记录') {
+                   let moreData = await search({})
+                   this.searchList = this.searchList.concat(moreData)
+                   this.showMore = '没有更多了'
+               } 
             },
             clickItem (item) {
                 this.$alert(item.description, '提示', {

@@ -126,6 +126,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 10px;
+    cursor: pointer;
 }
 .download {
     padding: 8px

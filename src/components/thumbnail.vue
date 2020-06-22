@@ -3,7 +3,7 @@
         <div  class="thum-item"  style="text-align: center;" v-for="(item, index) in myList" @click="clickItem(item, index)">
             <img
               v-lazy="url"
-              style="width: 60px; height: 60px; display: block; margin: 10px auto"
+              style="width: 90px; height: 60px; display: block; margin: 10px auto"
               />
             <p>第{{ index + 1 }}页</p>
         </div>
@@ -21,7 +21,7 @@
         data() {
             return {
                 myList: [],
-                url: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
             }
         },
         // 组件挂载完毕

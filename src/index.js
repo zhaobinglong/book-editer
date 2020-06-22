@@ -263,6 +263,13 @@ var app = new Vue({
     // });
   },
   methods: {
+    handleNodeClick (item) {
+      console.log(item)
+      this.$message({
+        message: `你点击了目录：${item.label}`,
+        type: 'success'
+      }); 
+    },
     toggleMenu () {
       this.menu.toggleMenu = !this.menu.toggleMenu
     },
@@ -395,7 +402,19 @@ var app = new Vue({
        })  
     },
     goBack () {
-      window.history.back(-1); 
+        this.$confirm('你的修改不会被保存, 是否继续?', '提示', {
+          confirmButtonText: '继续',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          window.history.back(-1); 
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
+      
     },
     beforeunloadHandler(e) {
       e = e || window.event;
