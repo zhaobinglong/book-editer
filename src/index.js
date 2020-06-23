@@ -88,10 +88,10 @@ var app = new Vue({
       {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
     ],
     navigationArr: [
-      {value: '目录', checked: false},
-      {value: '缩略图', checked: false},
-      {value: '无', checked: false},
-      {value: '搜索', checked: false}
+      {index: 0, value: '目录', checked: false, hidden: false},
+      {index: 1, value: '缩略图', checked: false, hidden: false},
+      {index: 2, value: '无', checked: false, hidden: false},
+      {index: 3, value: '搜索', checked: false, hidden: false}
     ],
     showMenu: true,
     fileList: [],
@@ -125,11 +125,12 @@ var app = new Vue({
       "external": "1",
       "externalText": "1",
       "externalEnable": false,
+      keepBackground: false,
       download: false,
       share: false,
       sound: false,
       search: false,
-      navigation: '目录',
+      navigation: 0,
       userId: 1,
       title: '',
       description: '',
@@ -235,32 +236,6 @@ var app = new Vue({
     }],
     searchList: [] 
   },
-  watch: {
-    setPhone: function (newValue, oldValue) {
-      this.controls.map((item, index) => {
-        if (item.label == 'setPhone') {
-            item.checked = newValue
-            this.$set(this.controls, index, item)
-        }
-      })
-    },   
-    setStaff: function (newValue, oldValue) {
-      this.controls.map((item, index) => {
-        if (item.label == 'setStaff') {
-            item.checked = newValue
-            this.$set(this.controls, index, item)
-        }
-      })
-    }, 
-    setEmail: function (newValue, oldValue) {
-      this.controls.map((item, index) => {
-        if (item.label == 'setEmail') {
-            item.checked = newValue
-            this.$set(this.controls, index, item)
-        }
-      })
-    },      
-  },
   computed: {
     icons: function () {
       let arr = this.controls.filter(item => item.checked )
@@ -288,6 +263,21 @@ var app = new Vue({
         handler:function(val,oldval){
           console.log(val)
           this.saveBtn = '保存'
+          if (val.search) {
+            this.navigationArr = this.navigationArr.map(item => {
+              if (item.value == '搜索') {
+                item.hidden = false
+              }
+              return item
+            })
+          } else {
+            this.navigationArr = this.navigationArr.map(item => {
+              if (item.value == '搜索') {
+                item.hidden = true
+              }
+              return item
+            })            
+          }
         },
         deep:true//对象内部的属性监听，也叫深度监听
       },
@@ -416,15 +406,12 @@ var app = new Vue({
       this.navigationArr = this.navigationArr.map(item => {
          if (item.value == obj.value) {
             item.checked = true
-            this.form.navigation = item.value
+            this.form.navigation = item.index
          } else {
             item.checked = false
          }
          return item
       })
-    },
-    input () {
-      
     },
     faviconSetting () {
         this.form.favico = ''
@@ -509,17 +496,6 @@ var app = new Vue({
 
     // 保存修改
     mainSave () {
-      // let data = {}
-      // for(let key  in this.form){
-      //    if(typeof this.form[key] == 'boolean') {
-      //      this.form[key] = !this.form[key]
-      //      // data[key] = this.form[key].
-      //    } else {
-      //      data[key] = this.form[key]
-      //    }
-      // }
-      // console.log(data)
-
       api.saveSetting(Qs.stringify(this.form)).then(res => {
         console.log(res)
         this.saveBtn = '已保存'
@@ -527,6 +503,7 @@ var app = new Vue({
         this.dialogFavicon = false
         this.dialogBackground = false
         this.dialogButton = false
+        this.dialogBackground = false
       })  
     },
     goBack () {

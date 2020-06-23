@@ -294,9 +294,9 @@
                           width="200"
                           trigger="click">
                           <div>
-                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigationArr">{{ item.value }}</p>
+                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigationArr" v-if="!item.hidden">{{ item.value }}</p>
                           </div>
-                          <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
+                          <button slot="reference" class="brand-btns favicon">{{ navigationArr[form.navigation].value }}</button>
                         </el-popover>
                         
                     </div>
@@ -498,7 +498,7 @@
       width="50%">
         <el-form ref="form" :model="form" label-width="190px">
             <el-form-item label="Keep current background">
-                <el-switch v-model="form.delivery"></el-switch>
+                <el-switch v-model="form.keepBackground"></el-switch>
             </el-form-item>
         </el-form>
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
@@ -512,7 +512,7 @@
         </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSkin = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveSkin">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
