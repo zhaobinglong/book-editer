@@ -56,8 +56,8 @@
                   <div>
                       <el-checkbox v-model="form.main">设为默认</el-checkbox>
                   </div>
-                   <el-button type="primary" slot="reference">
-                      保存<i class="el-icon-caret-bottom"  @click="mainSave"></i>
+                   <el-button type="primary" slot="reference" @click="mainSave"> 
+                      保存<i class="el-icon-caret-bottom"  ></i>
                    </el-button>
                 </el-popover>
                 
@@ -582,8 +582,8 @@
       title="EDIT FAVICON"
       :visible.sync="dialogFavicon"
       width="40%">
-        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-            <el-image :src="form.favico" v-if="form.favico"></el-image>
+        <div style="position: relative; background-color: #EFEFEF; height: 200px; overflow: hidden;" class="mb20">
+            <el-image :src="form.favico" v-if="form.favico"  fit="scale-down"></el-image>
             <el-popover
               placement="right"
               width="200"

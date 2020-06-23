@@ -509,15 +509,15 @@ var app = new Vue({
 
     // 保存修改
     mainSave () {
-      let data = {}
-      for(let key  in this.form){
-         if(typeof this.form[key] == 'boolean') {
-           this.form[key] = !this.form[key]
-           // data[key] = this.form[key].
-         } else {
-           data[key] = this.form[key]
-         }
-      }
+      // let data = {}
+      // for(let key  in this.form){
+      //    if(typeof this.form[key] == 'boolean') {
+      //      this.form[key] = !this.form[key]
+      //      // data[key] = this.form[key].
+      //    } else {
+      //      data[key] = this.form[key]
+      //    }
+      // }
       // console.log(data)
 
       api.saveSetting(Qs.stringify(this.form)).then(res => {
