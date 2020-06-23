@@ -40,6 +40,7 @@ export function tryHideFullScreenLoading() {
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://m.baige.me/api/',
+  // baseURL: process.env.NODE_ENV === 'development' ? 'http://m.baige.me/api/' : 'http://m.baige.me/api/',
   timeout: 5000                  // 请求超时时间
 });
 

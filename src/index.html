@@ -106,7 +106,7 @@
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <el-color-picker v-model="form.color"></el-color-picker>
+                        <el-color-picker v-model="color"></el-color-picker>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
@@ -124,16 +124,16 @@
                 
                 <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
                     <!-- 蛋疼，这里定义的数据结构不合适，要想办法 -->
-                    <div class="controls-col "  >
+                    <div class="controls-col "  v-for="item in controls">
                         <div>
-                           <span class="icon iconfont" class="iconfenxiang2"></span>
-                            <span>分享</span>
+                           <span class="icon iconfont" :class="item.icon? item.icon : ''"></span>
+                            <span>{{ item.title }}</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.share">
+                            <input class="switch switch-anim" type="checkbox" v-model="form[item.label]">
                         </div>
                     </div>
-                    <div class="controls-col "  >
+         <!--            <div class="controls-col "  >
                         <div>
                            <span class="icon iconfont" class="iconxiazai"></span>
                             <span>下载</span>
@@ -202,7 +202,7 @@
                         <div>
                             <input class="switch switch-anim" type="checkbox" checked="" v-model="form.search">
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- 电话区域 -->
                     <div class="controls-col" >
@@ -218,11 +218,11 @@
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.contcontactEnableactTel">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.contactEnable">
                         </div>
                     </div>
                     <div v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
-                          <div class="form-group" v-for="item in form.phone">
+                          <div class="form-group" v-for="item in phone">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
                             <input class="form-control"  placeholder="" v-model="form.contactTel">
                           </div>         
@@ -242,11 +242,11 @@
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.chatEnable">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.chatEnable">
                         </div>
                     </div>
                     <div v-if="form.chatEnable" :class="form.chatEnable? 'bottom-line':''" >
-                      <div class="form-group" v-for="item in form.staff">
+                      <div class="form-group" v-for="item in staff">
                         <label for="exampleInputEmail1">{{ item.label }}</label>
                         <input  class="form-control"  placeholder="" v-model="form.chat">
                       </div>        
@@ -266,13 +266,13 @@
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.emailEnable">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.emailEnable">
                         </div>
                     </div>
                     <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
-                          <div class="form-group" v-for="item in form.email">
+                          <div class="form-group" v-for="item in email">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input type="email" class="form-control"  placeholder="">
+                            <input type="email" class="form-control"  placeholder="" v-model="form[item.value]">
                           </div>
                     </div>                
 
@@ -288,7 +288,7 @@
                           <div>
                              <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
                           </div>
-                          <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
+                          <button slot="reference" class="brand-btns favicon">{{ navigation }}</button>
                         </el-popover>
                         
                     </div>
@@ -400,15 +400,15 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation =='目录' || form.navigation == '缩略图'">
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="navigation =='目录' || navigation == '缩略图'">
         <el-collapse accordion>
-              <el-collapse-item v-if="form.navigation == '目录'">
+              <el-collapse-item v-if="navigation == '目录'">
                 <template slot="title">
                   <div style="padding-left: 10px;">目录</div>
                 </template>
                 <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
               </el-collapse-item>
-              <el-collapse-item v-if="form.navigation == '缩略图'">
+              <el-collapse-item v-if="navigation == '缩略图'">
                 <template slot="title">
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
@@ -467,7 +467,7 @@
 
 
     <!-- 右侧搜索区 -->
-    <search :navigation="form.navigation"></search>
+    <search :navigation="navigation"></search>
 
 
 
@@ -526,13 +526,14 @@
               <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
             </el-popover>
         </div>
-        
+        <!-- action="http://m.baige.me/api/book/saveSettingImage" -->
         <el-upload
           class="upload-demo"
-          action="http://m.baige.me/api/book/saveSettingImage"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
+          :http-request="uploadFile"
+          :show-file-list="false"
+          action=""
+          :limit="1" 
+          :auto-upload="true"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
@@ -541,7 +542,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveLogo">OK</el-button>
+        <el-button type="primary" @click="save">OK</el-button>
       </span>
     </el-dialog>
 
@@ -553,13 +554,13 @@
 
         <el-form ref="form" :model="form" >
             <el-form-item label="Show Contacts Button">
-                <el-switch v-model="form.button.delivery"></el-switch>
+                <el-switch v-model="button.delivery"></el-switch>
             </el-form-item>
             <el-form-item label="Button Text">
-                <el-input v-model="form.button.text" placeholder=""></el-input>
+                <el-input v-model="button.text" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="Web Address(URL)">
-                <el-input v-model="form.button.address" placeholder="https://your-website.com"></el-input>
+                <el-input v-model="button.address" placeholder="https://your-website.com"></el-input>
             </el-form-item>
         </el-form>
       <span slot="footer" class="dialog-footer">
@@ -574,7 +575,7 @@
       :visible.sync="dialogFavicon"
       width="40%">
         <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-            <el-image :src="form.favico" v-if="form.favicon"></el-image>
+            <el-image :src="form.favico" v-if="form.favico"></el-image>
             <el-popover
               placement="right"
               width="200"
@@ -592,17 +593,16 @@
         <div style="margin-top: 20px;">or elect existing file</div>
         <el-upload
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
+          :http-request="uploadFavicon"
+          :show-file-list="false"
+          action=""
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
     
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFavicon = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
+        <el-button type="primary" @click="save">OK</el-button>
       </span>
     </el-dialog>
 
@@ -632,10 +632,10 @@
       width="40%">
         <el-image
           style="width: 100px; height: 100px"
-          :src="form.share.qrcode"></el-image>
-      <el-input v-model="form.share.link" placeholder=""></el-input>
+          :src="share.qrcode"></el-image>
+      <el-input v-model="share.link" placeholder=""></el-input>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="copy(form.share.link)">复制</el-button>
+        <el-button type="primary"  @click="copy(share.link)">复制</el-button>
       </span>
     </el-dialog>
 
@@ -647,9 +647,11 @@
         <div style="background-color: #EFEFEF; text-align: center;" class="mb20">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :http-request="uploadBackground"
+              action=""
+              :show-file-list="false"
               :show-file-list="false">
-              <img v-if="form.background.url" :src="form.background.url" class="avatar">
+              <img v-if="form.background" :src="form.background" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>            
         </div>
@@ -658,9 +660,9 @@
           <el-form-item
             label="Image Placement"
           >
-            <el-select v-model="form.placement" placeholder="请选择">
+            <el-select v-model="form.backgroundPlace" placeholder="请选择">
             <el-option
-              v-for="item in form.background.fit"
+              v-for="item in background.fit"
               :key="item"
               :label="item"
               :value="item">
@@ -680,14 +682,14 @@
                   </span>
               </div>
               <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
-                <el-input slot="reference" v-model="form.background.filling" placeholder=""></el-input>
+                <el-input slot="reference" v-model="form.backgroundFill" placeholder=""></el-input>
             </el-popover>
           </el-form-item>
         </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBackground = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogBackground = false">OK</el-button>
+        <el-button type="primary" @click="save">OK</el-button>
       </span>
     </el-dialog>
 

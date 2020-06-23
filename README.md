@@ -37,7 +37,7 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 - 获取书本配置信息（logo，favicon）
 - 增加图片上传接口
 - /book/getMainSetting(这个接口获取不到保存的title和desc)
-
+- 接口可以提交数据，但是提交的数据没有在数据库更新
 
 ## 交互细节变更记录
 - 缩略图懒加载，默认显示一个loading的图标，显示在视窗上后更改为图片

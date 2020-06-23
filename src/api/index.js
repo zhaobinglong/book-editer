@@ -34,6 +34,15 @@ export const saveSetting = data => {
     })
 }
 
+// 保存图片
+
+export const saveSettingImage = data => {
+    return service({
+        url: '/book/saveSettingImage',
+        method: 'post',
+        data: data
+    })
+}
 
 export const search = data => {
     return service({

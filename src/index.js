@@ -11,11 +11,14 @@ Vue.use(VueLazyLoad,{
 })
 
 var api=require("./api/index");
+const Qs = require('qs');
+
 import thumbnails from '@/components/thumbnail'
 import search from '@/components/search'
+import axios from 'axios'
 
 //引入你mock.js文件
-require('./mock/index.js')
+// require('./mock/index.js')
 
 
 
@@ -106,24 +109,18 @@ var app = new Vue({
     dialogShare: false,
     dialogDownload: false,
     saveBtn: '保存',
+    color: '#EEE',
+    navigation: '目录',
     form: {
       "bookId": 1,
       "main": true,
       "skin": "2",
-      "logo": "1",
-      "favico": "1",
       "background": "1",
       "backgroundFill": 1,
       "backgroundPlace": 1,
       "colorPanel": 1,
       "colorBackground": 1,
       "colorLink": 1,
-      "emailWelcome": "1",
-      "emailPort": 1,
-      "emailServer": "1",
-      "emailUsername": "1",
-      "emailPassword": "1",
-      "emailSign": "1",
       "external": "1",
       "externalText": "1",
       "externalEnable": false,
@@ -134,68 +131,70 @@ var app = new Vue({
       "userId": 1,
       title: '',
       description: '',
-      share: {
-        link: 'baidu.com',
-        qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
-      },
-      color: '#EEE',
-      navigation: '目录',
-      button: {
-        delivery: '',
-        text: '',
-        address: ''
-      },
       placement: 'fill',
-      background: {
-        url:'',
-        fit:['fit','fill','fixx'],
-        filling: 'center'
-      },
       logo: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-      logoInput: '',
-      favicon: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-      faviconInput: '',
+      favico: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
       chatEnable: false,
       chat: '',
       contactTel: '',
       contactEnable: false,
       emailEnable: false,
+      emailWelcome: "1",
+      emailPort: 1,
+      emailServer: "1",
+      emailUsername: "1",
+      emailPassword: "1",
+      emailSign: "1",
       password: '',
       passwordEnable: false,
-      info: [
-        {label: 'name', value: ''},
-        {label: 'desc', value: ''},
-      ],
-      email: [
-        {label: '服务器', value: ''},
-        {label: '端口', value: ''},
-        {label: '密码', value: ''},
-        {label: '账户', value: ''},
-        {label: '欢迎词', value: ''},
-        {label: '签名', value: ''}
-      ],
-      staff: [
-        {label: '客服widget', value: ''},
-      ],
-      phone: [
-        {label: '号码', value: ''},
-      ]
     },
+      background: {
+        url:'',
+        fit:['fit','fill','fixx'],
+        filling: 'center'
+      },
+    share: {
+      link: 'baidu.com',
+      qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
+    },
+    button: {
+      delivery: '',
+      text: '',
+      address: ''
+    },
+    info: [
+      {label: 'name', value: ''},
+      {label: 'desc', value: ''},
+    ],
+    staff: [
+      {label: '客服widget', value: ''},
+    ],
+    phone: [
+      {label: '号码', value: ''},
+    ],
+    email: [
+      {label: '服务器', value: 'emailServer'},
+      {label: '端口', value: 'emailPort'},
+      {label: '密码', value: 'emailPassword'},
+      {label: '账户', value: 'emailUsername'},
+      {label: '欢迎词', value: 'emailWelcome'},
+      {label: '签名', value: 'emailSign'}
+    ],
     message: 'Hello Vue!',
     controls: [
-      {'group':1, 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
-      {'group':1, 'title': '下载', 'icon': 'iconxiazai', 'checked': false},
-      {'group':1, 'title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
-      {'group':1, 'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
-      {'group':2, 'title': '声音', 'icon': 'iconmute-off', 'checked': false},
-      {'group':2, 'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
-      {'group':2, 'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
-      {'group':2, 'title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
+      {'group':1,'label': 'share', 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
+      {'group':1,'label': 'download','title': '下载', 'icon': 'iconxiazai', 'checked': false},
+      {'group':1,'label': 'textSelect','title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
+      {'group':1,'label': 'thumbnail','title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
+      {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
+      {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
+      {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+      {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
       // {'title': 'Default Navigation',  'checked': false},
       // {'title': 'Contacts Button',  'checked': false},
-      {'group':3, 'title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true, 'label':'setPhone'},
-      {'group':4, 'title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, 'label':'setStaff'},
-      {'group':5, 'title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true, 'label':'setEmail'},
+      {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true, 'label':'setPhone'},
+      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, 'label':'setStaff'},
+      {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true, 'label':'setEmail'},
     ],
     treeData: [{
       label: '一级 1',
@@ -301,6 +300,8 @@ var app = new Vue({
      // })   
      api.getMainSetting({bookId: 2}).then(res => {
       console.log(res)
+       delete res.created
+       delete res.updated
        Object.assign(this.form, res)
      })  
   },
@@ -310,6 +311,54 @@ var app = new Vue({
     // });
   },
   methods: {
+
+    handleLogoChange (file) {
+        const formData = new FormData()
+        this.formData.file = file.raw
+        this.formData.name = file.name
+        // upload(formData) //调用上传方法,传递FormData格式的参数
+        this.fileChange = false      
+    },
+    uploadBackground(files) {
+        console.log(files)
+        let formData = new FormData()
+        formData.append('file', files.file)
+        api.saveSettingImage(formData).then(res => {
+          console.log(res)
+          this.form.background = res
+        })      
+    },
+    uploadFavicon(files) {
+        console.log(files)
+        let formData = new FormData()
+        formData.append('file', files.file)
+        api.saveSettingImage(formData).then(res => {
+          console.log(res)
+          this.form.favico = res
+        })
+    },
+    uploadFile (files) {
+        console.log(files)
+        let formData = new FormData()
+        formData.append('file', files.file)
+        api.saveSettingImage(formData).then(res => {
+          console.log(res)
+          this.form.logo = res
+        })
+       // axios.post('http://m.baige.me/api/book/saveSettingImage', null, {
+       //    transformRequest: [() => {
+       //      let formData = new FormData()
+       //      formData.append('file', files.file)
+       //      return formData
+       //    }
+       //  ]
+       // }).then(data => {
+       //  console.log(data)
+       // })
+    },
+    handleLogoSuccess (res, file) {
+      console.log(res)
+    },
     handleNodeClick (item) {
       console.log(item)
       this.$message({
@@ -347,7 +396,7 @@ var app = new Vue({
       this.navigation = this.navigation.map(item => {
          if (item.value == obj.value) {
             item.checked = true
-            this.form.navigation = item.value
+            this.navigation = item.value
          } else {
             item.checked = false
          }
@@ -358,9 +407,8 @@ var app = new Vue({
       
     },
     faviconSetting () {
-
-        this.form.favicon = ''
-        console.log(this.form.favicon)
+        this.form.favico = ''
+        console.log(this.form.favico)
     },
     handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -444,10 +492,24 @@ var app = new Vue({
 
     // 保存修改
     save () {
-       api.saveSetting(this.form).then(res => {
+      let data = {}
+      for(let key  in this.form){
+         if(typeof this.form[key] == 'boolean') {
+           this.form[key] = !this.form[key]
+           // data[key] = this.form[key].
+         } else {
+           data[key] = this.form[key]
+         }
+      }
+      // console.log(data)
+
+      api.saveSetting(Qs.stringify(this.form)).then(res => {
         console.log(res)
         this.saveBtn = '已保存'
-       })  
+        this.dialogLogo = false
+        this.dialogFavicon = false
+        this.dialogBackground = false
+      })  
     },
     goBack () {
       if (this.saveBtn == '保存') {
