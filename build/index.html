@@ -20,7 +20,7 @@
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
-<link href="css/main.db372.css" rel="stylesheet"></head>
+<link href="css/main.6da6a.css" rel="stylesheet"></head>
 
 <body >
 <div class="container-fluid" id="app">
@@ -48,10 +48,19 @@
             <span @click="goBack">
                 <span class="glyphicon glyphicon-menu-left"></span>首页
             </span>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                    {{ saveBtn }}<span class="caret"></span>
-                </button>
+            <!-- <div class="btn-group"> -->
+                <el-popover
+                  placement="right"
+                  width="100"
+                  trigger="hover">
+                  <div>
+                      <el-checkbox v-model="form.main">设为默认</el-checkbox>
+                  </div>
+                   <el-button type="primary" slot="reference">
+                      保存<i class="el-icon-caret-bottom"  @click="mainSave"></i>
+                   </el-button>
+                </el-popover>
+                
 <!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
                     <div class="checkbox">
                     <label>
@@ -59,7 +68,7 @@
                     </label>
                   </div>
                 </form> -->
-            </div>
+            <!-- </div> -->
         </div>
         <div style="height: 100vh; overflow-y: scroll;">
         <el-collapse accordion>
@@ -123,8 +132,7 @@
            <li role="presentation" class="controls">
                 
                 <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
-                    <!-- 蛋疼，这里定义的数据结构不合适，要想办法 -->
-                    <div class="controls-col "  v-for="item in controls">
+                    <div class="controls-col "  v-for="item in controls" :class="item.bottomLine? 'bottom-line': ''" v-if="!item.hidden">
                         <div>
                            <span class="icon iconfont" :class="item.icon? item.icon : ''"></span>
                             <span>{{ item.title }}</span>
@@ -286,9 +294,9 @@
                           width="200"
                           trigger="click">
                           <div>
-                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
+                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigationArr">{{ item.value }}</p>
                           </div>
-                          <button slot="reference" class="brand-btns favicon">{{ navigation }}</button>
+                          <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
                         </el-popover>
                         
                     </div>
@@ -400,15 +408,15 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="navigation =='目录' || navigation == '缩略图'">
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation =='目录' || form.navigation == '缩略图'">
         <el-collapse accordion>
-              <el-collapse-item v-if="navigation == '目录'">
+              <el-collapse-item v-if="form.navigation == '目录'">
                 <template slot="title">
                   <div style="padding-left: 10px;">目录</div>
                 </template>
                 <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
               </el-collapse-item>
-              <el-collapse-item v-if="navigation == '缩略图'">
+              <el-collapse-item v-if="form.navigation == '缩略图'">
                 <template slot="title">
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
@@ -467,7 +475,7 @@
 
 
     <!-- 右侧搜索区 -->
-    <search :navigation="navigation"></search>
+    <search :navigation="form.navigation"></search>
 
 
 
@@ -542,7 +550,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="save">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -554,18 +562,18 @@
 
         <el-form ref="form" :model="form" >
             <el-form-item label="Show Contacts Button">
-                <el-switch v-model="button.delivery"></el-switch>
+                <el-switch v-model="form.externalEnable"></el-switch>
             </el-form-item>
             <el-form-item label="Button Text">
-                <el-input v-model="button.text" placeholder=""></el-input>
+                <el-input v-model="form.externalText" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="Web Address(URL)">
-                <el-input v-model="button.address" placeholder="https://your-website.com"></el-input>
+                <el-input v-model="form.external" placeholder="https://your-website.com"></el-input>
             </el-form-item>
         </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogButton = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogButton = false">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -602,7 +610,7 @@
     
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFavicon = false">CANCEL</el-button>
-        <el-button type="primary" @click="save">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -689,10 +697,10 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBackground = false">CANCEL</el-button>
-        <el-button type="primary" @click="save">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
 </div>
-<script src="main.db3723b33d.js"></script></body>
+<script src="main.6da6ab10f9.js"></script></body>
 </html>

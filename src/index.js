@@ -31,6 +31,7 @@ var app = new Vue({
     search
   },
   data: {
+    visible: false,
     treeData: [{
       label: '一级 1',
       children: [{
@@ -86,7 +87,7 @@ var app = new Vue({
       {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
       {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
     ],
-    navigation: [
+    navigationArr: [
       {value: '目录', checked: false},
       {value: '缩略图', checked: false},
       {value: '无', checked: false},
@@ -110,7 +111,7 @@ var app = new Vue({
     dialogDownload: false,
     saveBtn: '保存',
     color: '#EEE',
-    navigation: '目录',
+    
     form: {
       "bookId": 1,
       "main": true,
@@ -128,7 +129,8 @@ var app = new Vue({
       share: false,
       sound: false,
       search: false,
-      "userId": 1,
+      navigation: '目录',
+      userId: 1,
       title: '',
       description: '',
       placement: 'fill',
@@ -393,10 +395,10 @@ var app = new Vue({
     },
     navigationSetting (obj) {
       console.log(obj)
-      this.navigation = this.navigation.map(item => {
+      this.navigationArr = this.navigationArr.map(item => {
          if (item.value == obj.value) {
             item.checked = true
-            this.navigation = item.value
+            this.form.navigation = item.value
          } else {
             item.checked = false
          }
@@ -448,9 +450,6 @@ var app = new Vue({
         }  
         this.dialogSkin = false
     },
-    saveLogo () {
-      this.dialogLogo = false
-    },
     clickIcon (item) {
         console.log(item)
         if (item.title == '下载') {
@@ -491,7 +490,7 @@ var app = new Vue({
     },
 
     // 保存修改
-    save () {
+    mainSave () {
       let data = {}
       for(let key  in this.form){
          if(typeof this.form[key] == 'boolean') {
@@ -509,6 +508,7 @@ var app = new Vue({
         this.dialogLogo = false
         this.dialogFavicon = false
         this.dialogBackground = false
+        this.dialogButton = false
       })  
     },
     goBack () {
