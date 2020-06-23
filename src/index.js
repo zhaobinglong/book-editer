@@ -292,7 +292,8 @@ var app = new Vue({
         deep:true//对象内部的属性监听，也叫深度监听
       },
   } ,  
-  mounted() {      
+  mounted() {    
+     let id = this.getUrlParam('bookId')
      // api.getBook({}).then(res => {
      //    Object.assign(this.form, res)
      // })
@@ -300,11 +301,22 @@ var app = new Vue({
      // api.getSetting({}).then(res => {
      //    Object.assign(this.form, res)
      // })   
-     api.getMainSetting({bookId: 2}).then(res => {
+     let data = {bookId: id || 2 }
+     api.getFlipbook(data).then(res => {
       console.log(res)
-       delete res.created
-       delete res.updated
-       Object.assign(this.form, res)
+      Object.assign(this.form, res)
+     })
+     api.getMainSetting(data).then(res => {
+      console.log(res)
+      if (res && res.created) {
+        delete res.created
+      }
+
+      if (res && res.updated) {
+        delete res.updated
+      }
+        
+      Object.assign(this.form, res)
      })  
   },
   destroyed() {
@@ -312,8 +324,14 @@ var app = new Vue({
     //     this.beforeunloadHandler(e);
     // });
   },
-  methods: {
 
+  methods: {
+    getUrlParam: function(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]);
+        return '';
+    },
     handleLogoChange (file) {
         const formData = new FormData()
         this.formData.file = file.raw

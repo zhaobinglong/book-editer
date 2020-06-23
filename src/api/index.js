@@ -9,6 +9,15 @@ export const getBook = data => {
     })
 }
 
+// 获取书的标题和描述
+export const getFlipbook = data => {
+    return service({
+        url: '/getFlipbook',
+        method: 'get',
+        params: data
+    })
+}
+
 export const getSetting = data => {
     return service({
         url: '/fb/getSetting',
@@ -35,7 +44,6 @@ export const saveSetting = data => {
 }
 
 // 保存图片
-
 export const saveSettingImage = data => {
     return service({
         url: '/book/saveSettingImage',
