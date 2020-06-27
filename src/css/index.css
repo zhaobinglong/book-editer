@@ -906,3 +906,18 @@ body {
     padding: 4px 10px;
     margin-right: 10px;
 }
+
+/*缩略图*/
+.thum-item {
+    width: 100%;
+    padding: 6px 0;
+    cursor: pointer;
+    text-align: center; 
+    width: 90px; 
+    display: block; 
+    margin: 10px auto;
+    overflow: hidden;
+}
+.thum-item:hover {
+    background-color: #EFEFEF
+}

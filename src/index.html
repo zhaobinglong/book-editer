@@ -433,15 +433,11 @@
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
                 <div >
-                  <div  class="thum-item"  style="text-align: center;" v-for="(item, index) in myList" @click="clickItem(item, index)">
-                      <img
-                        v-lazy="url"
-                        style="width: 90px; height: 60px; display: block; margin: 10px auto"
-                        />
+                  <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)">
+                      <el-image :key="item" :src="item" fit="cover"></el-image>  
                       <p>第{{ index + 1 }}页</p>
                   </div>
                 </div>
-
               </el-collapse-item>
 
         </el-collapse>        
@@ -1020,7 +1016,11 @@ var app = new Vue({
         deep:true//对象内部的属性监听，也叫深度监听
       },
   } ,  
-  mounted() {    
+  mounted() {   
+
+    // 初始化一百张缩略图
+
+    console.log(this.myList)
      // let id = this.getUrlParam('bookId')
      // api.getBook({}).then(res => {
      //    Object.assign(this.form, res)
@@ -1042,10 +1042,18 @@ var app = new Vue({
      }).then(res => {
       console.log(res)        
       Object.assign(this.form, res.data)
+      this.initThumbnail()
      })  
   },
 
   methods: {
+    initThumbnail() {
+      for (var i = 0; i < 100; i++) {
+        this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i + 1}.jpg`
+        )
+      } 
+      console.log(this.myList)
+    },
     getUrlParam: function(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = window.location.search.substr(1).match(reg);
@@ -1293,6 +1301,12 @@ var app = new Vue({
             type: 'warning'
           });
       }
+    },
+    clickThumItem(item, index) {
+      this.$message({
+        message: `点击了${index + 1}页`,
+        type: 'info'
+      });      
     }
   }
 })
