@@ -98,19 +98,31 @@
                 <div role="presentation" class="menu-down show-menu" style="display: block;">
                     <div class="brand-col">
                         <span>Logo</span>
-                        <button class="brand-btns logo" >Custon ···</button>
+                        <button class="brand-btns logo" @click="dialogLogo = true">Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>背景图</span>
-                        <button class="brand-btns bg-image" >Default ···</button>
+                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <el-color-picker ></el-color-picker>
+                        <el-popover
+                          placement="right"
+                          width="200"
+                          trigger="click">
+                          <div >
+                            <div v-for="item in colors" style="display: flex; align-items: center;"> 
+                              <el-color-picker v-model="form[item.label]"></el-color-picker>
+                              <span style="padding-left: 10px">{{ item.label }}</span>
+                            </div>
+                             
+                          </div>
+                          <button class="brand-btns logo" slot="reference"  >Custon ···</button>
+                        </el-popover>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
-                        <button class="brand-btns favicon" >Default ···</button>
+                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
                     </div>
                 </div>
             </li>
@@ -123,6 +135,16 @@
            <li role="presentation" class="controls">
                 
                 <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
+                    <div class="controls-col "  v-for="item in controls" :class="item.bottomLine? 'bottom-line': ''" v-if="!item.hidden">
+                        <div>
+                           <span class="icon iconfont" :class="item.icon? item.icon : ''"></span>
+                            <span>{{ item.title }}</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" v-model="form[item.label]">
+                        </div>
+                    </div>
+                    <!--
                      <div class="controls-col "  >
                         <div>
                            <span class="icon iconfont" class="iconxiazai"></span>
@@ -193,6 +215,7 @@
                             <input class="switch switch-anim" type="checkbox" checked="" v-model="form.search">
                         </div>
                     </div> 
+                  -->
 
                     <!-- 电话区域 -->
                     <div class="controls-col" >
@@ -413,36 +436,7 @@
 
               </el-collapse-item>
 
-        </el-collapse>
-        
-<!--         <li role="presentation" class="menu-item">
-            <span>
-                <i class="el-icon-s-unfold"></i>篇目 
-            </span>
-            <i class="el-icon-close" @click="showMenu = false"></i>
-        </li>
-        <li role="presentation" class="change-skin"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
-        <li role="presentation"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
-        <li role="presentation" class="skin-desc">
-            <a href="#"><span>What is FlippingBook Online？<span class="glyphicon glyphicon-menu-down toggle-arrows"></span></span></a>
-            <div role="presentation" class="menu-down">
-                <span>Flipbook Name</span>
-                <span style="margin-top: 15px;">Description</span>
-                <span style="margin-top: 15px;">Description</span>
-                <span style="margin-top: 15px;">Description</span>
-            </div>
-        </li>
-        <li role="presentation" class="menu-item">
-            <span>
-                <i class="el-icon-s-grid"></i>缩略图
-            </span>
-        </li>
-      <div class="block"  style="text-align: center;">
-        <el-image
-          v-for="item in skins"
-          style="width: 60px; height: 60px; display: block; margin: 10px auto"
-          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-image>
-      </div>   -->          
+        </el-collapse>        
     </ul>
 
 
@@ -468,9 +462,9 @@
                 <div class="hard"></div>
               </div>
             </div>
-<!--             <div class="page-footer">
+            <div class="page-footer">
                 <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
-            </div>   -->         
+            </div>           
         </div>
 
 
@@ -786,6 +780,11 @@ var app = new Vue({
       {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
       {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
     ],
+    colors: [
+      {label: 'colorPanel'},
+      {label: 'colorBackground'},
+      {label: 'colorLink'},
+    ],
     navigationArr: [
       {index: 0, value: '目录', checked: false, hidden: false},
       {index: 1, value: '缩略图', checked: false, hidden: false},
@@ -818,9 +817,9 @@ var app = new Vue({
       "background": "1",
       "backgroundFill": 1,
       "backgroundPlace": 1,
-      "colorPanel": 1,
-      "colorBackground": 1,
-      "colorLink": 1,
+      colorPanel: '#EEE',
+      colorBackground: '#EEE',
+      colorLink: '#EEE',
       "external": "1",
       "externalText": "1",
       "externalEnable": false,
@@ -937,6 +936,7 @@ var app = new Vue({
   },
   computed: {
     icons: function () {
+      console.log('start build icons')
       let arr = this.controls.filter(item => item.checked )
       console.log(arr)
       arr.map((item, index) => {
@@ -958,6 +958,11 @@ var app = new Vue({
     }
   },  
   watch: {
+      // controls: {
+      //   handler: function(val, oldval) {
+      //     console.log(val)
+      //   }
+      // },
       form:{
         handler:function(val,oldval){
           console.log(val)
