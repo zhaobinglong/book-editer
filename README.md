@@ -46,5 +46,10 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 - 增加搜索结果的点击事件
 - 增加目录菜单的点击事件
 
+## 6.25-6.27
+- 三个颜色像相关的字段修改颜色值后点击保存，接口报错500
+- 发邮件需要接口
+- 
+
 
 

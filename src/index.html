@@ -6,6 +6,10 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+    <!-- 加载icon上的字体图标 -->
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1876940_8s7f2vms0xx.css">
+
+
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <link rel="stylesheet" type="text/css" href="./css/switch.css">
 
@@ -26,6 +30,9 @@
     <!-- 异步请求库 -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
+    <!-- qs.stringify()将对象序列化成URL的形式 -->
+    <script src="https://cdn.bootcss.com/qs/6.7.0/qs.min.js"></script>
+    
     <!-- 引入翻书插件 -->
     <script src="./static/turn.min.js"></script>
 </head>
@@ -37,7 +44,7 @@
     <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
         <div class="menu-item" style="background-color: #CFCFCF">
             <span >
-                <span class="glyphicon glyphicon-menu-left"></span>首页
+                <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
             </span>
             <!-- <div class="btn-group"> -->
                 <el-popover
@@ -45,10 +52,10 @@
                   width="100"
                   trigger="hover">
                   <div>
-                      <el-checkbox >设为默认</el-checkbox>
+                      <el-checkbox v-model="form.main">设为默认</el-checkbox>
                   </div>
-                   <el-button type="primary" slot="reference" > 
-                      保存<i class="el-icon-caret-bottom"  ></i>
+                   <el-button type="primary" slot="reference" @click="mainSave"> 
+                      {{ saveBtn }}<i class="el-icon-caret-bottom"  ></i>
                    </el-button>
                 </el-popover>
                 
@@ -413,25 +420,26 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation =='目录' || form.navigation == '缩略图'">
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 0 || form.navigation == 1">
         <el-collapse accordion>
-              <el-collapse-item v-if="form.navigation == '目录'">
+              <el-collapse-item v-if="form.navigation == 0">
                 <template slot="title">
                   <div style="padding-left: 10px;">目录</div>
                 </template>
                 <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
               </el-collapse-item>
-              <el-collapse-item v-if="form.navigation == '缩略图'">
+              <el-collapse-item v-if="form.navigation == 1">
                 <template slot="title">
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
                 <div >
-                    <div  class="thum-item"  style="text-align: center;" >
-                        <img
-                          style="width: 90px; height: 60px; display: block; margin: 10px auto"
-                          />
-                        <p>第1页</p>
-                    </div>
+                  <div  class="thum-item"  style="text-align: center;" v-for="(item, index) in myList" @click="clickItem(item, index)">
+                      <img
+                        v-lazy="url"
+                        style="width: 90px; height: 60px; display: block; margin: 10px auto"
+                        />
+                      <p>第{{ index + 1 }}页</p>
+                  </div>
                 </div>
 
               </el-collapse-item>
@@ -463,27 +471,27 @@
               </div>
             </div>
             <div class="page-footer">
-                <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
+                <span v-for="item in icons"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
             </div>           
         </div>
 
 
 
     <!-- 右侧搜索区 -->
-    <ul class="search-box" >
-        <li class="title">搜索</li>
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for..." >
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button" >Go!</button>
-              </span>
-            </div>
+    <ul class="search-box" :style="{backgroundColor: form.colorBackground}">
+        <li class="title" :style="{backgroundColor: form.colorPanel}">搜索</li>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for..." >
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" @click="search">Go!</button>
+          </span>
+        </div>
         <li class="text-list" >
-            <p class="item" >
+            <p class="item" v-for="item in searchList">
                 第1页. www
             </p>
         </li>
-        <li class="search-more" >xianshi</li>
+        <!-- <li class="search-more" >xianshi</li> -->
     </ul>
     <div class="earch-box-small" style="display: none">
         <span class="earch-box-small-tip">外链</span><i class="el-icon-search" ></i>
@@ -549,7 +557,7 @@
         <!-- action="http://m.baige.me/api/book/saveSettingImage" -->
         <el-upload
           class="upload-demo"
-          :http-request="uploadFile"
+          :http-request="uploadLogo"
           :show-file-list="false"
           action=""
           :limit="1" 
@@ -682,10 +690,10 @@
           >
             <el-select v-model="form.backgroundPlace" placeholder="请选择">
             <el-option
-              v-for="item in background.fit"
+              v-for="(item, index) in background.placement"
               :key="item"
               :label="item"
-              :value="item">
+              :value="index">
             </el-option>
           </el-select>
           </el-form-item>
@@ -702,7 +710,7 @@
                   </span>
               </div>
               <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
-                <el-input slot="reference" v-model="form.backgroundFill" placeholder=""></el-input>
+              <el-input slot="reference" v-model="backgroundFill" ></el-input>
             </el-popover>
           </el-form-item>
         </el-form>
@@ -716,14 +724,19 @@
 </div>
 </body>
 <script type="text/javascript">
-// vue接管列表数据渲染
+
+// 接管双向数据绑定
 var app = new Vue({
   el: '#app',
-  // components: {
-  //   // mavonEditor
-  //   thumbnails,
-  // },
+  //定义私用局部过滤器。只能在当前 vue 对象中使用
+  filters: {
+      dataFormat(msg) {
+          return msg+'xxxxx';
+      }
+  },
   data: {
+    searchKey: '', // 搜索用关键词
+    myList: [],
     visible: false,
     treeData: [{
       label: '一级 1',
@@ -761,15 +774,15 @@ var app = new Vue({
       }]
     }],
     rank: [
-      {icon: 'el-icon-top-left', checked: false},
-      {icon: 'el-icon-top', checked: false},
-      {icon: 'el-icon-top-right', checked: false},
-      {icon: 'el-icon-back', checked: false},
-      {icon: 'el-icon-rank', checked: false},
-      {icon: 'el-icon-right', checked: false},
-      {icon: 'el-icon-bottom-left', checked: false},
-      {icon: 'el-icon-bottom', checked: false},
-      {icon: 'el-icon-bottom-right', checked: false}
+      {icon: 'el-icon-top-left', checked: false, label: '左上'},
+      {icon: 'el-icon-top', checked: false, label: '上'},
+      {icon: 'el-icon-top-right', checked: false, label: '右上'},
+      {icon: 'el-icon-back', checked: false, label: '左'},
+      {icon: 'el-icon-rank', checked: false, label: '中心'},
+      {icon: 'el-icon-right', checked: false, label: '右'},
+      {icon: 'el-icon-bottom-left', checked: false, label: '左下'},
+      {icon: 'el-icon-bottom', checked: false, label: '下'},
+      {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
     skins: [
       {index: 1, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
@@ -815,7 +828,7 @@ var app = new Vue({
       "main": true,
       "skin": "2",
       "background": "1",
-      "backgroundFill": 1,
+      backgroundFill: 1,
       "backgroundPlace": 1,
       colorPanel: '#EEE',
       colorBackground: '#EEE',
@@ -829,6 +842,10 @@ var app = new Vue({
       sound: false,
       search: false,
       navigation: 0,
+      zoom: false,
+      thumbnail: false,
+      textSelect: false,
+      fullScreen: false,
       userId: 1,
       title: '',
       description: '',
@@ -849,11 +866,11 @@ var app = new Vue({
       password: '',
       passwordEnable: false,
     },
-      background: {
-        url:'',
-        fit:['fit','fill','fixx'],
-        filling: 'center'
-      },
+    background: {
+      url:'',
+      placement:['Fit','Fill','Tile'],
+      filling: 'center'
+    },
     share: {
       link: 'baidu.com',
       qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
@@ -891,8 +908,6 @@ var app = new Vue({
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
       {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
       {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
-      // {'title': 'Default Navigation',  'checked': false},
-      // {'title': 'Contacts Button',  'checked': false},
       {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true, 'label':'setPhone'},
       {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, 'label':'setStaff'},
       {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true, 'label':'setEmail'},
@@ -935,10 +950,27 @@ var app = new Vue({
     searchList: [] 
   },
   computed: {
+    backgroundFill: {
+      get: function () {
+        return this.rank[this.form.backgroundFill].label
+      },
+      set: function (value) {
+        this.form.backgroundFill = value
+      }
+    },  
     icons: function () {
       console.log('start build icons')
+      // 把form和controls关联
+      this.controls = this.controls.map(item => {
+        item.checked = this.form[item.label]
+        return item
+      })
+
+      // 过滤被选中的control
       let arr = this.controls.filter(item => item.checked )
       console.log(arr)
+
+      // 根据group来计算分割线
       arr.map((item, index) => {
         console.log(item.group, index)
         if (index < arr.length-1 ) {
@@ -950,10 +982,12 @@ var app = new Vue({
         }
         return item
       })
+    
       // 最有一个icon的右侧不能有分隔符号
       if (arr.length > 0) {
         arr[arr.length-1].rightLine = false
       }
+      console.log(arr)
       return arr
     }
   },  
@@ -1026,12 +1060,11 @@ var app = new Vue({
         this.fileChange = false      
     },
     uploadBackground(files) {
-        console.log(files)
         let formData = new FormData()
         formData.append('file', files.file)
-        api.saveSettingImage(formData).then(res => {
+        axios.post('/api/book/saveSettingImage', formData).then(res => {
           console.log(res)
-          this.form.background = res
+          this.form.background = res.data
         })      
     },
     uploadFavicon(files) {
@@ -1043,24 +1076,12 @@ var app = new Vue({
           this.form.favico = res
         })
     },
-    uploadFile (files) {
-        console.log(files)
+    uploadLogo (files) {
         let formData = new FormData()
         formData.append('file', files.file)
-        api.saveSettingImage(formData).then(res => {
-          console.log(res)
-          this.form.logo = res
+        axios.post('/api/book/saveSettingImage', formData).then(res => {
+          this.form.logo = res.data
         })
-       // axios.post('http://m.baige.me/api/book/saveSettingImage', null, {
-       //    transformRequest: [() => {
-       //      let formData = new FormData()
-       //      formData.append('file', files.file)
-       //      return formData
-       //    }
-       //  ]
-       // }).then(data => {
-       //  console.log(data)
-       // })
     },
     handleLogoSuccess (res, file) {
       console.log(res)
@@ -1082,11 +1103,10 @@ var app = new Vue({
         }); 
     },
     clickRank (item) {
-      console.log(item)
-      this.rank = this.rank.map((i) => {
+      this.rank = this.rank.map((i, index) => {
         if (i.icon == item.icon) {
             i.checked = true
-            this.form.background.filling = i.icon
+            this.form.backgroundFill = index
         } else {
             i.checked = false
         }
@@ -1192,7 +1212,10 @@ var app = new Vue({
 
     // 保存修改
     mainSave () {
-      api.saveSetting(Qs.stringify(this.form)).then(res => {
+
+      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+      axios.post('/api/book/saveSetting', Qs.stringify(this.form)).then(res => {
+      // api.saveSetting(Qs.stringify(this.form)).then(res => {
         console.log(res)
         this.saveBtn = '已保存'
         this.dialogLogo = false
@@ -1200,7 +1223,16 @@ var app = new Vue({
         this.dialogBackground = false
         this.dialogButton = false
         this.dialogBackground = false
-      })  
+        this.$message({
+          type: 'success',
+          message: '保存成功'
+        });  
+      }).catch((error) => {
+        this.$message({
+          type: 'error',
+          message: error
+        });
+      });  
     },
     goBack () {
       if (this.saveBtn == '保存') {
@@ -1248,6 +1280,19 @@ var app = new Vue({
         a.click()
       }
       x.send();
+    },
+    search () {
+      if (this.searchKey) {
+          this.$message({
+            message: '搜索不到内容',
+            type: 'warning'
+          });
+      } else {
+          this.$message({
+            message: '搜索内容不能为空',
+            type: 'warning'
+          });
+      }
     }
   }
 })
