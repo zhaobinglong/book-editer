@@ -1195,8 +1195,14 @@ var app = new Vue({
           this.audioControl()
         } else if (item.title == '全屏') {
           this.sceenControl()
+        } else if (item.title == '搜索') {
+          if (this.form.navigation == 3) {
+            this.form.navigation = 2
+          } else {
+            this.form.navigation = 3
+          }
         } else if (item.title == '电话') {
-            this.$alert(`拨打电话136-1851-6602`, '提示', {
+            this.$alert(`拨打电话${this.form.contactTel}`, '提示', {
               confirmButtonText: '确定'
             });
         } else if (item.title == '邮件') {
