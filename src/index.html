@@ -42,8 +42,14 @@
 
 <body >
 
-<!-- 隐藏内容 -->
+<!-- 隐藏的分享链接 -->
 <input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
+
+<!-- 隐藏的音频播放标签 -->
+<audio id="myAudio" >
+  <source src="./js/horse.ogg" type="audio/ogg">
+  <source src="./js/horse.mp3" type="audio/mpeg">
+</audio>
 
 <div class="container-fluid" id="app">
 
@@ -1184,6 +1190,10 @@ var app = new Vue({
           } else {
             this.form.navigation = 2
           }
+
+        } else if (item.title == '声音') {
+          
+          this.audioControl()
         } else if (item.title == '电话') {
             this.$alert(`拨打电话136-1851-6602`, '提示', {
               confirmButtonText: '确定'
@@ -1315,6 +1325,14 @@ var app = new Vue({
     toggleSearch() {
       console.log(this.form.navigation)
       this.form.navigation = 3
+    },
+    audioControl() {
+     var audio = document.getElementById('myAudio');
+      if(audio.paused)                     {                 
+        audio.play();//audio.play();// 这个就是播放  
+      }else{
+        audio.pause();// 这个就是暂停
+      }
     }
   }
 })
