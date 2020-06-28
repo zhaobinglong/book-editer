@@ -2,9 +2,9 @@ import Mock from 'mockjs'
 // mock随机数据
 const Random = Mock.Random;
 
-Mock.mock('/api/query', 'get', () => {
+Mock.mock(/\/api\/query/, 'get', () => {
 	let arr = []
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 10; i++) {
 		let data = Mock.mock({
 		  "page|1-100": 100,
 		  "description": Random.cparagraph( 50 )
@@ -14,7 +14,13 @@ Mock.mock('/api/query', 'get', () => {
     return arr
 })
 
+<<<<<<< HEAD
 Mock.mock('/api/getBook', 'get', () => {
+=======
+
+
+Mock.mock(/\api\/getBook/, 'get', () => {
+>>>>>>> debug2
 	let obj = {
 	    "id": Random.integer(100,1000),
 	    "userId": Random.integer(100,1000),
@@ -40,7 +46,11 @@ Mock.mock('/api/getBook', 'get', () => {
 })
 
 
+<<<<<<< HEAD
 Mock.mock('/api/fb/getSetting', 'get', () => {
+=======
+Mock.mock(/\/api\/fb\/getSetting/, 'get', () => {
+>>>>>>> debug2
 	let controls = {
 	    "id": Random.integer(100,1000),
 	    "bookId": Random.integer(100,1000),
@@ -61,8 +71,14 @@ Mock.mock('/api/fb/getSetting', 'get', () => {
 	    "updated": "",
 	    "main": false
 	 }
+<<<<<<< HEAD
     return {
     	controls: controls
     }
 })
 	
+=======
+    return  controls
+})
+	
+>>>>>>> debug2

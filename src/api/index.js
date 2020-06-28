@@ -4,25 +4,66 @@ import service from './http'
 export const getBook = data => {
     return service({
         url: '/api/getBook',
+export const getBook = data => {
+    return service({
+        url: '/getBook',
+        method: 'get'
+    })
+}
+
+// 获取书的标题和描述
+export const getFlipbook = data => {
+    return service({
+        url: '/getFlipbook',
         method: 'get',
-        data
+        params: data
     })
 }
 
 export const getSetting = data => {
     return service({
-        url: '/api/fb/getSetting',
+        url: '/fb/getSetting',
+        method: 'get'
+    })
+}
+
+// 获取主要的配置信息
+export const getMainSetting = data => {
+    return service({
+        url: '/book/getMainSetting',
         method: 'get',
+        params: data
+    })
+}
+
+// 保存配置信息
+export const saveSetting = data => {
+    return service({
+        url: '/book/saveSetting',
+        method: 'post',
         data
+    })
+}
+
+// 保存图片
+export const saveSettingImage = data => {
+    return service({
+        url: '/book/saveSettingImage',
+        method: 'post',
+        data: data
+>>>>>>> debug2
     })
 }
 
 export const search = data => {
     return service({
-        url: '/api/query',
+        url: '/query',
         method: 'get'
     })
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> debug2
 

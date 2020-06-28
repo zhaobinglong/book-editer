@@ -126,6 +126,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 10px;
+    cursor: pointer;
 }
 .download {
     padding: 8px
@@ -668,6 +669,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 .main .picture {
     width: 400px;
@@ -792,13 +794,33 @@ body {
     color: #5d90dd;
 }
 
-/* 右侧 */
+/* SKIN Bar */
+.skinbar {
+}
+
+.skinbar li:first-child > i {
+    padding-left: 15px;
+}
+
+/*.skinbar li:first-child > span {
+    margin-left: 200px;
+    line-height: 40px;
+    height: 40px;
+    color: #afafaf;
+}*/
+.flex {
+    display: flex!important;
+    justify-content: space-between;
+}
+
+/* 右侧搜索区域 */
 .search-box {
     width: 250px;
     list-style: none;
     background-color: #e6e6e6;
     background-color: #FFF;
-    height: 100vh
+    height: 100vh;
+    overflow-y: scroll;
 }
 
 .search-box li {
@@ -856,7 +878,6 @@ body {
 .search-box .text-list {
     padding: 7px 15px;
     color: #7f7d7d;
-    background-color: #ebebeb;
     font-size: 12px;
     font-weight: 600;
 }
@@ -874,22 +895,30 @@ body {
 .search-box .text-list span {
     color: #aaa;
 }
-
-/* SKIN Bar */
-.skinbar {
+.search-box .search-more {
+    text-align: center;
+}
+.earch-box-small {
+    padding: 10px 20px;
+}
+.earch-box-small-tip {
+    background-color: #CFCFCF;
+    display: inline-block;
+    padding: 4px 10px;
+    margin-right: 10px;
 }
 
-.skinbar li:first-child > i {
-    padding-left: 15px;
+/*缩略图*/
+.thum-item {
+    width: 100%;
+    padding: 6px 0;
+    cursor: pointer;
+    text-align: center; 
+    width: 90px; 
+    display: block; 
+    margin: 10px auto;
+    overflow: hidden;
 }
-
-/*.skinbar li:first-child > span {
-    margin-left: 200px;
-    line-height: 40px;
-    height: 40px;
-    color: #afafaf;
-}*/
-.flex {
-    display: flex!important;
-    justify-content: space-between;
+.thum-item:hover {
+    background-color: #EFEFEF
 }

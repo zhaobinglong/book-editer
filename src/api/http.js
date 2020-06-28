@@ -39,7 +39,9 @@ export function tryHideFullScreenLoading() {
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? '' : 'https://examlab.cn/uniapi/',
+  withCredentials: false,
+  baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://webpic.examlab.cn/api',
+  // baseURL: process.env.NODE_ENV === 'development' ? 'http://m.baige.me/api/' : 'http://m.baige.me/api/',
   timeout: 5000                  // 请求超时时间
 });
 
@@ -48,6 +50,7 @@ service.interceptors.request.use(config => {
   // if (store.getters.token) {
   //   config.headers['X-Token'] = store.getters.token; // 让每个请求携带自定义token 请根据实际情况自行修改
   // }
+  config.headers['content-type'] = 'application/x-www-form-urlencoded'
   showFullScreenLoading()
   return config;
 }, error => {
@@ -65,7 +68,6 @@ service.interceptors.response.use(
   /**
   * code为非200是抛错 可结合自己业务进行修改
   */
-    console.log(response)
     const res = response.data;
     if (!response) {
       tryHideFullScreenLoading()
