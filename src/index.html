@@ -42,6 +42,9 @@
 
 <body >
 
+<!-- 隐藏的book页数 -->
+<input type="hidden" value="100" id="bookPage">
+
 <!-- 隐藏的分享链接 -->
 <input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
 
@@ -676,9 +679,8 @@
       <div style="display: flex;">
         <el-input  placeholder="发送至邮箱"></el-input>
       </div>
-      
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="copy(share.link)">确定</el-button>
+        <el-button type="primary"  @click="dialogEmail = false">确定</el-button>
       </span>
     </el-dialog>
 
@@ -1216,7 +1218,7 @@ var app = new Vue({
         } else if (item.title == '在线客服') {
           this.clickStaff()
         } else if (item.title == '电话') {
-            this.$alert(`拨打电话${this.form.contactTel}`, '提示', {
+            this.$alert(`电话：${this.form.contactTel}`, '提示', {
               confirmButtonText: '确定'
             });
         } else if (item.title == '邮件') {
