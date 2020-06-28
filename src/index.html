@@ -39,7 +39,6 @@
     <!-- <script src="../../context/js/tools.js"></script> -->
     <!-- <script src="../../context/js/tween.js"></script> -->
     <!-- <script src="../../context/js/velocity.min.js"></script> -->
-=======
     
     <!-- 引入弹出层组件库 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
@@ -56,7 +55,6 @@
 
     <!-- 引入二维码插件 -->
     <script src="./js/qrcode.min.js"></script>
->>>>>>> debug2
 </head>
 
 <body >
@@ -512,20 +510,6 @@
 
 
     <!-- 右侧搜索区 -->
-<<<<<<< HEAD
-    <!-- <v-search></v-search> -->
-    <el-dialog
-      title="搜索"
-      :visible.sync="searchDialog"
-      width="30%"
-      :before-close="handleClose">
-      <span>{{ searchKey ? searchKey : '搜索内容为空' }}</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="searchDialog = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-=======
     <ul class="search-box" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
         <li class="title" :style="{backgroundColor: form.colorPanel}">搜索</li>
         <div class="input-group">
@@ -544,9 +528,6 @@
     <div class="earch-box-small" v-else>
         <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="form.navigation = 3"></i>
     </div>
-
->>>>>>> debug2
-
     <!-- skin皮肤选择器 -->
     <el-dialog
       title="选择皮肤"
@@ -578,7 +559,7 @@
       :visible.sync="dialogLogo"
       width="40%">
         <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-           <el-image :src="form.controls.logo" ></el-image> 
+           <el-image :src="form.logo" ></el-image> 
             <el-popover
               placement="right"
               width="200"
@@ -638,13 +619,8 @@
       title="EDIT FAVICON"
       :visible.sync="dialogFavicon"
       width="40%">
-<<<<<<< HEAD
-        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-            <el-image :src="form.controls.favico" ></el-image>
-=======
         <div style="position: relative; background-color: #EFEFEF; height: 200px; overflow: hidden;" class="mb20">
             <el-image :src="form.favico" v-if="form.favico"  fit="scale-down"></el-image>
->>>>>>> debug2
             <el-popover
               placement="right"
               width="200"
