@@ -49,7 +49,10 @@ https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&
 ## 6.25-6.27
 - 三个颜色像相关的字段修改颜色值后点击保存，接口报错500
 - 发邮件需要接口
-- 
+- 分享弹框，显示一个二维码，二维码生成接口
+- 点击下载的弹框，下载内容的链接和内容大小
+- 点击Text Selection弹框，细节明确
+- 点击缩略图icon交互细节
 
 
 

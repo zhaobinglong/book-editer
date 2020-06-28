@@ -7,7 +7,6 @@ const WebpackBar = require('webpackbar'); // 打包进度条
 const optimizeCss = require('optimize-css-assets-webpack-plugin') // 压缩css
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin') // 压缩js
 const { VueLoaderPlugin } = require('vue-loader');
-import jquery  from 'jquery';
 
 var baseConfig = {
     devtool: 'cheap-module-eval-source-map',
@@ -49,10 +48,6 @@ var baseConfig = {
       }
     },
     plugins: [
-        new webpack.ProvidePlugin({
-              jQuery: "jquery",
-              $: "jquery"
-        }),
         new ExtractTextPlugin({
             filename: (getPath)=>{
                 return getPath('css/[name].[chunkHash:5].css').replace("js","css")

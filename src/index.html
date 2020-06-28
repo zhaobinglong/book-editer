@@ -34,10 +34,17 @@
     <script src="https://cdn.bootcss.com/qs/6.7.0/qs.min.js"></script>
     
     <!-- 引入翻书插件 -->
-    <script src="./static/turn.min.js"></script>
+    <script src="./js/turn.min.js"></script>
+
+    <!-- 引入二维码插件 -->
+    <script src="./js/qrcode.min.js"></script>
 </head>
 
 <body >
+
+<!-- 隐藏内容 -->
+<input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
+
 <div class="container-fluid" id="app">
 
     <!-- 左侧菜单栏区域 -->
@@ -434,7 +441,7 @@
                 </template>
                 <div >
                   <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)">
-                      <el-image :key="item" :src="item" fit="cover"></el-image>  
+                      <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
                       <p>第{{ index + 1 }}页</p>
                   </div>
                 </div>
@@ -474,10 +481,10 @@
 
 
     <!-- 右侧搜索区 -->
-    <ul class="search-box" :style="{backgroundColor: form.colorBackground}">
+    <ul class="search-box" :style="{backgroundColor: form.colorBackground}" v-if="showSearchBox">
         <li class="title" :style="{backgroundColor: form.colorPanel}">搜索</li>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search for..." >
+          <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" @click="search">Go!</button>
           </span>
@@ -489,23 +496,10 @@
         </li>
         <!-- <li class="search-more" >xianshi</li> -->
     </ul>
-    <div class="earch-box-small" style="display: none">
-        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" ></i>
+    <div class="earch-box-small" v-else>
+        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="toggleSearch"></i>
     </div>
 
-
-
-    <el-dialog
-      title="搜索"
-      :visible.sync="searchDialog"
-      width="30%"
-      :before-close="handleClose">
-      <span>{{ searchKey ? searchKey : '搜索内容为空' }}</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="searchDialog = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
 
     <!-- skin皮肤选择器 -->
     <el-dialog
@@ -654,10 +648,11 @@
       title="分享"
       :visible.sync="dialogShare"
       width="40%">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="share.qrcode"></el-image>
-      <el-input v-model="share.link" placeholder=""></el-input>
+      <div style="display: flex;">
+        <div id="qrcode" style="padding-right: 10px"></div>
+        <el-input v-model="shareLink" ></el-input>
+      </div>
+      
       <span slot="footer" class="dialog-footer">
         <el-button type="primary"  @click="copy(share.link)">复制</el-button>
       </span>
@@ -731,6 +726,8 @@ var app = new Vue({
       }
   },
   data: {
+    qrcodeInstance: null, // 二维码实例
+    shareLink: '', // 分享的链接
     searchKey: '', // 搜索用关键词
     myList: [],
     visible: false,
@@ -904,9 +901,9 @@ var app = new Vue({
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
       {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
       {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
-      {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true, 'label':'setPhone'},
-      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, 'label':'setStaff'},
-      {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true, 'label':'setEmail'},
+      {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
+      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true},
+      {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true}
     ],
     treeData: [{
       label: '一级 1',
@@ -946,6 +943,13 @@ var app = new Vue({
     searchList: [] 
   },
   computed: {
+    showSearchBox: function () {
+      if (this.form.navigation == 3 ) {
+          return true
+      } else {
+          return false
+      }
+    },
     backgroundFill: {
       get: function () {
         return this.rank[this.form.backgroundFill].label
@@ -955,9 +959,9 @@ var app = new Vue({
       }
     },  
     icons: function () {
-      console.log('start build icons')
       // 把form和controls关联
       this.controls = this.controls.map(item => {
+        console.log(item.checked, this.form[item.label])
         item.checked = this.form[item.label]
         return item
       })
@@ -1017,19 +1021,6 @@ var app = new Vue({
       },
   } ,  
   mounted() {   
-
-    // 初始化一百张缩略图
-
-    console.log(this.myList)
-     // let id = this.getUrlParam('bookId')
-     // api.getBook({}).then(res => {
-     //    Object.assign(this.form, res)
-     // })
-
-     // api.getSetting({}).then(res => {
-     //    Object.assign(this.form, res)
-     // })   
-
      let data = {bookId:  2 }
      axios.get('/api/getFlipbook', {
       params: data
@@ -1052,7 +1043,6 @@ var app = new Vue({
         this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i + 1}.jpg`
         )
       } 
-      console.log(this.myList)
     },
     getUrlParam: function(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -1076,12 +1066,12 @@ var app = new Vue({
         })      
     },
     uploadFavicon(files) {
-        console.log(files)
         let formData = new FormData()
         formData.append('file', files.file)
-        api.saveSettingImage(formData).then(res => {
+        axios.post('/api/book/saveSettingImage', formData).then(res => {
+        // api.saveSettingImage(formData).then(res => {
           console.log(res)
-          this.form.favico = res
+          this.form.favico = res.data
         })
     },
     uploadLogo (files) {
@@ -1184,31 +1174,41 @@ var app = new Vue({
         if (item.title == '下载') {
             this.dialogDownload = true              
         } else if (item.title == '分享') {
-            this.dialogShare = true
+          this.dialogShare = true
+          this.$nextTick(() => {
+            this.qrcode()
+          })
         } else if (item.title == '缩略图') {
             this.showMenu = true
         } else if (item.title == '电话') {
             this.$alert(`拨打电话136-1851-6602`, '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-              }
+              confirmButtonText: '确定'
             });
         } else if (item.title == '邮件') {
             this.$alert(`发送邮件到 570869214@qq.com`, '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-              }
+              confirmButtonText: '确定'
             });
         } else{
             this.$alert(`你点击了${item.title}按钮`, '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-              }
+              confirmButtonText: '确定'
             });
         }
     },
-    handleClose () {
-
+    qrcode() {
+      let text = document.getElementById("shareLink").value
+      this.shareLink = text
+      if (this.qrcodeInstance) {
+        return false
+      } else {
+        this.qrcodeInstance = new QRCode(document.getElementById("qrcode"), {
+          text: text,
+          width: 128,
+          height: 128,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+      }
     },
     setIconClass (item) {
       if (item.rightLine) {
@@ -1307,6 +1307,10 @@ var app = new Vue({
         message: `点击了${index + 1}页`,
         type: 'info'
       });      
+    },
+    toggleSearch() {
+      console.log(this.form.navigation)
+      this.form.navigation = 3
     }
   }
 })
