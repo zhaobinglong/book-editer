@@ -669,6 +669,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 .main .picture {
     width: 400px;

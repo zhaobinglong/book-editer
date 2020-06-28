@@ -51,6 +51,9 @@
   <source src="./js/horse.mp3" type="audio/mpeg">
 </audio>
 
+<!-- 隐藏的在线客服的代码 -->
+<input id="tawk" type="hidden" value="https://embed.tawk.to/5a811a074b401e45400cdcd8/default">
+
 <div class="container-fluid" id="app">
 
     <!-- 左侧菜单栏区域 -->
@@ -487,7 +490,7 @@
 
 
     <!-- 右侧搜索区 -->
-    <ul class="search-box" :style="{backgroundColor: form.colorBackground}" v-if="showSearchBox">
+    <ul class="search-box" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
         <li class="title" :style="{backgroundColor: form.colorPanel}">搜索</li>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
@@ -503,7 +506,7 @@
         <!-- <li class="search-more" >xianshi</li> -->
     </ul>
     <div class="earch-box-small" v-else>
-        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="toggleSearch"></i>
+        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="form.navigation = 3"></i>
     </div>
 
 
@@ -664,6 +667,21 @@
       </span>
     </el-dialog>
 
+
+    <!--发送邮件对话框 -->
+    <el-dialog
+      title="邮件"
+      :visible.sync="dialogEmail"
+      width="40%">
+      <div style="display: flex;">
+        <el-input  placeholder="发送至邮箱"></el-input>
+      </div>
+      
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary"  @click="copy(share.link)">确定</el-button>
+      </span>
+    </el-dialog>
+
     <!-- 背景选择器 -->
     <el-dialog
       title="EDIT BACKGROUND"
@@ -820,6 +838,7 @@ var app = new Vue({
     dialogButton: false,
     dialogShare: false,
     dialogDownload: false,
+    dialogEmail: false,
     saveBtn: '保存',
     color: '#EEE',
     
@@ -950,13 +969,6 @@ var app = new Vue({
     searchList: [] 
   },
   computed: {
-    showSearchBox: function () {
-      if (this.form.navigation == 3 ) {
-          return true
-      } else {
-          return false
-      }
-    },
     backgroundFill: {
       get: function () {
         return this.rank[this.form.backgroundFill].label
@@ -1201,14 +1213,14 @@ var app = new Vue({
           } else {
             this.form.navigation = 3
           }
+        } else if (item.title == '在线客服') {
+          this.clickStaff()
         } else if (item.title == '电话') {
             this.$alert(`拨打电话${this.form.contactTel}`, '提示', {
               confirmButtonText: '确定'
             });
         } else if (item.title == '邮件') {
-            this.$alert(`发送邮件到 570869214@qq.com`, '提示', {
-              confirmButtonText: '确定'
-            });
+            this.dialogEmail = true
         } else{
             this.$alert(`你点击了${item.title}按钮`, '提示', {
               confirmButtonText: '确定'
@@ -1364,6 +1376,23 @@ var app = new Vue({
         }  
         this.currentScreen = 'full' 
       }   
+    },
+    clickStaff() {
+        var code = $('#tawk').val();
+        //console.log(" widget ...."+wdiget);
+        if (code!='') {
+         //console.log("display widget ....");
+         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+         (function() {
+          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+          s1.async = true;
+          s1.src =  code;
+          s1.charset = 'UTF-8';
+          s1.setAttribute('crossorigin', '*');
+          s0.parentNode.insertBefore(s1, s0);
+         })();
+        }
+     
     }
   }
 })
