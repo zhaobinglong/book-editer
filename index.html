@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
@@ -13,7 +14,8 @@
     <link rel="stylesheet" type="text/css" href="./css/switch.css">
 
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
 
     <!-- 引入最新版的jquery -->
     <script
@@ -80,7 +82,7 @@
     <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
         <div class="menu-item" style="background-color: #CFCFCF">
             <span >
-                <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
+                <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首1页
             </span>
             <!-- <div class="btn-group"> -->
                 <el-popover
@@ -154,7 +156,7 @@
                           width="200"
                           trigger="click">
                           <div >
-                            <div v-for="item in colors" style="display: flex; align-items: center;"> 
+                            <div v-for="(item, index) in colors" style="display: flex; align-items: center;" :key="index"> 
                               <el-color-picker v-model="form[item.label]"></el-color-picker>
                               <span style="padding-left: 10px">{{ item.label }}</span>
                             </div>
@@ -178,7 +180,7 @@
            <li role="presentation" class="controls">
                 
                 <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
-                    <div class="controls-col "  v-for="item in controls" :class="item.bottomLine? 'bottom-line': ''" v-if="!item.hidden">
+                    <div class="controls-col "  v-for="(item, index) in controls" :key="index" :class="item.bottomLine? 'bottom-line': ''" v-if="!item.hidden">
                         <div>
                            <span class="icon iconfont" :class="item.icon? item.icon : ''"></span>
                             <span>{{ item.title }}</span>
@@ -278,7 +280,7 @@
                         </div>
                     </div>
                     <div v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
-                          <div class="form-group" v-for="item in phone">
+                          <div class="form-group" v-for="(item, index) in phone" :key="index">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
                             <input class="form-control"  placeholder="" v-model="form.contactTel">
                           </div>         
@@ -302,7 +304,7 @@
                         </div>
                     </div>
                     <div v-if="form.chatEnable" :class="form.chatEnable? 'bottom-line':''" >
-                      <div class="form-group" v-for="item in staff">
+                      <div class="form-group" v-for="(item, index) in staff" :key="index">
                         <label for="exampleInputEmail1">{{ item.label }}</label>
                         <input  class="form-control"  placeholder="" v-model="form.chat">
                       </div>        
@@ -326,7 +328,7 @@
                         </div>
                     </div>
                     <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
-                          <div class="form-group" v-for="item in email">
+                          <div class="form-group" v-for="(item, index) in email" :key="index">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
                             <input type="email" class="form-control"  placeholder="" v-model="form[item.value]">
                           </div>
@@ -342,7 +344,7 @@
                           width="200"
                           trigger="click">
                           <div>
-                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigationArr" v-if="!item.hidden">{{ item.value }}</p>
+                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="(item, index) in navigationArr" :key="index" v-if="!item.hidden">{{ item.value }}</p>
                           </div>
                           <button slot="reference" class="brand-btns favicon">{{ navigationArr[form.navigation].value }}</button>
                         </el-popover>
@@ -469,7 +471,7 @@
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
                 <div >
-                  <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)">
+                  <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
                       <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
                       <p>第{{ index + 1 }}页</p>
                   </div>
@@ -503,7 +505,7 @@
               </div>
             </div>
             <div class="page-footer">
-                <span v-for="item in icons"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
+                <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
             </div>           
         </div>
 
@@ -519,7 +521,7 @@
           </span>
         </div>
         <li class="text-list" >
-            <p class="item" v-for="item in searchList">
+            <p class="item" v-for="(item, index) in searchList" :key="index">
                 第1页. www
             </p>
         </li>
@@ -539,7 +541,7 @@
             </el-form-item>
         </el-form>
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" :key="item" @click="clickSkinItem(item)" >
+          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item)" >
             <el-image
               style="width: 100%; display: block;border: 2px solid #FFF"
               :class="item.checked ? 'skinChecked' : ''"
@@ -723,7 +725,7 @@
             <el-select v-model="form.backgroundPlace" placeholder="请选择">
             <el-option
               v-for="(item, index) in background.placement"
-              :key="item"
+              :key="index"
               :label="item"
               :value="index">
             </el-option>
@@ -737,7 +739,7 @@
               width="180"
               trigger="click">
               <div  class="rank">
-                  <span class="rank-item" :class="item.checked ? 'rank-item-checked':''" v-for="item in rank" @click="clickRank(item)">
+                  <span class="rank-item" :class="item.checked ? 'rank-item-checked':''" v-for="(item, index) in rank" @click="clickRank(item)" :key="index">
                     <i :class="item.icon ? item.icon : ''"></i>
                   </span>
               </div>

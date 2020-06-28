@@ -11,8 +11,11 @@ const { VueLoaderPlugin } = require('vue-loader');
 
 
 var baseConfig = {
-    devtool: 'cheap-module-eval-source-map',
-    mode:'development', //development
+    devtool: 'source-map',
+    optimization: {    // 1. 这个配置必须
+        minimize: false
+    },
+    mode:'production', //development
     entry: {
         main: './index.js'
     },
@@ -35,7 +38,7 @@ var baseConfig = {
        overlay: {
            errors: true,
        },
-      contentBase: './src',
+      contentBase: './',
       inline: true,
   　　 proxy: {
         '/api': {// '/api':匹配项
@@ -62,11 +65,12 @@ var baseConfig = {
             watch: false
         }),
         new HtmlWebpackPlugin({
-            template:'./src/index.html'
+            template:'./index.html'
         }),
         new optimizeCss(),
         new UglifyJsPlugin({
-            test: /\.js($|\?)/i
+            test: /\.js($|\?)/i,
+
         }),
         new VueLoaderPlugin()
     ],
