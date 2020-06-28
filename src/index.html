@@ -539,7 +539,7 @@
             </el-form-item>
         </el-form>
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" @click="clickSkinItem(item)" >
+          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" :key="item" @click="clickSkinItem(item)" >
             <el-image
               style="width: 100%; display: block;border: 2px solid #FFF"
               :class="item.checked ? 'skinChecked' : ''"

@@ -3,25 +3,30 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <link rel="stylesheet" href="./css/bootstrap.min.css"> -->
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/index.css">
-    <!-- <link rel="stylesheet" href="./css/font.css"> -->
+
+    <!-- 加载icon上的字体图标 -->
     <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1876940_8s7f2vms0xx.css">
-    <link rel="stylesheet" href="./css/switch.css">
-    <!-- <script src="./Document_files/jquery.min.js"></script> -->
+
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="stylesheet" type="text/css" href="./css/switch.css">
+
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- 引入最新版的jquery -->
     <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
   crossorigin="anonymous"></script>
-    <script src="./css/bootstrap.min.js"></script>
+    <!-- <script src="./css/bootstrap.min.js"></script> -->
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.3.6/lib/theme-chalk/index.css">
+
     <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
     <!-- 右键菜单 -->
     <!-- <link rel="stylesheet" href="../../context/css/style.css"> -->
     <!-- <link rel="stylesheet" href="../../context/css/nprogress.css"> -->
@@ -34,38 +39,62 @@
     <!-- <script src="../../context/js/tools.js"></script> -->
     <!-- <script src="../../context/js/tween.js"></script> -->
     <!-- <script src="../../context/js/velocity.min.js"></script> -->
+    
+    <!-- 引入弹出层组件库 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    
+    <!-- 异步请求库 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+    <!-- qs.stringify()将对象序列化成URL的形式 -->
+    <script src="https://cdn.bootcss.com/qs/6.7.0/qs.min.js"></script>
+    
+    <!-- 引入翻书插件 -->
+    <script src="./js/turn.min.js"></script>
+
+    <!-- 引入二维码插件 -->
+    <script src="./js/qrcode.min.js"></script>
 </head>
 
 <body >
+
+<!-- 隐藏的book页数 -->
+<input type="hidden" value="100" id="bookPage">
+
+<!-- 隐藏的分享链接 -->
+<input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
+
+<!-- 隐藏的音频播放标签 -->
+<audio id="myAudio" loop>
+  <source src="./js/horse.ogg" type="audio/ogg">
+  <source src="./js/horse.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 隐藏的在线客服的代码 -->
+<input id="tawk" type="hidden" value="https://embed.tawk.to/5a811a074b401e45400cdcd8/default">
+
 <div class="container-fluid" id="app">
-<!--     <div class="bar">
-        <span @click="goBack">
-            <span class="glyphicon glyphicon-menu-left"></span> Home
-        </span>
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                Save <span class="caret"></span>
-            </button>
-            <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
-                <div class="checkbox">
-                <label>
-                  <input type="checkbox"> Make setting default for future flipbooks
-                </label>
-              </div>
-            </form>
-        </div>
-    </div> -->
 
     <!-- 左侧菜单栏区域 -->
     <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
         <div class="menu-item" style="background-color: #CFCFCF">
-            <span @click="goBack">
-                <span class="glyphicon glyphicon-menu-left"></span>首页
+            <span >
+                <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
             </span>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="save">
-                    默认<span class="caret"></span>
-                </button>
+            <!-- <div class="btn-group"> -->
+                <el-popover
+                  placement="right"
+                  width="100"
+                  trigger="hover">
+                  <div>
+                      <el-checkbox v-model="form.main">设为默认</el-checkbox>
+                  </div>
+                   <el-button type="primary" slot="reference" @click="mainSave"> 
+                      {{ saveBtn }}<i class="el-icon-caret-bottom"  ></i>
+                   </el-button>
+                </el-popover>
+                
 <!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
                     <div class="checkbox">
                     <label>
@@ -73,7 +102,7 @@
                     </label>
                   </div>
                 </form> -->
-            </div>
+            <!-- </div> -->
         </div>
         <div style="height: 100vh; overflow-y: scroll;">
         <el-collapse accordion>
@@ -85,10 +114,10 @@
             <div role="presentation" class="menu-down show-menu" style="display: block;">
 
                 <span style="margin-top: 15px;">书名</span>
-                <input type="text" class="form-control" placeholder="Flipbook Name" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Flipbook Name" v-model="form.title">
                 <span style="margin-top: 15px;">描述</span>
                 <!-- <textarea type="text"></textarea> -->
-                 <textarea type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1"></textarea>
+                 <textarea type="text" class="form-control" placeholder="Description" v-model="form.description"></textarea>
             </div>
              
           </el-collapse-item>
@@ -97,7 +126,7 @@
               <div style="padding-left: 10px">皮肤</div>
             </template>
             <div class="unActive-a flex" style="padding: 10px 17px">
-                <span style="color: #999" @click="clickSelectSkin">White Style ···</span>
+                <span style="color: #999" @click="dialogSkin = true">White Style ···</span>
             </div>
           </el-collapse-item>
           <el-collapse-item >
@@ -112,7 +141,7 @@
                 <div role="presentation" class="menu-down show-menu" style="display: block;">
                     <div class="brand-col">
                         <span>Logo</span>
-                        <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
+                        <button class="brand-btns logo" @click="dialogLogo = true">Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>背景图</span>
@@ -120,7 +149,19 @@
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <el-color-picker v-model="form.color"></el-color-picker>
+                        <el-popover
+                          placement="right"
+                          width="200"
+                          trigger="click">
+                          <div >
+                            <div v-for="item in colors" style="display: flex; align-items: center;"> 
+                              <el-color-picker v-model="form[item.label]"></el-color-picker>
+                              <span style="padding-left: 10px">{{ item.label }}</span>
+                            </div>
+                             
+                          </div>
+                          <button class="brand-btns logo" slot="reference"  >Custon ···</button>
+                        </el-popover>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
@@ -135,18 +176,90 @@
               <div style="padding-left: 10px">控制</div>
             </template>
            <li role="presentation" class="controls">
-                <!-- <a href="#" class="unActive-a"><span>控制 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
+                
                 <div role="presentation" class="menu-down controls-menu show-menu" style="display: block;">
-                    <div class="controls-col" v-for="item in controls" :class="item.bottomLine ? 'bottom-line' : ''" v-if="!item.hidden">
+                    <div class="controls-col "  v-for="item in controls" :class="item.bottomLine? 'bottom-line': ''" v-if="!item.hidden">
                         <div>
-                           <span class="icon iconfont" :class="item.icon ? item.icon : ''"></span>
+                           <span class="icon iconfont" :class="item.icon? item.icon : ''"></span>
                             <span>{{ item.title }}</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="item.checked">
+                            <input class="switch switch-anim" type="checkbox" v-model="form[item.label]">
                         </div>
                     </div>
-                    
+                    <!--
+                     <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconxiazai"></span>
+                            <span>下载</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.download">
+                        </div>
+                    </div>
+
+                    <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconxiazai"></span>
+                            <span>Text Selection</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col bottom-line"  >
+                        <div>
+                           <span class="icon iconfont" class="iconview-thumbs"></span>
+                            <span>缩略图</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconmute-off"></span>
+                            <span>声音</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.sound">
+                        </div>
+                    </div>
+
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconfull-screen"></span>
+                            <span>全屏</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col "  >
+                        <div>
+                           <span class="icon iconfont" class="iconzoom-in"></span>
+                            <span>放大镜</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" >
+                        </div>
+                    </div>
+
+                   <div class="controls-col bottom-line"  >
+                        <div>
+                           <span class="icon iconfont" class="iconsearch"></span>
+                            <span>搜索</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.search">
+                        </div>
+                    </div> 
+                  -->
+
                     <!-- 电话区域 -->
                     <div class="controls-col" >
                         <div>
@@ -156,18 +269,18 @@
                         <div>
                         </div>
                     </div>
-                    <div class="controls-col " :class="setPhone? '':'bottom-line'">
+                    <div class="controls-col " :class="form.contactEnable? '':'bottom-line'">
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPhone">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.contactEnable">
                         </div>
                     </div>
-                    <div v-if="setPhone" :class="setPhone? 'bottom-line':''">
-                          <div class="form-group" v-for="item in form.phone">
+                    <div v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
+                          <div class="form-group" v-for="item in phone">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input type="email" class="form-control"  placeholder="">
+                            <input class="form-control"  placeholder="" v-model="form.contactTel">
                           </div>         
                     </div>
 
@@ -180,18 +293,18 @@
                         <div>
                         </div>
                     </div>
-                    <div class="controls-col " :class="setStaff? '':'bottom-line'" >
+                    <div class="controls-col " :class="form.chatEnable? '':'bottom-line'" >
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setStaff">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.chatEnable">
                         </div>
                     </div>
-                    <div v-if="setStaff" :class="setStaff? 'bottom-line':''" >
-                      <div class="form-group" v-for="item in form.staff">
+                    <div v-if="form.chatEnable" :class="form.chatEnable? 'bottom-line':''" >
+                      <div class="form-group" v-for="item in staff">
                         <label for="exampleInputEmail1">{{ item.label }}</label>
-                        <input type="email" class="form-control"  placeholder="">
+                        <input  class="form-control"  placeholder="" v-model="form.chat">
                       </div>        
                     </div>
 
@@ -204,18 +317,18 @@
                         <div>
                         </div>
                     </div>
-                    <div class="controls-col" :class="setEmail ? '':'bottom-line'">
+                    <div class="controls-col" :class="form.emailEnable ? '':'bottom-line'">
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setEmail">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.emailEnable">
                         </div>
                     </div>
-                    <div v-if="setEmail" :class="setEmail ? 'bottom-line':''">
-                          <div class="form-group" v-for="item in form.email">
+                    <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
+                          <div class="form-group" v-for="item in email">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input type="email" class="form-control"  placeholder="">
+                            <input type="email" class="form-control"  placeholder="" v-model="form[item.value]">
                           </div>
                     </div>                
 
@@ -229,9 +342,9 @@
                           width="200"
                           trigger="click">
                           <div>
-                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigation">{{ item.value }}</p>
+                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="item in navigationArr" v-if="!item.hidden">{{ item.value }}</p>
                           </div>
-                          <button slot="reference" class="brand-btns favicon">{{ form.navigation }}</button>
+                          <button slot="reference" class="brand-btns favicon">{{ navigationArr[form.navigation].value }}</button>
                         </el-popover>
                         
                     </div>
@@ -253,20 +366,20 @@
 <!--                 <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
                 <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
 
-                    <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
+                    <div class="controls-col" :class="form.passwordEnable ? '':'bottom-line'">
                         <div>
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
+                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.passwordEnable">
                         </div>
                     </div>
 
 
-                    <form v-if="setPassWord">
+                    <form v-if="form.passwordEnable">
                         <span style="margin-top: 15px;">设置密码</span>
                         <div>
-                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
+                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1" v-model="form.password">
                         </div>                    
                     </form>
                     <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
@@ -343,58 +456,27 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="showMenu">
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 0 || form.navigation == 1">
         <el-collapse accordion>
-              <el-collapse-item>
+              <el-collapse-item v-if="form.navigation == 0">
                 <template slot="title">
                   <div style="padding-left: 10px;">目录</div>
                 </template>
-                <div>
-                    <el-tree :data="treeData" ></el-tree>
-                </div>
+                <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
               </el-collapse-item>
-              <el-collapse-item >
+              <el-collapse-item v-if="form.navigation == 1">
                 <template slot="title">
                    <div style="padding-left: 10px;">缩略图</div>
                 </template>
-                  <div class="block"  style="text-align: center;">
-                    <el-image
-                      v-for="item in skins"
-                      style="width: 60px; height: 60px; display: block; margin: 10px auto"
-                      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-image>
+                <div >
+                  <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)">
+                      <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
+                      <p>第{{ index + 1 }}页</p>
                   </div>
+                </div>
               </el-collapse-item>
 
-        </el-collapse>
-
-<!--         <li role="presentation" class="menu-item">
-            <span>
-                <i class="el-icon-s-unfold"></i>篇目 
-            </span>
-            <i class="el-icon-close" @click="showMenu = false"></i>
-        </li>
-        <li role="presentation" class="change-skin"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
-        <li role="presentation"><a href="http://rtake.com:9999/bs-pro/src/pages/index.html#">Welcome to FlippingBook Online</a></li>
-        <li role="presentation" class="skin-desc">
-            <a href="#"><span>What is FlippingBook Online？<span class="glyphicon glyphicon-menu-down toggle-arrows"></span></span></a>
-            <div role="presentation" class="menu-down">
-                <span>Flipbook Name</span>
-                <span style="margin-top: 15px;">Description</span>
-                <span style="margin-top: 15px;">Description</span>
-                <span style="margin-top: 15px;">Description</span>
-            </div>
-        </li>
-        <li role="presentation" class="menu-item">
-            <span>
-                <i class="el-icon-s-grid"></i>缩略图
-            </span>
-        </li>
-      <div class="block"  style="text-align: center;">
-        <el-image
-          v-for="item in skins"
-          style="width: 60px; height: 60px; display: block; margin: 10px auto"
-          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-image>
-      </div>   -->          
+        </el-collapse>        
     </ul>
 
 
@@ -407,46 +489,45 @@
                 </form>
             </div>
             <div style="flex-grow: 1" class="bookBox">
-              <div class="picture"></div>
+              <div id="flipbook">
+                <div class="hard"> Turn.js </div>
+                <div class="hard"></div>
+                <div> Page 2 </div>
+                <div> Page 2 </div>
+                <div> Page 3 </div>
+                <div> Page 4 </div>
+                <div> Page 5 </div>
+                <div> Page 6 </div>
+                <div class="hard"></div>
+                <div class="hard"></div>
+              </div>
             </div>
             <div class="page-footer">
-                <span v-for="item in icons" :item="item"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
+                <span v-for="item in icons"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
             </div>           
         </div>
 
 
 
     <!-- 右侧搜索区 -->
-    <ul class="search-box">
-        <li class="title">搜索</li>
-        <!-- <li> -->
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button" @click="search">Go!</button>
-              </span>
-            </div>
-        <!-- </li> -->
-        <li>
-            找到3页
+    <ul class="search-box" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
+        <li class="title" :style="{backgroundColor: form.colorPanel}">搜索</li>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" @click="search">Go!</button>
+          </span>
+        </div>
+        <li class="text-list" >
+            <p class="item" v-for="item in searchList">
+                第1页. www
+            </p>
         </li>
-        <li class="text-list">
-            <p class="item">第2页
-                ...安抚你我去年覅劝我放弃卧槽调查内哦放弃付不起饿哦孵化器我父亲我asdqwdqwdasdqwdqwqwdqwfqwfqwfqwv帮我v被表达式v抱歉哦i服务器北半球哦欸穷五千万</p>
-        </li>
+        <!-- <li class="search-more" >xianshi</li> -->
     </ul>
-    <el-dialog
-      title="搜索"
-      :visible.sync="searchDialog"
-      width="30%"
-      :before-close="handleClose">
-      <span>{{ searchKey ? searchKey : '搜索内容为空' }}</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="searchDialog = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
+    <div class="earch-box-small" v-else>
+        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="form.navigation = 3"></i>
+    </div>
     <!-- skin皮肤选择器 -->
     <el-dialog
       title="选择皮肤"
@@ -454,11 +535,11 @@
       width="50%">
         <el-form ref="form" :model="form" label-width="190px">
             <el-form-item label="Keep current background">
-                <el-switch v-model="form.delivery"></el-switch>
+                <el-switch v-model="form.keepBackground"></el-switch>
             </el-form-item>
         </el-form>
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" @click="clickSkinItem(item)" >
+          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="item in skins" :key="item" @click="clickSkinItem(item)" >
             <el-image
               style="width: 100%; display: block;border: 2px solid #FFF"
               :class="item.checked ? 'skinChecked' : ''"
@@ -468,7 +549,7 @@
         </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSkin = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveSkin">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -478,7 +559,7 @@
       :visible.sync="dialogLogo"
       width="40%">
         <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-           <el-image :src="form.logo" v-if="form.logo"></el-image> 
+           <el-image :src="form.logo" ></el-image> 
             <el-popover
               placement="right"
               width="200"
@@ -490,22 +571,23 @@
               <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
             </el-popover>
         </div>
-        
+        <!-- action="http://m.baige.me/api/book/saveSettingImage" -->
         <el-upload
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
+          :http-request="uploadLogo"
+          :show-file-list="false"
+          action=""
+          :limit="1" 
+          :auto-upload="true"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
-        <div style="height: 20px;"></div>
+<!--         <div style="height: 20px;"></div>
         <el-input v-model="form.logoInput" placeholder="https://your-website.com"></el-input>
-
+ -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="saveLogo">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -517,18 +599,18 @@
 
         <el-form ref="form" :model="form" >
             <el-form-item label="Show Contacts Button">
-                <el-switch v-model="form.button.delivery"></el-switch>
+                <el-switch v-model="form.externalEnable"></el-switch>
             </el-form-item>
             <el-form-item label="Button Text">
-                <el-input v-model="form.button.text" placeholder=""></el-input>
+                <el-input v-model="form.externalText" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="Web Address(URL)">
-                <el-input v-model="form.button.address" placeholder="https://your-website.com"></el-input>
+                <el-input v-model="form.external" placeholder="https://your-website.com"></el-input>
             </el-form-item>
         </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogButton = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogButton = false">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -537,8 +619,8 @@
       title="EDIT FAVICON"
       :visible.sync="dialogFavicon"
       width="40%">
-        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-            <el-image :src="form.favicon" v-if="form.favicon"></el-image>
+        <div style="position: relative; background-color: #EFEFEF; height: 200px; overflow: hidden;" class="mb20">
+            <el-image :src="form.favico" v-if="form.favico"  fit="scale-down"></el-image>
             <el-popover
               placement="right"
               width="200"
@@ -551,22 +633,21 @@
             </el-popover>
         </div>
         
-        <div>Import  favicon from  your website</div>
+<!--         <div>Import  favicon from  your website</div>
         <el-input v-model="form.faviconInput" placeholder="https://your-website.com"></el-input>
-        <div style="margin-top: 20px;">or elect existing file</div>
+        <div style="margin-top: 20px;">or elect existing file</div> -->
         <el-upload
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
+          :http-request="uploadFavicon"
+          :show-file-list="false"
+          action=""
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
     
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFavicon = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -594,12 +675,27 @@
       title="分享"
       :visible.sync="dialogShare"
       width="40%">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="form.share.qrcode"></el-image>
-      <el-input v-model="form.share.link" placeholder=""></el-input>
+      <div style="display: flex;">
+        <div id="qrcode" style="padding-right: 10px"></div>
+        <el-input v-model="shareLink" ></el-input>
+      </div>
+      
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="copy(form.share.link)">复制</el-button>
+        <el-button type="primary"  @click="copy(share.link)">复制</el-button>
+      </span>
+    </el-dialog>
+
+
+    <!--发送邮件对话框 -->
+    <el-dialog
+      title="邮件"
+      :visible.sync="dialogEmail"
+      width="40%">
+      <div style="display: flex;">
+        <el-input  placeholder="发送至邮箱"></el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary"  @click="dialogEmail = false">确定</el-button>
       </span>
     </el-dialog>
 
@@ -611,9 +707,11 @@
         <div style="background-color: #EFEFEF; text-align: center;" class="mb20">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :http-request="uploadBackground"
+              action=""
+              :show-file-list="false"
               :show-file-list="false">
-              <img v-if="form.background.url" :src="form.background.url" class="avatar">
+              <img v-if="form.background" :src="form.background" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>            
         </div>
@@ -622,12 +720,12 @@
           <el-form-item
             label="Image Placement"
           >
-            <el-select v-model="form.placement" placeholder="请选择">
+            <el-select v-model="form.backgroundPlace" placeholder="请选择">
             <el-option
-              v-for="item in form.background.fit"
+              v-for="(item, index) in background.placement"
               :key="item"
               :label="item"
-              :value="item">
+              :value="index">
             </el-option>
           </el-select>
           </el-form-item>
@@ -644,524 +742,685 @@
                   </span>
               </div>
               <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
-                <el-input slot="reference" v-model="form.background.filling" placeholder=""></el-input>
+              <el-input slot="reference" v-model="backgroundFill" ></el-input>
             </el-popover>
           </el-form-item>
         </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBackground = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogBackground = false">OK</el-button>
+        <el-button type="primary" @click="mainSave">OK</el-button>
       </span>
     </el-dialog>
 
 </div>
-
-
-<script type="text/javascript">
-    // vue接管列表数据渲染
-    var app = new Vue({
-      el: '#app',
-      data: {
-        treeData: [{
-          label: '一级 1',
-          children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
-          }]
-        }, {
-          label: '一级 2',
-          children: [{
-            label: '二级 2-1',
-            children: [{
-              label: '三级 2-1-1'
-            }]
-          }, {
-            label: '二级 2-2',
-            children: [{
-              label: '三级 2-2-1'
-            }]
-          }]
-        }, {
-          label: '一级 3',
-          children: [{
-            label: '二级 3-1',
-            children: [{
-              label: '三级 3-1-1'
-            }]
-          }, {
-            label: '二级 3-2',
-            children: [{
-              label: '三级 3-2-1'
-            }]
-          }]
-        }],
-        rank: [
-          {icon: 'el-icon-top-left', checked: false},
-          {icon: 'el-icon-top', checked: false},
-          {icon: 'el-icon-top-right', checked: false},
-          {icon: 'el-icon-back', checked: false},
-          {icon: 'el-icon-rank', checked: false},
-          {icon: 'el-icon-right', checked: false},
-          {icon: 'el-icon-bottom-left', checked: false},
-          {icon: 'el-icon-bottom', checked: false},
-          {icon: 'el-icon-bottom-right', checked: false}
-        ],
-        skins: [
-          {index: 1, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-          {index: 2, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-          {index: 3, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-          {index: 4, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-          {index: 5, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-          {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-          {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-        ],
-        navigation: [
-          {value: 'Table of Contents', checked: false},
-          {value: 'Thumbnails', checked: false},
-          {value: 'Notes', checked: false},
-          {value: 'None', checked: false},
-          {value: 'Search', checked: false}
-        ],
-        showMenu: true,
-        fileList: [],
-        searchKey: '',
-        searchDialog: false,
-        setPassWord: false,
-        setPhone: false,
-        setStaff: false,
-        setEmail: false,
-        dialogSkin: false,
-        dialogLogo: false,
-        dialogColor: false,
-        dialogBackground: false,
-        dialogFavicon: false,
-        dialogButton: false,
-        dialogShare: false,
-        dialogDownload: false,
-        form: {
-          share: {
-            link: 'baidu.com',
-            qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
-          },
-          color: '#EEE',
-          navigation: 'Default ...',
-          button: {
-            delivery: '',
-            text: '',
-            address: ''
-          },
-          placement: 'fill',
-          background: {
-            url:'',
-            fit:['fit','fill','fixx'],
-            filling: 'center'
-          },
-          logo: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-          logoInput: '',
-          favicon: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-          faviconInput: '',
-          info: [
-            {label: 'name', value: ''},
-            {label: 'desc', value: ''},
-          ],
-          email: [
-            {label: '服务器', value: ''},
-            {label: '端口', value: ''},
-            {label: '密码', value: ''},
-            {label: '账户', value: ''},
-            {label: '欢迎词', value: ''},
-            {label: '签名', value: ''}
-          ],
-          staff: [
-            {label: '客服widget', value: ''},
-          ],
-          phone: [
-            {label: '号码', value: ''},
-          ]
-        },
-        message: 'Hello Vue!',
-        controls: [
-          {'group':1, 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
-          {'group':1, 'title': '下载', 'icon': 'iconxiazai', 'checked': false},
-          {'group':1, 'title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
-          {'group':1, 'title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
-          {'group':2, 'title': '声音', 'icon': 'iconmute-off', 'checked': false},
-          {'group':2, 'title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
-          {'group':2, 'title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
-          {'group':2, 'title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
-          // {'title': 'Default Navigation',  'checked': false},
-          // {'title': 'Contacts Button',  'checked': false},
-          {'group':3, 'title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true, 'label':'setPhone'},
-          {'group':4, 'title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, 'label':'setStaff'},
-          {'group':5, 'title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true, 'label':'setEmail'},
-        ],
-        treeData: [{
-          label: '一级 1',
-          children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
-          }]
-        }, {
-          label: '一级 2',
-          children: [{
-            label: '二级 2-1',
-            children: [{
-              label: '三级 2-1-1'
-            }]
-          }, {
-            label: '二级 2-2',
-            children: [{
-              label: '三级 2-2-1'
-            }]
-          }]
-        }, {
-          label: '一级 3',
-          children: [{
-            label: '二级 3-1',
-            children: [{
-              label: '三级 3-1-1'
-            }]
-          }, {
-            label: '二级 3-2',
-            children: [{
-              label: '三级 3-2-1'
-            }]
-          }]
-        }]
-      },
-      watch: {
-        setPhone: function (newValue, oldValue) {
-          this.controls.map((item, index) => {
-            if (item.label == 'setPhone') {
-                item.checked = newValue
-                this.$set(this.controls, index, item)
-            }
-          })
-        },   
-        setStaff: function (newValue, oldValue) {
-          this.controls.map((item, index) => {
-            if (item.label == 'setStaff') {
-                item.checked = newValue
-                this.$set(this.controls, index, item)
-            }
-          })
-        }, 
-        setEmail: function (newValue, oldValue) {
-          this.controls.map((item, index) => {
-            if (item.label == 'setEmail') {
-                item.checked = newValue
-                this.$set(this.controls, index, item)
-            }
-          })
-        },      
-      },
-      computed: {
-        icons: function () {
-          let arr = this.controls.filter(item => item.checked )
-          console.log(arr)
-          arr.map((item, index) => {
-            console.log(item.group, index)
-            if (index < arr.length-1 ) {
-                if (item.group != arr[index + 1].group) {
-                  item.rightLine = true   
-                } else {
-                  item.rightLine = false 
-                } 
-            }
-            return item
-          })
-          // 最有一个icon的右侧不能有分隔符号
-          if (arr.length > 0) {
-            arr[arr.length-1].rightLine = false
-          }
-          return arr
-        }
-      },     
-      mounted() {      
-         // window.addEventListener("beforeunload", e => {
-         //    this.beforeunloadHandler(e);
-         // });
-
-      },
-      destroyed() {
-        // window.removeEventListener("beforeunload", e => {
-        //     this.beforeunloadHandler(e);
-        // });
-      },
-      methods: {
-        toggleMenu () {
-          this.menu.toggleMenu = !this.menu.toggleMenu
-        },
-        copy () {
-            this.$message({
-              message: '复制成功',
-              type: 'success'
-            }); 
-        },
-        clickRank (item) {
-          console.log(item)
-          this.rank = this.rank.map((i) => {
-            if (i.icon == item.icon) {
-                i.checked = true
-                this.form.background.filling = i.icon
-            } else {
-                i.checked = false
-            }
-            return i
-          })
-          console.log(this.rank)
-        },
-        logoSetting () {
-          this.form.logo = ''
-        },
-        navigationSetting (obj) {
-          console.log(obj)
-          this.navigation = this.navigation.map(item => {
-             if (item.value == obj.value) {
-                item.checked = true
-                this.form.navigation = item.value
-             } else {
-                item.checked = false
-             }
-             return item
-          })
-        },
-        input () {
-          
-        },
-        faviconSetting () {
-
-            this.form.favicon = ''
-            console.log(this.form.favicon)
-        },
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-
-        clickSkinItem (item) {
-          this.skins = this.skins.map(i => {
-            if (i.index === item.index) {
-                i.checked = true
-            } else {
-                i.checked = false
-            }
-            return i
-          })
-        },
-        clickSelectSkin () {
-            this.dialogSkin = true
-        },
-        handleLogoDialog () {
-            this.dialogLogo = !this.dialogLogo
-        },
-        saveSkin () {
-            let hadSelect = this.skins.some(item => item.checked)
-            if (hadSelect) {
-                this.$message({
-                  message: '保存成功',
-                  type: 'success'
-                });
-            } else {
-                this.$message({
-                  message: '没有选择不能保存',
-                  type: 'warning'
-                });                
-            }  
-            this.dialogSkin = false
-        },
-        saveLogo () {
-          this.dialogLogo = false
-        },
-        clickIcon (item) {
-            console.log(item)
-            if (item.title == '下载') {
-                this.dialogDownload = true              
-            } else if (item.title == '分享') {
-                this.dialogShare = true
-            } else if (item.title == '缩略图') {
-                this.showMenu = true
-            } else if (item.title == '电话') {
-                this.$alert(`拨打电话136-1851-6602`, '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                  }
-                });
-            } else if (item.title == '邮件') {
-                this.$alert(`发送邮件到 570869214@qq.com`, '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                  }
-                });
-            } else{
-                this.$alert(`你点击了${item.title}按钮`, '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                  }
-                });
-            }
-        },
-        handleClose () {
-
-        },
-        setIconClass (item) {
-          if (item.rightLine) {
-            return 'right-line ' + item.icon
-          } else {
-            return item.icon
-          }
-        },
-        save () {
-            // this.$message({
-            //   message: '保存成功',
-            //   type: 'success'
-            // });  
-        },
-        goBack () {
-          window.history.back(-1); 
-        },
-        beforeunloadHandler(e) {
-          e = e || window.event;
-          if (e) {
-            e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存";
-          }
-          return "您是否确认离开此页面-您输入的数据可能不会被保存";
-        },
-        clickTopButton (item) {
-            console.log(item)
-            this.$message({
-              message: '你点击了' + item.title + '按钮',
-              type: 'info'
-            });             
-        },
-        search () {
-            if (this.searchKey) {
-                this.$message({
-                  message: '向后台发出搜索请求，等待响应',
-                  type: 'success'
-                });                
-            } else {
-                this.$message({
-                  message: '搜索内容不能为空',
-                  type: 'warning'
-                });
-            }
-        },
-        download (src, fileName) {
-          let x = new XMLHttpRequest();
-          x.open("GET", src, true);
-          x.responseType = 'blob';
-          x.onload = function(e) {
-            let url = window.URL.createObjectURL(x.response)
-            let a = document.createElement('a');
-            a.href = url
-            a.download = fileName
-            a.click()
-          }
-          x.send();
-        }
-      }
-    })
-</script>
-<script>
-    $(document).ready(function () {
-        $('.name-desc').children('a').click(function () {
-            $('.sidebar').find('a').attr("class","unActive-a");
-            $(this).stop(true).attr("class","active-a");
-            $('.name-desc').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.name-desc').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.name-desc').children(".menu-down").slideToggle(300);
-        })
-        $('.branding').children('a').click(function () {
-            $('.sidebar').find('a').attr("class","unActive-a");
-            $(this).stop(true).attr("class","active-a");
-            $('.branding').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.branding').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.branding').children(".menu-down").slideToggle(300);
-        })
-
-        $('.controls').children('a').click(function () {
-            $('.sidebar').find('a').attr("class","unActive-a");
-            $(this).stop(true).attr("class","active-a");
-            $('.controls').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.controls').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.controls').children(".menu-down").slideToggle(300);
-        })
-        $('.password').children('a').click(function () {
-            $('.sidebar').find('a').attr("class","unActive-a");
-            $(this).stop(true).attr("class","active-a");
-            $('.password').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.password').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.password').children(".menu-down").slideToggle(300);
-        })
-
-
-        $('.directory').children('a').click(function () {
-            $('.sidebar').find('a').attr("class","unActive-a");
-            $(this).stop(true).attr("class","active-a");
-            $('.directory').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.directory').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.directory').children(".menu-down").slideToggle(300);
-        })
-        $('.skin-desc').children('a').click(function () {
-            // $('.sidebar').find('a').attr("class","unActive-a");
-            // $(this).stop(true).attr("class","active-a");
-            $('.skin-desc').find('.toggle-arrows').stop(true).toggleClass('toggle-arrows-change')
-            $('.skin-desc').children(".menu-down").stop(true).toggleClass('show-menu')
-            $('.skin-desc').children(".menu-down").slideToggle(300);
-        })
-
-        $('.skintap').click(function () {
-            $('.skinbar').stop(true).toggle(0)
-            $('.search-box').stop(true).toggle(200)
-        })
-        $('.change-skin').click(function () {
-            $('.skin-panel').toggle(200)
-        })
-        // $("[name='my-checkbox']").bootstrapSwitch();  //这个操作有问题
-        $('.close-skin-panel').click(function () {
-            $('.skin-panel').css('display', 'none')
-        })
-
-        $('.skinbar-close').click(function () {
-            $('.skinbar').css('display', 'none')
-        })
-
-        // $('.logo').click(function () {
-        //     $('.mask-logo').toggle(100)
-        // })
-
-        $('.mask-logo').on('contextmenu', function (e) {
-
-
-        })
-        $('.close-mask-logo').click(function () {
-            $('.mask-logo').css('display', 'none')
-        })
-
-        // $('.bg-image').click(function () {
-        //     $('.mask-bgimg').toggle(100)
-        // })
-
-        $('.close-mask-bgimg').click(function () {
-            $('.mask-bgimg').css('display', 'none')
-        })
-
-        // $('.favicon').click(function () {
-        //     $('.mask-favicon').toggle(100)
-        // })
-
-        $('.close-mask-favicon').click(function () {
-            $('.mask-favicon').css('display', 'none')
-        })
-    });
-</script>
 </body>
+<script type="text/javascript">
+
+// 接管双向数据绑定
+var app = new Vue({
+  el: '#app',
+  //定义私用局部过滤器。只能在当前 vue 对象中使用
+  filters: {
+      dataFormat(msg) {
+          return msg+'xxxxx';
+      }
+  },
+  data: {
+    currentScreen: '', // 当前屏幕状态
+    qrcodeInstance: null, // 二维码实例
+    shareLink: '', // 分享的链接
+    searchKey: '', // 搜索用关键词
+    myList: [],
+    visible: false,
+    treeData: [{
+      label: '一级 1',
+      children: [{
+        label: '二级 1-1',
+        children: [{
+          label: '三级 1-1-1'
+        }]
+      }]
+    }, {
+      label: '一级 2',
+      children: [{
+        label: '二级 2-1',
+        children: [{
+          label: '三级 2-1-1'
+        }]
+      }, {
+        label: '二级 2-2',
+        children: [{
+          label: '三级 2-2-1'
+        }]
+      }]
+    }, {
+      label: '一级 3',
+      children: [{
+        label: '二级 3-1',
+        children: [{
+          label: '三级 3-1-1'
+        }]
+      }, {
+        label: '二级 3-2',
+        children: [{
+          label: '三级 3-2-1'
+        }]
+      }]
+    }],
+    rank: [
+      {icon: 'el-icon-top-left', checked: false, label: '左上'},
+      {icon: 'el-icon-top', checked: false, label: '上'},
+      {icon: 'el-icon-top-right', checked: false, label: '右上'},
+      {icon: 'el-icon-back', checked: false, label: '左'},
+      {icon: 'el-icon-rank', checked: false, label: '中心'},
+      {icon: 'el-icon-right', checked: false, label: '右'},
+      {icon: 'el-icon-bottom-left', checked: false, label: '左下'},
+      {icon: 'el-icon-bottom', checked: false, label: '下'},
+      {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
+    ],
+    skins: [
+      {index: 1, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 2, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 3, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 4, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 5, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+    ],
+    colors: [
+      {label: 'colorPanel'},
+      {label: 'colorBackground'},
+      {label: 'colorLink'},
+    ],
+    navigationArr: [
+      {index: 0, value: '目录', checked: false, hidden: false},
+      {index: 1, value: '缩略图', checked: false, hidden: false},
+      {index: 2, value: '无', checked: false, hidden: false},
+      {index: 3, value: '搜索', checked: false, hidden: false}
+    ],
+    showMenu: true,
+    fileList: [],
+    searchKey: '',
+    searchDialog: false,
+    setPassWord: false,
+    setPhone: false,
+    setStaff: false,
+    setEmail: false,
+    dialogSkin: false,
+    dialogLogo: false,
+    dialogColor: false,
+    dialogBackground: false,
+    dialogFavicon: false,
+    dialogButton: false,
+    dialogShare: false,
+    dialogDownload: false,
+    dialogEmail: false,
+    saveBtn: '保存',
+    color: '#EEE',
+    
+    form: {
+      "bookId": 1,
+      "main": true,
+      "skin": "2",
+      "background": "1",
+      backgroundFill: 1,
+      "backgroundPlace": 1,
+      colorPanel: '#EEE',
+      colorBackground: '#EEE',
+      colorLink: '#EEE',
+      "external": "1",
+      "externalText": "1",
+      "externalEnable": false,
+      keepBackground: false,
+      download: false,
+      share: false,
+      sound: false,
+      search: false,
+      navigation: 0,
+      zoom: false,
+      thumbnail: false,
+      textSelect: false,
+      fullScreen: false,
+      userId: 1,
+      title: '',
+      description: '',
+      placement: 'fill',
+      logo: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+      favico: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+      chatEnable: false,
+      chat: '',
+      contactTel: '',
+      contactEnable: false,
+      emailEnable: false,
+      emailWelcome: "1",
+      emailPort: 1,
+      emailServer: "1",
+      emailUsername: "1",
+      emailPassword: "1",
+      emailSign: "1",
+      password: '',
+      passwordEnable: false,
+    },
+    background: {
+      url:'',
+      placement:['Fit','Fill','Tile'],
+      filling: 'center'
+    },
+    share: {
+      link: 'baidu.com',
+      qrcode: 'https://efile.kaoyan.com/img/2020/05/25/193611_5ecbadab863ec.png'
+    },
+    button: {
+      delivery: '',
+      text: '',
+      address: ''
+    },
+    info: [
+      {label: 'name', value: ''},
+      {label: 'desc', value: ''},
+    ],
+    staff: [
+      {label: '客服widget', value: ''},
+    ],
+    phone: [
+      {label: '号码', value: ''},
+    ],
+    email: [
+      {label: '服务器', value: 'emailServer'},
+      {label: '端口', value: 'emailPort'},
+      {label: '密码', value: 'emailPassword'},
+      {label: '账户', value: 'emailUsername'},
+      {label: '欢迎词', value: 'emailWelcome'},
+      {label: '签名', value: 'emailSign'}
+    ],
+    message: 'Hello Vue!',
+    controls: [
+      {'group':1,'label': 'share', 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
+      {'group':1,'label': 'download','title': '下载', 'icon': 'iconxiazai', 'checked': false},
+      // {'group':1,'label': 'textSelect','title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
+      {'group':1,'label': 'thumbnail','title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
+      {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
+      {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
+      {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+      {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
+      {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
+      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true},
+      {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true}
+    ],
+    treeData: [{
+      label: '一级 1',
+      children: [{
+        label: '二级 1-1',
+        children: [{
+          label: '三级 1-1-1'
+        }]
+      }]
+    }, {
+      label: '一级 2',
+      children: [{
+        label: '二级 2-1',
+        children: [{
+          label: '三级 2-1-1'
+        }]
+      }, {
+        label: '二级 2-2',
+        children: [{
+          label: '三级 2-2-1'
+        }]
+      }]
+    }, {
+      label: '一级 3',
+      children: [{
+        label: '二级 3-1',
+        children: [{
+          label: '三级 3-1-1'
+        }]
+      }, {
+        label: '二级 3-2',
+        children: [{
+          label: '三级 3-2-1'
+        }]
+      }]
+    }],
+    searchList: [] 
+  },
+  computed: {
+    backgroundFill: {
+      get: function () {
+        return this.rank[this.form.backgroundFill].label
+      },
+      set: function (value) {
+        this.form.backgroundFill = value
+      }
+    },  
+    icons: function () {
+      // 把form和controls关联
+      this.controls = this.controls.map(item => {
+        console.log(item.checked, this.form[item.label])
+        item.checked = this.form[item.label]
+        return item
+      })
+
+      // 过滤被选中的control
+      let arr = this.controls.filter(item => item.checked )
+      console.log(arr)
+
+      // 根据group来计算分割线
+      arr.map((item, index) => {
+        console.log(item.group, index)
+        if (index < arr.length-1 ) {
+            if (item.group != arr[index + 1].group) {
+              item.rightLine = true   
+            } else {
+              item.rightLine = false 
+            } 
+        }
+        return item
+      })
+    
+      // 最有一个icon的右侧不能有分隔符号
+      if (arr.length > 0) {
+        arr[arr.length-1].rightLine = false
+      }
+      console.log(arr)
+      return arr
+    }
+  },  
+  watch: {
+      // controls: {
+      //   handler: function(val, oldval) {
+      //     console.log(val)
+      //   }
+      // },
+      form:{
+        handler:function(val,oldval){
+          console.log(val)
+          this.saveBtn = '保存'
+          if (val.search) {
+            this.navigationArr = this.navigationArr.map(item => {
+              if (item.value == '搜索') {
+                item.hidden = false
+              }
+              return item
+            })
+          } else {
+            this.navigationArr = this.navigationArr.map(item => {
+              if (item.value == '搜索') {
+                item.hidden = true
+              }
+              return item
+            })            
+          }
+        },
+        deep:true//对象内部的属性监听，也叫深度监听
+      },
+  } ,  
+  mounted() {   
+     let data = {bookId:  2 }
+     axios.get('/api/getFlipbook', {
+      params: data
+     }).then(res => {
+      console.log(res)
+      Object.assign(this.form, res.data)
+     })
+     axios.get('/api/book/getMainSetting', {
+       params: data
+     }).then(res => {
+      console.log(res)        
+      Object.assign(this.form, res.data)
+      this.initThumbnail()
+     })  
+  },
+
+  methods: {
+    initThumbnail() {
+      for (var i = 0; i < 100; i++) {
+        this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i + 1}.jpg`
+        )
+      } 
+    },
+    getUrlParam: function(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]);
+        return '';
+    },
+    handleLogoChange (file) {
+        const formData = new FormData()
+        this.formData.file = file.raw
+        this.formData.name = file.name
+        // upload(formData) //调用上传方法,传递FormData格式的参数
+        this.fileChange = false      
+    },
+    uploadBackground(files) {
+        let formData = new FormData()
+        formData.append('file', files.file)
+        axios.post('/api/book/saveSettingImage', formData).then(res => {
+          console.log(res)
+          this.form.background = res.data
+        })      
+    },
+    uploadFavicon(files) {
+        let formData = new FormData()
+        formData.append('file', files.file)
+        axios.post('/api/book/saveSettingImage', formData).then(res => {
+        // api.saveSettingImage(formData).then(res => {
+          console.log(res)
+          this.form.favico = res.data
+        })
+    },
+    uploadLogo (files) {
+        let formData = new FormData()
+        formData.append('file', files.file)
+        axios.post('/api/book/saveSettingImage', formData).then(res => {
+          this.form.logo = res.data
+        })
+    },
+    handleLogoSuccess (res, file) {
+      console.log(res)
+    },
+    handleNodeClick (item) {
+      console.log(item)
+      this.$message({
+        message: `你点击了目录：${item.label}`,
+        type: 'success'
+      }); 
+    },
+    toggleMenu () {
+      this.menu.toggleMenu = !this.menu.toggleMenu
+    },
+    copy () {
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        }); 
+    },
+    clickRank (item) {
+      this.rank = this.rank.map((i, index) => {
+        if (i.icon == item.icon) {
+            i.checked = true
+            this.form.backgroundFill = index
+        } else {
+            i.checked = false
+        }
+        return i
+      })
+      console.log(this.rank)
+    },
+    logoSetting () {
+      this.form.logo = ''
+    },
+    navigationSetting (obj) {
+      console.log(obj)
+      this.navigationArr = this.navigationArr.map(item => {
+         if (item.value == obj.value) {
+            item.checked = true
+            this.form.navigation = item.index
+         } else {
+            item.checked = false
+         }
+         return item
+      })
+    },
+    faviconSetting () {
+        this.form.favico = ''
+        console.log(this.form.favico)
+    },
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+    },
+    handlePreview(file) {
+        console.log(file);
+    },
+
+    clickSkinItem (item) {
+      this.skins = this.skins.map(i => {
+        if (i.index === item.index) {
+            i.checked = true
+        } else {
+            i.checked = false
+        }
+        return i
+      })
+    },
+    clickSelectSkin () {
+        this.dialogSkin = true
+    },
+    handleLogoDialog () {
+        this.dialogLogo = !this.dialogLogo
+    },
+    saveSkin () {
+        let hadSelect = this.skins.some(item => item.checked)
+        if (hadSelect) {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            });
+        } else {
+            this.$message({
+              message: '没有选择不能保存',
+              type: 'warning'
+            });                
+        }  
+        this.dialogSkin = false
+    },
+    clickIcon (item) {
+        console.log(item)
+        if (item.title == '下载') {
+            this.dialogDownload = true              
+        } else if (item.title == '分享') {
+          this.dialogShare = true
+          this.$nextTick(() => {
+            this.qrcode()
+          })
+        } else if (item.title == '缩略图') {
+          if (this.form.navigation == 2) {
+            this.form.navigation = 1
+          } else {
+            this.form.navigation = 2
+          }
+        } else if (item.title == '声音') {
+          this.audioControl()
+        } else if (item.title == '全屏') {
+          this.sceenControl()
+        } else if (item.title == '搜索') {
+          if (this.form.navigation == 3) {
+            this.form.navigation = 2
+          } else {
+            this.form.navigation = 3
+          }
+        } else if (item.title == '在线客服') {
+          this.clickStaff()
+        } else if (item.title == '电话') {
+            this.$alert(`电话：${this.form.contactTel}`, '提示', {
+              confirmButtonText: '确定'
+            });
+        } else if (item.title == '邮件') {
+            this.dialogEmail = true
+        } else{
+            this.$alert(`你点击了${item.title}按钮`, '提示', {
+              confirmButtonText: '确定'
+            });
+        }
+    },
+    qrcode() {
+      let text = document.getElementById("shareLink").value
+      this.shareLink = text
+      if (this.qrcodeInstance) {
+        return false
+      } else {
+        this.qrcodeInstance = new QRCode(document.getElementById("qrcode"), {
+          text: text,
+          width: 128,
+          height: 128,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+      }
+    },
+    setIconClass (item) {
+      if (item.rightLine) {
+        return 'right-line ' + item.icon
+      } else {
+        return item.icon
+      }
+    },
+
+    // 保存修改
+    mainSave () {
+
+      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+      axios.post('/api/book/saveSetting', Qs.stringify(this.form)).then(res => {
+      // api.saveSetting(Qs.stringify(this.form)).then(res => {
+        console.log(res)
+        this.saveBtn = '已保存'
+        this.dialogLogo = false
+        this.dialogFavicon = false
+        this.dialogBackground = false
+        this.dialogButton = false
+        this.dialogBackground = false
+        this.$message({
+          type: 'success',
+          message: '保存成功'
+        });  
+      }).catch((error) => {
+        this.$message({
+          type: 'error',
+          message: error
+        });
+      });  
+    },
+    goBack () {
+      if (this.saveBtn == '保存') {
+        this.$confirm('你的修改不会被保存, 是否继续?', '提示', {
+          confirmButtonText: '继续',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          window.history.back(-1); 
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
+      } else {
+        
+      }
+      
+    },
+    beforeunloadHandler(e) {
+      e = e || window.event;
+      if (e) {
+        e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存";
+      }
+      return "您是否确认离开此页面-您输入的数据可能不会被保存";
+    },
+    clickTopButton (item) {
+        console.log(item)
+        this.$message({
+          message: '你点击了' + item.title + '按钮',
+          type: 'info'
+        });             
+    },
+
+    download (src, fileName) {
+      let x = new XMLHttpRequest();
+      x.open("GET", src, true);
+      x.responseType = 'blob';
+      x.onload = function(e) {
+        let url = window.URL.createObjectURL(x.response)
+        let a = document.createElement('a');
+        a.href = url
+        a.download = fileName
+        a.click()
+      }
+      x.send();
+    },
+    search () {
+      if (this.searchKey) {
+          this.$message({
+            message: '搜索不到内容',
+            type: 'warning'
+          });
+      } else {
+          this.$message({
+            message: '搜索内容不能为空',
+            type: 'warning'
+          });
+      }
+    },
+    clickThumItem(item, index) {
+      this.$message({
+        message: `点击了${index + 1}页`,
+        type: 'info'
+      });      
+    },
+    toggleSearch() {
+      console.log(this.form.navigation)
+      this.form.navigation = 3
+    },
+    audioControl() {
+     var audio = document.getElementById('myAudio');
+      if(audio.paused)                     {                 
+        audio.play(); //audio.play();// 这个就是播放  
+      }else{
+        audio.pause(); // 这个就是暂停
+      }
+    },
+    sceenControl() {
+      let element = document.documentElement
+      if (this.currentScreen == 'full') {
+        if(document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if(document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if(document.webkitExitFullscreen) {
+          document.webkitExitFullscreen()
+        }
+        this.currentScreen = ''
+      } else {
+        if(element.requestFullscreen) {
+          element.requestFullscreen()
+        } else if(element.mozRequestFullScreen) {
+          element.mozRequestFullScreen()
+        } else if(element.webkitRequestFullscreen) {
+          element.webkitRequestFullscreen()
+        } else if(element.msRequestFullscreen) {
+          element.msRequestFullscreen();
+        }  
+        this.currentScreen = 'full' 
+      }   
+    },
+    clickStaff() {
+        var code = $('#tawk').val();
+        //console.log(" widget ...."+wdiget);
+        if (code!='') {
+         //console.log("display widget ....");
+         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+         (function() {
+          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+          s1.async = true;
+          s1.src =  code;
+          s1.charset = 'UTF-8';
+          s1.setAttribute('crossorigin', '*');
+          s0.parentNode.insertBefore(s1, s0);
+         })();
+        }
+     
+    }
+  }
+})
+</script>
+<script type="text/javascript">
+ 
+  $("#flipbook").turn({
+    width: 400,
+    height: 300,
+    autoCenter: true
+  });
+  
+</script>
 </html>

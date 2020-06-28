@@ -14,7 +14,7 @@ var baseConfig = {
     devtool: 'cheap-module-eval-source-map',
     mode:'development', //development
     entry: {
-        main: './src/index.js'
+        main: './index.js'
     },
     resolve: {
       extensions: ['.js', '.vue', '.json'],
