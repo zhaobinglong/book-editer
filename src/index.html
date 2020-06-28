@@ -46,7 +46,7 @@
 <input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
 
 <!-- 隐藏的音频播放标签 -->
-<audio id="myAudio" >
+<audio id="myAudio" loop>
   <source src="./js/horse.ogg" type="audio/ogg">
   <source src="./js/horse.mp3" type="audio/mpeg">
 </audio>
@@ -732,6 +732,7 @@ var app = new Vue({
       }
   },
   data: {
+    currentScreen: '', // 当前屏幕状态
     qrcodeInstance: null, // 二维码实例
     shareLink: '', // 分享的链接
     searchKey: '', // 搜索用关键词
@@ -1190,10 +1191,10 @@ var app = new Vue({
           } else {
             this.form.navigation = 2
           }
-
         } else if (item.title == '声音') {
-          
           this.audioControl()
+        } else if (item.title == '全屏') {
+          this.sceenControl()
         } else if (item.title == '电话') {
             this.$alert(`拨打电话136-1851-6602`, '提示', {
               confirmButtonText: '确定'
@@ -1329,10 +1330,34 @@ var app = new Vue({
     audioControl() {
      var audio = document.getElementById('myAudio');
       if(audio.paused)                     {                 
-        audio.play();//audio.play();// 这个就是播放  
+        audio.play(); //audio.play();// 这个就是播放  
       }else{
-        audio.pause();// 这个就是暂停
+        audio.pause(); // 这个就是暂停
       }
+    },
+    sceenControl() {
+      let element = document.documentElement
+      if (this.currentScreen == 'full') {
+        if(document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if(document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if(document.webkitExitFullscreen) {
+          document.webkitExitFullscreen()
+        }
+        this.currentScreen = ''
+      } else {
+        if(element.requestFullscreen) {
+          element.requestFullscreen()
+        } else if(element.mozRequestFullScreen) {
+          element.mozRequestFullScreen()
+        } else if(element.webkitRequestFullscreen) {
+          element.webkitRequestFullscreen()
+        } else if(element.msRequestFullscreen) {
+          element.msRequestFullscreen();
+        }  
+        this.currentScreen = 'full' 
+      }   
     }
   }
 })
