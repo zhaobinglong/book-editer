@@ -895,7 +895,7 @@ var app = new Vue({
     controls: [
       {'group':1,'label': 'share', 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
       {'group':1,'label': 'download','title': '下载', 'icon': 'iconxiazai', 'checked': false},
-      {'group':1,'label': 'textSelect','title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
+      // {'group':1,'label': 'textSelect','title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
       {'group':1,'label': 'thumbnail','title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
       {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
@@ -1179,7 +1179,11 @@ var app = new Vue({
             this.qrcode()
           })
         } else if (item.title == '缩略图') {
-            this.showMenu = true
+          if (this.form.navigation == 2) {
+            this.form.navigation = 1
+          } else {
+            this.form.navigation = 2
+          }
         } else if (item.title == '电话') {
             this.$alert(`拨打电话136-1851-6602`, '提示', {
               confirmButtonText: '确定'
