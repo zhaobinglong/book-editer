@@ -488,6 +488,7 @@
     
     <!-- 主编辑区 -->
         <div class="main">
+            <img :src="form.background" class="background" >
             <div class="header">
                 <form class="form-inline" style="text-align: center;">
                 {{ form.title }} | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
@@ -892,8 +893,8 @@ var app = new Vue({
       title: '',
       description: '',
       placement: 'fill',
-      logo: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-      favico: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+      logo: '',
+      favico: '',
       chatEnable: false,
       chat: '',
       contactTel: '',

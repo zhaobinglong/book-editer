@@ -707,6 +707,12 @@ body {
     bottom: 0;
     right: 0;
 }
+.main .background {
+    z-index: -1; 
+    width: 100%; 
+    height: auto;
+    position: absolute;
+}
 
 /* 换肤面板 */
 .skin-panel {
