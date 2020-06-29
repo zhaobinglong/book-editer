@@ -461,30 +461,24 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 0 || form.navigation == 1">
-        <el-collapse accordion>
-              <el-collapse-item v-if="form.navigation == 0">
-                <template slot="title">
-                  <div style="padding-left: 10px;">目录</div>
-                </template>
-                <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
-              </el-collapse-item>
-              <el-collapse-item v-if="form.navigation == 1">
-                <template slot="title">
-                   <div style="padding-left: 10px;">缩略图</div>
-                </template>
-                <div >
-                  <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
-                      <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
-                      <p>第{{ index + 1 }}页</p>
-                  </div>
-                </div>
-              </el-collapse-item>
-
-        </el-collapse>        
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 0 ">
+        <div>
+          <div style="padding-left: 10px;" class="menu-item">目录</div>
+          <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
+        </div>
     </ul>
 
 
+    <!-- 目录区 -->
+    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 1">
+        <div>
+          <div style="padding-left: 10px;" class="menu-item">缩略图</div>
+               <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
+                  <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
+                  <p>第{{ index + 1 }}页</p>
+              </div>
+        </div>
+    </ul>
     
     <!-- 主编辑区 -->
         <div class="main">
