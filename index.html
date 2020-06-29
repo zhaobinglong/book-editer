@@ -694,10 +694,10 @@
       :visible.sync="dialogEmail"
       width="40%">
       <div style="display: flex;">
-        <el-input  placeholder="发送至邮箱"></el-input>
+        <el-input  placeholder="发送至邮箱" v-model="inputEmail"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="dialogEmail = false">确定</el-button>
+        <el-button type="primary"  @click="sendEmail">确定</el-button>
       </span>
     </el-dialog>
 
@@ -769,6 +769,7 @@ var app = new Vue({
       }
   },
   data: {
+    inputEmail: '', // 输入发送的邮件地址
     currentScreen: '', // 当前屏幕状态
     qrcodeInstance: null, // 二维码实例
     shareLink: '', // 分享的链接
@@ -1411,7 +1412,10 @@ var app = new Vue({
           s0.parentNode.insertBefore(s1, s0);
          })();
         }
-     
+    },
+    // 发送邮件
+    sendEmail() {
+      this.dialogEmail = false
     }
   }
 })
