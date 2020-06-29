@@ -506,7 +506,7 @@
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
             </div>    
             <img :src="form.logo" class="logo">   
-            <div class="active-password">
+            <div class="active-password" v-if="showPassWordBox">
               <div class="content">
                 <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;margin-bottom: 20px;">
                 <el-form inline="true" model="formInline" >
@@ -514,7 +514,7 @@
                     <input type="password" placeholder="" v-model="inputPassword">
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" >查询</el-button>
+                    <el-button type="primary" @click="sendPassword">确定</el-button>
                   </el-form-item>
               </div>
               
@@ -780,6 +780,7 @@ var app = new Vue({
       }
   },
   data: {
+    showPassWordBox: true, // 显示密码框遮盖
     inputPassword: '', // 输入验证的密码
     inputEmail: '', // 输入发送的邮件地址
     currentScreen: '', // 当前屏幕状态
@@ -1447,6 +1448,23 @@ var app = new Vue({
     clickControlCollapse(activeNames) {
       console.log(activeNames)
 
+    },
+    sendPassword () {
+      let data = {
+        'bookId': 2,
+        'password': this.inputPassword
+      }
+
+      axios.post('/api/password', Qs.stringify(data)).then(res => {
+        console.log(res)
+        this.showPassWordBox = false
+      }).catch(res => {
+        this.showPassWordBox = false
+        this.$message({
+          message: res,
+          type: 'error'
+        });  
+      })      
     }
   }
 })
