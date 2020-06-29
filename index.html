@@ -512,6 +512,19 @@
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
             </div>    
             <img :src="form.logo" class="logo">   
+            <div class="active-password">
+              <div class="content">
+                <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;margin-bottom: 20px;">
+                <el-form inline="true" model="formInline" >
+                  <el-form-item>
+                    <input type="password" placeholder="" v-model="inputPassword">
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" >查询</el-button>
+                  </el-form-item>
+              </div>
+              
+            </div>
         </div>
 
 
@@ -773,6 +786,7 @@ var app = new Vue({
       }
   },
   data: {
+    inputPassword: '', // 输入验证的密码
     inputEmail: '', // 输入发送的邮件地址
     currentScreen: '', // 当前屏幕状态
     qrcodeInstance: null, // 二维码实例
