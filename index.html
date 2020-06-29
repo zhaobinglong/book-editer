@@ -343,7 +343,7 @@
                           width="200"
                           trigger="click">
                           <div>
-                             <p style="line-height: 30px;" @click="navigationSetting(item)" v-for="(item, index) in navigationArr" :key="index" v-if="!item.hidden">{{ item.value }}</p>
+                             <p class="el-popover_item" style="line-height: 30px;" @click="navigationSetting(item)" v-for="(item, index) in navigationArr" :key="index" v-if="!item.hidden">{{ item.value }}</p>
                           </div>
                           <button slot="reference" class="brand-btns favicon">{{ navigationArr[form.navigation].value }}</button>
                         </el-popover>
@@ -540,7 +540,7 @@
         <!-- <li class="search-more" >xianshi</li> -->
     </ul>
     <div class="earch-box-small" v-else>
-        <span class="earch-box-small-tip">外链</span><i class="el-icon-search" @click="form.navigation = 3"></i>
+        <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a><i class="el-icon-search" @click="form.navigation = 3"></i>
     </div>
     <!-- skin皮肤选择器 -->
     <el-dialog
