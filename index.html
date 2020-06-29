@@ -109,7 +109,7 @@
         </div>
         <div style="height: 100vh; overflow-y: scroll;">
         <el-collapse accordion @change="clickControlCollapse">
-          <el-collapse-item>
+          <el-collapse-item name="名字和描述">
             <template slot="title">
               <div style="padding-left: 10px">名字和描述</div>
             </template>
@@ -130,7 +130,7 @@
                 <span style="color: #999" @click="dialogSkin = true">White Style ···</span>
             </div>
           </div>
-          <el-collapse-item >
+          <el-collapse-item name="品牌">
             <template slot="title">
               <div style="padding-left: 10px">品牌</div>
             </template>
@@ -172,7 +172,7 @@
             </li>
 
           </el-collapse-item>
-          <el-collapse-item >
+          <el-collapse-item name="控制">
             <template slot="title">
               <div style="padding-left: 10px">控制</div>
             </template>
@@ -359,7 +359,7 @@
                 </div>
             </li>
           </el-collapse-item>
-          <el-collapse-item >
+          <el-collapse-item name="密码">
             <template slot="title">
               <div style="padding-left: 10px">密码</div>
             </template>
@@ -506,7 +506,7 @@
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
             </div>    
             <img :src="form.logo" class="logo">   
-            <div class="active-password" v-if="showPassWordBox">
+            <div class="active-password" v-if="form.passwordEnable && currentCollapse == '密码'">
               <div class="content">
                 <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;margin-bottom: 20px;">
                 <el-form inline="true" model="formInline" >
@@ -780,7 +780,8 @@ var app = new Vue({
       }
   },
   data: {
-    showPassWordBox: true, // 显示密码框遮盖
+    currentCollapse: '', // 当前展开的菜单
+    showPassWordBox: false, // 显示密码框遮盖
     inputPassword: '', // 输入验证的密码
     inputEmail: '', // 输入发送的邮件地址
     currentScreen: '', // 当前屏幕状态
@@ -1447,24 +1448,24 @@ var app = new Vue({
     },
     clickControlCollapse(activeNames) {
       console.log(activeNames)
-
+      this.currentCollapse = activeNames
     },
     sendPassword () {
-      let data = {
-        'bookId': 2,
-        'password': this.inputPassword
-      }
+      // let data = {
+      //   'bookId': 2,
+      //   'password': this.inputPassword
+      // }
 
-      axios.post('/api/password', Qs.stringify(data)).then(res => {
-        console.log(res)
-        this.showPassWordBox = false
-      }).catch(res => {
-        this.showPassWordBox = false
-        this.$message({
-          message: res,
-          type: 'error'
-        });  
-      })      
+      // axios.post('/api/password', Qs.stringify(data)).then(res => {
+      //   console.log(res)
+      //   this.showPassWordBox = false
+      // }).catch(res => {
+      //   this.showPassWordBox = false
+      //   this.$message({
+      //     message: res,
+      //     type: 'error'
+      //   });  
+      // })      
     }
   }
 })
