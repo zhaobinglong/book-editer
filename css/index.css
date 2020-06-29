@@ -113,7 +113,12 @@ body {
 .el-collapse-item__content {
     background-color: #EFEFEF
 }
-
+.el-dialog__header {
+    border-bottom: 1px solid #EBEEF5
+}
+.el-dialog__footer {
+    border-top: 1px solid #EBEEF5
+}
 .rank {
     display: flex;
     justify-content: space-between;
@@ -692,6 +697,15 @@ body {
     height: 100px;
     background-color: #EFEFEF;
     display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.main .logo {
+    width: auto;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 /* 换肤面板 */
@@ -911,6 +925,9 @@ body {
 }
 .earch-box-small {
     padding: 10px 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 .earch-box-small-tip {
     background-color: #CFCFCF;
@@ -946,4 +963,11 @@ body {
     object-fit: scale-down;
     width: auto;
     height: 200px;
+}
+
+/*样式粒子化*/
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

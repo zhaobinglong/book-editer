@@ -81,7 +81,7 @@
 
     <!-- 左侧菜单栏区域 -->
     <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
-        <div class="menu-item" style="background-color: #CFCFCF">
+        <div class="menu-item" style="background-color: #F3F7Fa; color: #4493b1">
             <span >
                 <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
             </span>
@@ -389,6 +389,10 @@
                </li>
              </el-collapse-item>
            </el-collapse>
+           <div class="flex-column" style="padding: 10px">
+             <div style=" display: inline-block; padding: 10px 14px; border: 1px solid #EBEEF5">添加视频及链接</div>
+             <p style="line-height: 30px">添加视频及链接, 让您的电子书更吸引人。</p>
+           </div>
        </div>
         <!-- <ul role="presentation"  style="flex-grow: 1;overflow-y: scroll; height: 100vh" > -->
             
@@ -505,7 +509,8 @@
             </div>
             <div class="page-footer">
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
-            </div>           
+            </div>    
+            <img :src="form.logo" class="logo">   
         </div>
 
 
@@ -662,11 +667,11 @@
             <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
             <div class="desc">
                 <p>全部出版物 37.8M</p> 
-                <a href="https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki&download_version=1032005140&version_type=1">下载刊物为PDF文件</a> 
+                <a download href="http://book.baige.me/download?bookId=2&page=">下载刊物为PDF文件</a> 
             </div>
           </div>
           <div class="download-current">
-              <a href="https://servicewechat.com/wxa-dev-logic/download_redirect?type=x64&from=mpwiki&download_version=1032005140&version_type=1">当前页面(5.2M)</a> 
+              <a download href="http://book.baige.me/download?bookId=2&page=1">当前页面(5.2M)</a> 
           </div>
       </div>
     </el-dialog>
