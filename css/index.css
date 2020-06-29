@@ -991,6 +991,28 @@ body {
     height: 200px;
 }
 
+/*按钮*/
+.button-save {
+    display: inline-block;
+    background-color: rgb(68, 147, 177);
+    color: #FFF;
+    line-height: 40px;
+    font-size: 14px;
+    padding: 0 14px;
+    border-radius: 4px;
+    position: relative;
+}
+.button-save-hidden-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #FFF;
+    padding: 10px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border: 1px solid #EBEEF5;
+    line-height: 20px;
+}
+
 /*样式粒子化*/
 .flex-column {
     display: flex;

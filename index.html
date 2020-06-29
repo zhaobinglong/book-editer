@@ -86,27 +86,26 @@
             <span >
                 <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
             </span>
+<!--             <el-button type="primary" slot="reference" @click="mainSave"> 
+                      
+            </el-button> -->
+            <div class="button-save">
+              <span @click="mainSave">{{ saveBtn }}</span> | <i class="el-icon-caret-bottom"  @click="showHiddenMenu =  !showHiddenMenu"></i>
+              <div class="button-save-hidden-menu" v-if="showHiddenMenu">
+                  <el-checkbox v-model="form.main">设为默认</el-checkbox>
+              </div>
+            </div>
             <!-- <div class="btn-group"> -->
-                <el-popover
+<!--                 <el-popover
                   placement="right"
                   width="100"
                   trigger="hover">
                   <div>
                       <el-checkbox v-model="form.main">设为默认</el-checkbox>
                   </div>
-                   <el-button type="primary" slot="reference" @click="mainSave"> 
-                      {{ saveBtn }}<i class="el-icon-caret-bottom"  ></i>
-                   </el-button>
-                </el-popover>
-                
-<!--                 <form class="dropdown-menu" style="width: 300px; line-height: 20px;padding: 0 10px">
-                    <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Make setting default for future flipbooks
-                    </label>
-                  </div>
-                </form> -->
-            <!-- </div> -->
+                   
+                </el-popover> -->
+
         </div>
         <div style="height: 100vh; overflow-y: scroll;">
         <el-collapse accordion @change="clickControlCollapse">
@@ -781,6 +780,7 @@ var app = new Vue({
       }
   },
   data: {
+    showHiddenMenu: false, // 隐藏的菜单
     currentCollapse: '', // 当前展开的菜单
     showPassWordBox: false, // 显示密码框遮盖
     inputPassword: '', // 输入验证的密码
