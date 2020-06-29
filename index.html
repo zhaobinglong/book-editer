@@ -108,7 +108,7 @@
             <!-- </div> -->
         </div>
         <div style="height: 100vh; overflow-y: scroll;">
-        <el-collapse accordion>
+        <el-collapse accordion @change="clickControlCollapse">
           <el-collapse-item>
             <template slot="title">
               <div style="padding-left: 10px">名字和描述</div>
@@ -1429,6 +1429,10 @@ var app = new Vue({
         console.log(res)
       })
       this.dialogEmail = false
+    },
+    clickControlCollapse(activeNames) {
+      console.log(activeNames)
+
     }
   }
 })

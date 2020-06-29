@@ -101,6 +101,8 @@ body {
     height: 178px;
     display: block;
   }
+
+/*样式重置*/
 .el-layout {
     width: 200px;
     height: 200px;
@@ -108,6 +110,10 @@ body {
 .el-dialog__footer {
     text-align: center!important;
 }
+.el-collapse-item__content {
+    background-color: #EFEFEF
+}
+
 .rank {
     display: flex;
     justify-content: space-between;
