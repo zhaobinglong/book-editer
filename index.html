@@ -1413,6 +1413,21 @@ var app = new Vue({
     },
     // 发送邮件
     sendEmail() {
+      let data = {
+        'bookId': 2,
+        'userId': '',
+        'email': this.inputEmail
+      }
+      if (!this.inputEmail) {
+        this.$message({
+          message: `邮箱不合法`,
+          type: 'error'
+        });          
+        return false
+      }
+      axios.post('/api/email', Qs.stringify(data)).then(res => {
+        console.log(res)
+      })
       this.dialogEmail = false
     }
   }
