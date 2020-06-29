@@ -15,7 +15,7 @@
 
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="./js/vue.min.js"></script>
 
     <!-- 引入最新版的jquery -->
     <script
@@ -25,7 +25,7 @@
     <!-- <script src="./css/bootstrap.min.js"></script> -->
     <!-- 引入样式 -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.3.6/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/elementui.css">
 
     <!-- 引入组件库 -->
     <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
@@ -43,11 +43,12 @@
     <!-- <script src="../../context/js/velocity.min.js"></script> -->
     
     <!-- 引入弹出层组件库 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    
+    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script src="./js/elementui.js"></script>
+
     <!-- 异步请求库 -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./js/axios.min.js"></script>
     
     <!-- qs.stringify()将对象序列化成URL的形式 -->
     <script src="https://cdn.bootcss.com/qs/6.7.0/qs.min.js"></script>
@@ -558,8 +559,8 @@
       title="编辑logo"
       :visible.sync="dialogLogo"
       width="40%">
-        <div style="position: relative; background-color: #EFEFEF; height: 200px" class="mb20">
-           <el-image :src="form.logo" ></el-image> 
+        <div class="mb20 upload-img">
+           <img :src="form.logo" >
             <el-popover
               placement="right"
               width="200"
@@ -619,8 +620,8 @@
       title="EDIT FAVICON"
       :visible.sync="dialogFavicon"
       width="40%">
-        <div style="position: relative; background-color: #EFEFEF; height: 200px; overflow: hidden;" class="mb20">
-            <el-image :src="form.favico" v-if="form.favico"  fit="scale-down"></el-image>
+        <div class="mb20 upload-img">
+            <img :src="form.favico"  >
             <el-popover
               placement="right"
               width="200"
@@ -704,14 +705,13 @@
       title="EDIT BACKGROUND"
       :visible.sync="dialogBackground"
       width="40%">
-        <div style="background-color: #EFEFEF; text-align: center;" class="mb20">
+        <div  class="mb20 upload-img">
             <el-upload
               class="avatar-uploader"
               :http-request="uploadBackground"
               action=""
-              :show-file-list="false"
               :show-file-list="false">
-              <img v-if="form.background" :src="form.background" class="avatar">
+              <img  :src="form.background" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>            
         </div>

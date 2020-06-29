@@ -105,6 +105,9 @@ body {
     width: 200px;
     height: 200px;
 }
+.el-dialog__footer {
+    text-align: center!important;
+}
 .rank {
     display: flex;
     justify-content: space-between;
@@ -923,4 +926,18 @@ body {
 }
 .thum-item:hover {
     background-color: #EFEFEF
+}
+
+/*资源上传*/
+.upload-img {
+    position: relative; 
+    background-color: #EFEFEF; 
+    height: 200px; 
+    overflow: hidden;
+    text-align: center; 
+}
+.upload-img img{
+    object-fit: scale-down;
+    width: auto;
+    height: 200px;
 }
