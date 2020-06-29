@@ -127,6 +127,7 @@ body {
     align-items: center;
     padding: 10px 10px;
     cursor: pointer;
+    border-bottom: 1px solid #EBEEF5
 }
 .download {
     padding: 8px
