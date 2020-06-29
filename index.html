@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="http://files.puhuijinfu.com/imgLoader/phjf/img/2020/03/04/rLBLKH6YAaw78iyB14J5.jpeg" type="image/x-icon">
     <title>Document</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -1084,9 +1085,12 @@ var app = new Vue({
      axios.get('/api/book/getMainSetting', {
        params: data
      }).then(res => {
-      console.log(res)        
+      console.log(res)       
+      let icon = res. favico
       Object.assign(this.form, res.data)
       this.initThumbnail()
+
+      this.setIcon(res.data.favico)
      })  
   },
 
@@ -1124,8 +1128,16 @@ var app = new Vue({
         axios.post('/api/book/saveSettingImage', formData).then(res => {
         // api.saveSettingImage(formData).then(res => {
           console.log(res)
+          this.setIcon(res.data)
           this.form.favico = res.data
         })
+    },
+    setIcon(icon_url) {
+      var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = icon_url;
+      document.getElementsByTagName('head')[0].appendChild(link);
     },
     uploadLogo (files) {
         let formData = new FormData()
