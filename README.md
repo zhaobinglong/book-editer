@@ -90,7 +90,7 @@ npm run dev
 9. 在缩略图处增加 "目录"项（ 接口没有控制目录的字段）
 10. ✅在底部工具，不显示 "在线客服"与搜索按钮
 11. 电话，邮件，分享，下载为第一组，缩略图，目录为第二组， 放大，全屏，声音为第三组。用分格线格开。
-12. ✅下载图标，PDF https://cn.bing.com/images/search?view=detailV2&ccid=hHKSHPp9&id=19DD14978D329A32703CA95F9A06331AD3A61F9F&thid=OIP.hHKSHPp92lxq0oYurNcKpwHaHa&mediaurl=https%3a%2f%2fcdn1.iconfinder.com%2fdata%2ficons%2fCrystalClear%2f128x128%2fmimetypes%2fpdf.png&exph=128&expw=128&q=pdf+icon&simid=608016954870006282&ck=29C321ECD13E4E731CAF41B8061A6388&selectedIndex=11&qft=+filterui%3aphoto-transparent+filterui%3aimagesize-small&ajaxhist=0
+12. ✅下载图标，
 13. ✅下载出版物前加下载icon.
 14. ✅下载灰框，加大padding,减少margin.
 15. ✅减少宽度到 PC 版 350px;

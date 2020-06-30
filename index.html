@@ -82,7 +82,7 @@
 
     <!-- 左侧菜单栏区域 -->
     <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;" v-if="!isMobile">
-        <div class="menu-item" style="background-color: #F3F7Fa; color: #4493b1">
+        <div class="menu-item" style="background-color: #F3F7Fa; color: #4493b1 ">
             <span >
                 <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
             </span>
@@ -124,7 +124,7 @@
             </div>
              
           </el-collapse-item>
-          <div class="menu-item" style="padding: 0 10px">
+          <div class="menu-item" style="padding: 0 10px;border-bottom: 1px solid #EBEEF5">
             <div >皮肤</div>
             <div class="unActive-a flex" style="padding: 10px 17px">
                 <span style="color: #999" @click="dialogSkin = true">White Style ···</span>
@@ -567,7 +567,7 @@
       title="选择皮肤"
       :visible.sync="dialogSkin"
       width="50%">
-        <el-form ref="form" :model="form" label-width="190px" v-if="form.background">
+        <el-form v-if="form.background">
             <el-form-item label="Keep current background">
                 <el-switch v-model="form.keepBackground"></el-switch>
             </el-form-item>
@@ -697,9 +697,14 @@
     </el-dialog>
 
     <!--分享对话框 -->
-    <el-dialog
-      title="分享"
-      :visible.sync="dialogShare">
+    <el-dialog title="分享" :visible.sync="dialogShare">
+        <div slot="title" class="dialog-title">
+          <span class="icon iconfont iconfenxiang2" ></span>
+          <span class="title-text">分享</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogShare = false"></span>
+          </div>
+        </div>
       <div style="display: flex;">
         <div id="qrcode" style="padding-right: 10px"></div>
         <div >
