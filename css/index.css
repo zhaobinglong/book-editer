@@ -38,6 +38,9 @@ body {
 button {
     outline: none;
 }
+.border-none {
+    border: none!important
+}
 .bottom-line {
     border-bottom: 1px solid #ccc;
 }
@@ -129,6 +132,7 @@ body {
 .el-icon-s-tools {
     right: 10px;
     bottom: 10px;
+    position: absolute;
 }
 .el-form-item__label {
     font-weight: 400!important;
@@ -142,6 +146,13 @@ body {
 }
 .el-dialog {
     width: 350px!important
+}
+.el-tree {
+    background-color: transparent!important;
+}
+
+.el-tree-node__content:hover {
+    background-color: none!important
 }
 .rank {
     display: flex;
@@ -165,7 +176,6 @@ body {
     align-items: center;
     padding: 10px 10px;
     cursor: pointer;
-    border-bottom: 1px solid #EBEEF5
 }
 .download {
   
@@ -298,7 +308,7 @@ body {
     justify-content: space-between;
 }
 
-.branding .brand-btns {
+.brand-btns {
     float: right;
     padding: 0 10px;
     line-height: 30px;
@@ -307,17 +317,7 @@ body {
     border: 1px solid #eee;
     margin-top: 5px;
 }
-.brand-btns {
-    float: right;
-    line-height: 30px;
-    background: #fff;
-    color: #77777c;
-    border: 1px solid #eee;
-    margin-top: 5px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
+
 .controls-col {
     display: flex;
     justify-content: space-between;
@@ -705,7 +705,8 @@ body {
     position: absolute;
     top: 0;
     width: 100%;
-    padding: 0 20px;
+    padding: 10px 20px;
+
 }
 .main .bookBox {
     display: flex;
@@ -721,7 +722,6 @@ body {
 .main .page-footer {
     padding-top: 20px;
     height: 100px;
-    background-color: #EFEFEF;
     display: flex;
     width: 100%;
     justify-content: center;
@@ -1006,6 +1006,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 .upload-img img{
     object-fit: scale-down;
@@ -1040,4 +1041,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/*皮肤切换的样式*/
+.skin0 {
+     background-color: #EFEFEF;
+    color: #000;   
+}
+.skin1 {
+    background-color: #333;
+    color: #FFF;
 }

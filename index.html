@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <!-- 加载icon上的字体图标 -->
-    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1876940_8s7f2vms0xx.css">
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
 
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <link rel="stylesheet" type="text/css" href="./css/switch.css">
@@ -81,7 +81,7 @@
 <div class="container-fluid" id="app">
 
     <!-- 左侧菜单栏区域 -->
-    <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;">
+    <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;" v-if="!isMobile">
         <div class="menu-item" style="background-color: #F3F7Fa; color: #4493b1">
             <span >
                 <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
@@ -150,7 +150,7 @@
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <button class="brand-btns logo" slot="reference"  >Custon ···</button>
+                        <button class="brand-btns logo" slot="reference"  @click="dialogColor = true">Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
@@ -334,7 +334,7 @@
                           <div>
                              <p class="el-popover_item" style="line-height: 30px;" @click="navigationSetting(item)" v-for="(item, index) in navigationArr" :key="index" v-if="!item.hidden">{{ item.value }}</p>
                           </div>
-                          <button slot="reference" class="brand-btns favicon">{{ navigationArr[form.navigation].value }}</button>
+                          <button slot="reference" class="brand-btns">{{ navigationArr[form.navigation].value }}</button>
                         </el-popover>
                         
                     </div>
@@ -343,7 +343,7 @@
                            <span class="icon iconfont" ></span>
                             <span>Contacts Button</span>
                         </div>
-                        <button class="brand-btns favicon" @click="dialogButton = true">Default ···</button>
+                        <button class="brand-btns" @click="dialogButton = true">Default ···</button>
                     </div>
                 </div>
             </li>
@@ -450,31 +450,40 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 0 ">
+    <ul class="nav nav-pills nav-stacked skinbar border-none" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 ">
         <div>
-          <div style="padding-left: 10px;" class="menu-item">目录</div>
+          <div  class="menu-item"   :style="{backgroundColor: form.colorPanel}">
+              <div>
+                <span  class="icon iconfont iconcatalog"></span >目录
+              </div>
+               <i class="el-icon-close" @click="form.navigation = 2"></i>
+          </div>
           <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
         </div>
     </ul>
 
 
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar" v-if="form.navigation == 1">
+    <ul class="nav nav-pills nav-stacked skinbar border-none" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1">
         <div>
-          <div style="padding-left: 10px;" class="menu-item">缩略图</div>
-               <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
-                  <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
-                  <p>第{{ index + 1 }}页</p>
+            <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}">
+              <div>
+                <span  class="icon iconfont iconview-thumbs"></span >缩略图
               </div>
+               <i class="el-icon-close" @click="form.navigation = 2"></i>
+            </div>
+             <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
+                <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
+                <p>第{{ index + 1 }}页</p>
+            </div>
         </div>
     </ul>
     
     <!-- 主编辑区 -->
-        <div class="main">
-            <img :src="form.background" class="background" >
-            <div class="header">
+        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position}">
+            <div class="header" :class="toggleSkinClass(form.skin)" >
                 <form class="form-inline" style="text-align: center;">
-                {{ form.title }} | 页  <input  class="form-control"  placeholder="" style="width: 40px;">  | /32
+                {{ form.title }} | 页  <input placeholder="" style="width: 40px;">  | /32
                 </form>
             </div>
             <div style="flex-grow: 1" class="bookBox">
@@ -491,7 +500,7 @@
                 <div class="hard"></div>
               </div>
             </div>
-            <div class="page-footer">
+            <div class="page-footer" :class="toggleSkinClass(form.skin)" >
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
             </div>    
             <img :src="form.logo" class="logo">   
@@ -512,13 +521,18 @@
 
 
     <!-- 右侧搜索区 -->
-    <ul class="search-box" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
-        <li class="title" :style="{backgroundColor: form.colorPanel}">搜索</li>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search for..." v-model="searchKey">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" @click="search">Go!</button>
-          </span>
+    <ul class="search-box" :class="toggleSkinClass(form.skin)"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
+        <div  class="menu-item" :style="{backgroundColor: form.colorPanel}">
+          <div>
+            <span  class="icon iconfont iconsearch"></span >搜索
+          </div>
+           <i class="el-icon-close" @click="form.navigation = 2"></i>
+        </div>
+        <div class="input-group" style="display: flex; padding: 4px;">
+          <input type="text" style="height: 100%" class="form-control" placeholder="在此输入文本..." v-model="searchKey">
+          <div style="width: 50px;display: flex;align-items: center;justify-content: center; background-color: #FFF;margin-left: 4px;">
+            <span  class="icon iconfont iconsearch" ></span >
+          </div>
         </div>
         <li class="text-list" >
             <p class="item" v-for="(item, index) in searchList" :key="index">
@@ -646,7 +660,7 @@
                  <p @click="faviconSetting">Back to Default</p>
                  <p @click="faviconSetting">Remove</p>
               </div>
-              <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
+              <i slot="reference" class="el-icon-s-tools" ></i>
             </el-popover>
         </div>
         <el-upload
@@ -1008,6 +1022,26 @@ var app = new Vue({
     searchList: [] 
   },
   computed: {
+    // https://www.w3school.com.cn/cssref/pr_background-position.asp
+    position() {
+      let position = [
+          'top left',
+          'top center',
+          'top right',
+          'center left',
+          'center center',
+          'center right',
+          'bottom left',
+          'bottom center',
+          'bottom right'
+      ]
+      return position[0]
+    },
+    // 判断是什么设备
+    isMobile() {
+      let flag = navigator.userAgent.match(/(phone|pod|iPhone|iPod|ios|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+      return flag;
+    },
     backgroundFill: {
       get: function () {
         return this.rank[this.form.backgroundFill].label
@@ -1096,6 +1130,7 @@ var app = new Vue({
 
       this.setIcon(res.data.favico)
      })  
+     this.initBook()
   },
 
   methods: {
@@ -1467,16 +1502,20 @@ var app = new Vue({
       })
     },
     // 
+    initBook () {
+      $("#flipbook").turn({
+        width: 400,
+        height: 300,
+        autoCenter: true
+      });
+    },
+    toggleSkinClass(skin){
+      return 'skin' + skin
+    }
   }
 })
 </script>
 <script type="text/javascript">
- 
-  $("#flipbook").turn({
-    width: 400,
-    height: 300,
-    autoCenter: true
-  });
   
 </script>
 </html>
