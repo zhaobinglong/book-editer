@@ -90,9 +90,9 @@
                       
             </el-button> -->
             <div class="button-save">
-              <span @click="mainSave">{{ saveBtn }}</span> | <i class="el-icon-caret-bottom"  @click="showHiddenMenu =  !showHiddenMenu"></i>
-              <div class="button-save-hidden-menu" v-if="showHiddenMenu">
-                  <el-checkbox v-model="form.main">设为默认</el-checkbox>
+              <span @click="mainSave">{{ saveBtn }}</span> | <i class="el-icon-caret-bottom"  @click="toggleHiddenMenu"></i>
+              <div class="button-save-hidden-menu" v-if="showHiddenMenu" id="setDefault">
+                  <el-checkbox v-model="form.main" >设为默认</el-checkbox>
               </div>
             </div>
             <!-- <div class="btn-group"> -->
@@ -150,23 +150,12 @@
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <el-popover
-                          placement="right"
-                          width="200"
-                          trigger="click">
-                          <div >
-                            <div v-for="(item, index) in colors" style="display: flex; align-items: center;" :key="index"> 
-                              <el-color-picker v-model="form[item.label]"></el-color-picker>
-                              <span style="padding-left: 10px">{{ item.label }}</span>
-                            </div>
-                             
-                          </div>
-                          <button class="brand-btns logo" slot="reference"  >Custon ···</button>
-                        </el-popover>
+                        <button class="brand-btns logo" slot="reference"  >Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
-                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
+                        <button class="brand-btns " @click="dialogFavicon = true">
+                          <img :src="form.favico" v-if="form.favico" class="favicon">Default ···</button>
                     </div>
                 </div>
             </li>
@@ -503,19 +492,18 @@
               </div>
             </div>
             <div class="page-footer">
-                <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)"></span >
+                <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
             </div>    
             <img :src="form.logo" class="logo">   
             <div class="active-password" v-if="form.passwordEnable && currentCollapse == '密码'">
               <div class="content">
-                <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;margin-bottom: 20px;">
-                <el-form inline="true" model="formInline" >
-                  <el-form-item>
+                <p style="color: #FFF;margin:20px 0;">{{ form.title }}</p>
+                <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;">
+                <p style="color: #FFF;margin:20px 0;">该文档为非公开文档，请输入密码打开</p>
+                <div style="display: flex;position: relative;">
                     <input type="password" placeholder="" v-model="inputPassword">
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="sendPassword">确定</el-button>
-                  </el-form-item>
+                    <el-button type="primary" @click="sendPassword" style="margin-left: -4px">确定</el-button>
+                </div>
               </div>
               
             </div>
@@ -542,28 +530,43 @@
     <div class="earch-box-small" v-else>
         <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a><i class="el-icon-search" @click="form.navigation = 3"></i>
     </div>
+
+    <!-- 颜色选择器 -->
+    <el-dialog
+      title="SELECT COLORS"
+      :visible.sync="dialogColor"
+      width="30%">
+        <div >
+            <div v-for="(item, index) in colors" style="display: flex; align-items: center;" :key="index"> 
+              <el-color-picker v-model="form[item.label]"></el-color-picker>
+              <span style="padding-left: 10px">{{ item.label }}</span>
+            </div>
+        </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogColor = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogColor = false">OK</el-button>
+      </span>
+    </el-dialog>
+
     <!-- skin皮肤选择器 -->
     <el-dialog
       title="选择皮肤"
       :visible.sync="dialogSkin"
       width="50%">
-        <el-form ref="form" :model="form" label-width="190px">
+        <el-form ref="form" :model="form" label-width="190px" v-if="form.background">
             <el-form-item label="Keep current background">
                 <el-switch v-model="form.keepBackground"></el-switch>
             </el-form-item>
         </el-form>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: inline-block; width: 15%; margin-bottom: 10px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item)" >
-            <el-image
-              style="width: 100%; display: block;border: 2px solid #FFF"
-              :class="item.checked ? 'skinChecked' : ''"
-              :src="item.url"></el-image>
-            <p style="text-align: center;" ><span :class="item.checked ? 'skinTextChecked':''">{{ item.name }}</span></p>
+        <div >
+          <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(index)" >
+            <div :style="{backgroundColor: item.color}" style="height: 100px; width: 100px"></div>
+            <p style="text-align: center;line-height: 20px;" ><span :class="item.index == form.skin ? 'skinTextChecked':''">{{ item.name }}</span></p>
           </div>
         </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSkin = false">CANCEL</el-button>
-        <el-button type="primary" @click="mainSave">OK</el-button>
+        <el-button type="primary" @click="dialogSkin = false">OK</el-button>
       </span>
     </el-dialog>
 
@@ -573,16 +576,16 @@
       :visible.sync="dialogLogo"
       width="40%">
         <div class="mb20 upload-img">
-           <img :src="form.logo" >
+           <img :src="form.logo" style="max-height:50px;max-width:250px;width: auto;height: auto;">
             <el-popover
               placement="right"
               width="200"
               trigger="click">
               <div>
-                 <p @click="logoSetting">Back to Default</p>
-                 <p @click="logoSetting">Remove</p>
+                 <p @click="logoSetting" class="el-popover_item">Back to Default</p>
+                 <p @click="logoSetting" class="el-popover_item">Remove</p>
               </div>
-              <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
+              <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
             </el-popover>
         </div>
         <!-- action="http://m.baige.me/api/book/saveSettingImage" -->
@@ -646,10 +649,6 @@
               <i slot="reference" class="el-icon-s-tools" style="position: absolute; right: 0; bottom: 0"></i>
             </el-popover>
         </div>
-        
-<!--         <div>Import  favicon from  your website</div>
-        <el-input v-model="form.faviconInput" placeholder="https://your-website.com"></el-input>
-        <div style="margin-top: 20px;">or elect existing file</div> -->
         <el-upload
           class="upload-demo"
           :http-request="uploadFavicon"
@@ -661,18 +660,17 @@
     
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFavicon = false">CANCEL</el-button>
-        <el-button type="primary" @click="mainSave">OK</el-button>
+        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
       </span>
     </el-dialog>
 
     <!-- 下载选择器 -->
     <el-dialog
       title="下载出版物"
-      :visible.sync="dialogDownload"
-      width="50%">
+      :visible.sync="dialogDownload">
       <div class="download">
           <div class="download-all">
-            <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+            <img src="./css/pdf.webp" style="width: 50px; height: 50px;">
             <div class="desc">
                 <p>全部出版物 37.8M</p> 
                 <a download href="http://book.baige.me/download?bookId=2&page=">下载刊物为PDF文件</a> 
@@ -687,29 +685,37 @@
     <!--分享对话框 -->
     <el-dialog
       title="分享"
-      :visible.sync="dialogShare"
-      width="40%">
+      :visible.sync="dialogShare">
       <div style="display: flex;">
         <div id="qrcode" style="padding-right: 10px"></div>
-        <el-input v-model="shareLink" ></el-input>
+        <div >
+          <el-input v-model="shareLink" ></el-input>
+          <el-button type="primary"  @click="copy(share.link)" style="float: right; margin-top: 10px;">复制</el-button>
+        </div>
       </div>
-      
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="copy(share.link)">复制</el-button>
-      </span>
     </el-dialog>
 
 
     <!--发送邮件对话框 -->
     <el-dialog
       title="邮件"
-      :visible.sync="dialogEmail"
-      width="40%">
+      :visible.sync="dialogEmail">
       <div style="display: flex;">
         <el-input  placeholder="发送至邮箱" v-model="inputEmail"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary"  @click="sendEmail">确定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="电话"
+      :visible.sync="dialogContactTel">
+      <div style="text-align: center;">
+        电话号码:{{ form.contactTel }}
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary"  @click="dialogContactTel = false">确定</el-button>
       </span>
     </el-dialog>
 
@@ -838,13 +844,8 @@ var app = new Vue({
       {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
     skins: [
-      {index: 1, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-      {index: 2, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-      {index: 3, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-      {index: 4, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-      {index: 5, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-      {index: 6, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
-      {index: 7, name: 'xxx', url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg', checked: false},
+      {index: 0, name: '灰白色', color: '#EFEFEF', checked: false},
+      {index: 1, name: '深灰色', color: '#333333', checked: false},
     ],
     colors: [
       {label: 'colorPanel'},
@@ -867,13 +868,14 @@ var app = new Vue({
     setEmail: false,
     dialogSkin: false,
     dialogLogo: false,
-    dialogColor: false,
     dialogBackground: false,
     dialogFavicon: false,
     dialogButton: false,
     dialogShare: false,
     dialogDownload: false,
     dialogEmail: false,
+    dialogColor: false,
+    dialogContactTel: false,
     saveBtn: '保存',
     color: '#EEE',
     
@@ -919,6 +921,7 @@ var app = new Vue({
       emailSign: "1",
       password: '',
       passwordEnable: false,
+      skin: 0,
     },
     background: {
       url:'',
@@ -957,13 +960,14 @@ var app = new Vue({
       {'group':1,'label': 'share', 'title': '分享', 'icon': 'iconfenxiang2', 'checked': false},
       {'group':1,'label': 'download','title': '下载', 'icon': 'iconxiazai', 'checked': false},
       // {'group':1,'label': 'textSelect','title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
-      {'group':1,'label': 'thumbnail','title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false, 'bottomLine': true},
+      {'group':1,'label': 'thumbnail','title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false},
+      {'group':1,'label': 'thumbnail','title': '目录', 'icon': 'iconcatalog', 'checked': false, 'bottomLine': true},
       {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
       {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
-      {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
+      {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true, hiddenBottom: true},
       {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
-      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true},
+      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, hiddenBottom: true},
       {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true}
     ],
     treeData: [{
@@ -1126,8 +1130,6 @@ var app = new Vue({
         let formData = new FormData()
         formData.append('file', files.file)
         axios.post('/api/book/saveSettingImage', formData).then(res => {
-        // api.saveSettingImage(formData).then(res => {
-          console.log(res)
           this.setIcon(res.data)
           this.form.favico = res.data
         })
@@ -1203,36 +1205,14 @@ var app = new Vue({
         console.log(file);
     },
 
-    clickSkinItem (item) {
-      this.skins = this.skins.map(i => {
-        if (i.index === item.index) {
-            i.checked = true
-        } else {
-            i.checked = false
-        }
-        return i
-      })
+    clickSkinItem (index) {
+      this.form.skin = index
     },
     clickSelectSkin () {
         this.dialogSkin = true
     },
     handleLogoDialog () {
         this.dialogLogo = !this.dialogLogo
-    },
-    saveSkin () {
-        let hadSelect = this.skins.some(item => item.checked)
-        if (hadSelect) {
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            });
-        } else {
-            this.$message({
-              message: '没有选择不能保存',
-              type: 'warning'
-            });                
-        }  
-        this.dialogSkin = false
     },
     clickIcon (item) {
         console.log(item)
@@ -1262,9 +1242,7 @@ var app = new Vue({
         } else if (item.title == '在线客服') {
           this.clickStaff()
         } else if (item.title == '电话') {
-            this.$alert(`电话：${this.form.contactTel}`, '提示', {
-              confirmButtonText: '确定'
-            });
+            this.dialogContactTel = true
         } else if (item.title == '邮件') {
             this.dialogEmail = true
         } else{
@@ -1309,11 +1287,7 @@ var app = new Vue({
         this.dialogFavicon = false
         this.dialogBackground = false
         this.dialogButton = false
-        this.dialogBackground = false
-        this.$message({
-          type: 'success',
-          message: '保存成功'
-        });  
+        this.dialogBackground = false 
       }).catch((error) => {
         this.$message({
           type: 'error',
@@ -1478,7 +1452,21 @@ var app = new Vue({
       //     type: 'error'
       //   });  
       // })      
-    }
+    },
+    toggleHiddenMenu() {
+      this.showHiddenMenu =  !this.showHiddenMenu
+      this.$nextTick(() => {
+        document.addEventListener('mouseup',(e) =>{
+          var _con = document.getElementById('setDefault')
+          if(_con) {
+            if(!_con.contains(e.target)) {
+              this.showHiddenMenu = false
+            }
+          }
+        })
+      })
+    },
+    // 
   }
 })
 </script>

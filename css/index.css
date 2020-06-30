@@ -126,6 +126,23 @@ body {
     background-color: #EFEFEF;
     cursor: pointer;
 }
+.el-icon-s-tools {
+    right: 10px;
+    bottom: 10px;
+}
+.el-form-item__label {
+    font-weight: 400!important;
+}
+.el-color-picker__trigger {
+    border: none!important;
+}
+.el-color-picker__color {
+    border-radius: 50%!important;
+    overflow:hidden;
+}
+.el-dialog {
+    width: 350px!important
+}
 .rank {
     display: flex;
     justify-content: space-between;
@@ -151,12 +168,12 @@ body {
     border-bottom: 1px solid #EBEEF5
 }
 .download {
-    padding: 8px
+  
 }
 .download .download-all {
     display: flex;
     background-color: #EFEFEF;
-    padding: 10px;
+    padding: 30px;
 }
 .download .download-all span {
     margin-right: 20px;
@@ -283,8 +300,7 @@ body {
 
 .branding .brand-btns {
     float: right;
-    width: 80px;
-    height: 30px;
+    padding: 0 10px;
     line-height: 30px;
     background: #fff;
     color: #77777c;
@@ -293,7 +309,6 @@ body {
 }
 .brand-btns {
     float: right;
-    width: 80px;
     line-height: 30px;
     background: #fff;
     color: #77777c;
@@ -548,6 +563,11 @@ body {
 }
 
 /* 功能弹框favicon*/
+.favicon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
 .mask-favicon {
     display: none;
     position: fixed;
@@ -723,7 +743,7 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,.9);
+    background-color: rgba(0,0,0,1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -982,8 +1002,10 @@ body {
     position: relative; 
     background-color: #EFEFEF; 
     height: 200px; 
-    overflow: hidden;
     text-align: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .upload-img img{
     object-fit: scale-down;
@@ -998,7 +1020,7 @@ body {
     color: #FFF;
     line-height: 40px;
     font-size: 14px;
-    padding: 0 14px;
+    padding: 0 20px;
     border-radius: 4px;
     position: relative;
 }

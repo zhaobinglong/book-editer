@@ -74,5 +74,30 @@ npm run dev
 - . 工具栏与右边有一条分割线
 
 
+## 验收后web端修改
+1. ✅保存 左右两边padding 20px;
+2. ✅设为默认，点击页面其他位置隐藏
+3. ✅保存时，无需弹窗显示"保存成功"
+4. ✅如果已有背景，在选择皮肤时，显示“保持当前背景”,点击确认，更新皮肤，无需“保存成功”.此时还没有保存
+5. ✅编辑logo,内容区，灰色没有padding, 工具标志， padding:10px,logo:max-height:50px;max-width:250px;
+6. ✅favico,网页图标， 在default前显示该图标；
+7. ✅color palette 样式参照文档，应该是窗口中间弹窗
+8. ✅输入框的label,都不要粗体
+9. 在缩略图处增加 "目录"项（ 接口没有控制目录的字段）
+10. ✅在底部工具，不显示 "在线客服"与搜索按钮
+11. 电话，邮件，分享，下载为第一组，缩略图，目录为第二组， 放大，全屏，声音为第三组。用分格线格开。
+12. ✅下载图标，PDF https://cn.bing.com/images/search?view=detailV2&ccid=hHKSHPp9&id=19DD14978D329A32703CA95F9A06331AD3A61F9F&thid=OIP.hHKSHPp92lxq0oYurNcKpwHaHa&mediaurl=https%3a%2f%2fcdn1.iconfinder.com%2fdata%2ficons%2fCrystalClear%2f128x128%2fmimetypes%2fpdf.png&exph=128&expw=128&q=pdf+icon&simid=608016954870006282&ck=29C321ECD13E4E731CAF41B8061A6388&selectedIndex=11&qft=+filterui%3aphoto-transparent+filterui%3aimagesize-small&ajaxhist=0
+13. ✅下载出版物前加下载icon.
+14. ✅下载灰框，加大padding,减少margin.
+15. ✅减少宽度到 PC 版 350px;
+16. ✅电话弹窗，将“提示”改为"电话" 前面加电话图标， 在下面显示灰框，居中显示“电话号码:130000000",确定按钮居中。
+17. 在工具栏禁止 在线聊天， 消除 该dom(第10条中工具栏上不显示在线客服按钮)
+18. ✅分享弹窗，前加分享图标。 复制，在输入框下面，float:right; 弹窗宽度350px;
+19. ✅邮件弹窗，邮件前加图标， 宽度为350px; 
+20. ✅密码控制 ，遮罩不透明， 输入框与确定按钮一体化， 在图标上，添加文档标题， 为封面下添加“该文档为非公开文档，请输入密码打开”
+21. 缩略图、目录、搜索样式参考 “皮肤与背景”文档上的图片
+22. PC与ipad 横版样式一致， ipad竖版与手机版一致，手机版排版参见上次的图片，  手机里电话，下载等弹窗占满屏幕。取消按钮在右下角。 缩略图，搜索与目录，右边空出80px;
+
+
 
 

@@ -6,6 +6,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WebpackBar = require('webpackbar'); // 打包进度条
 const optimizeCss = require('optimize-css-assets-webpack-plugin') // 压缩css
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin') // 压缩js
+var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+
 
 const { VueLoaderPlugin } = require('vue-loader');
 
@@ -38,6 +40,7 @@ var baseConfig = {
        overlay: {
            errors: true,
        },
+       quiet: true,
       contentBase: './',
       inline: true,
   　　 proxy: {
@@ -53,6 +56,7 @@ var baseConfig = {
       }
     },
     plugins: [
+        new FriendlyErrorsWebpackPlugin(),
         new ExtractTextPlugin({
             filename: (getPath)=>{
                 return getPath('css/[name].[chunkHash:5].css').replace("js","css")
