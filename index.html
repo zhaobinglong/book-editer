@@ -679,9 +679,14 @@
     </el-dialog>
 
     <!-- 下载选择器 -->
-    <el-dialog
-      title="下载出版物"
-      :visible.sync="dialogDownload">
+    <el-dialog title="下载出版物" :visible.sync="dialogDownload">
+      <div slot="title" class="dialog-title">
+        <span class="icon iconfont iconxiazai" ></span>
+        <span class="title-text">下载出版物</span>
+        <div class="button-right">
+          <span class="title-close" @click="dialogShare = false"></span>
+        </div>
+      </div>
       <div class="download">
           <div class="download-all">
             <img src="./css/pdf.webp" style="width: 50px; height: 50px;">
@@ -716,9 +721,14 @@
 
 
     <!--发送邮件对话框 -->
-    <el-dialog
-      title="邮件"
-      :visible.sync="dialogEmail">
+    <el-dialog title="邮件" :visible.sync="dialogEmail">
+      <div slot="title" class="dialog-title">
+        <span class="icon iconfont iconEMAIL" ></span>
+        <span class="title-text">邮件</span>
+        <div class="button-right">
+          <span class="title-close" @click="dialogShare = false"></span>
+        </div>
+      </div>
       <div style="display: flex;">
         <el-input  placeholder="发送至邮箱" v-model="inputEmail"></el-input>
       </div>
@@ -726,10 +736,16 @@
         <el-button type="primary"  @click="sendEmail">确定</el-button>
       </span>
     </el-dialog>
-
-    <el-dialog
-      title="电话"
-      :visible.sync="dialogContactTel">
+    
+    <!-- 电话对话框 -->
+    <el-dialog title="电话" :visible.sync="dialogContactTel">
+      <div slot="title" class="dialog-title">
+        <span class="icon iconfont icontelphone" ></span>
+        <span class="title-text">电话</span>
+        <div class="button-right">
+          <span class="title-close" @click="dialogShare = false"></span>
+        </div>
+      </div>
       <div style="text-align: center;">
         电话号码:{{ form.contactTel }}
       </div>
@@ -1266,6 +1282,12 @@ var app = new Vue({
         } else if (item.title == '缩略图') {
           if (this.form.navigation == 2) {
             this.form.navigation = 1
+          } else {
+            this.form.navigation = 2
+          }
+        } else if (item.title == '目录') {
+          if (this.form.navigation == 2) {
+            this.form.navigation = 0
           } else {
             this.form.navigation = 2
           }
