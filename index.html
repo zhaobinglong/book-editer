@@ -755,10 +755,7 @@
     </el-dialog>
 
     <!-- 背景选择器 -->
-    <el-dialog
-      title="EDIT BACKGROUND"
-      :visible.sync="dialogBackground"
-      width="40%">
+    <el-dialog title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="40%">
         <div  class="mb20 upload-img">
             <el-upload
               class="avatar-uploader"
@@ -803,7 +800,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBackground = false">CANCEL</el-button>
-        <el-button type="primary" @click="mainSave">OK</el-button>
+        <el-button type="primary" @click="dialogBackground = false">OK</el-button>
       </span>
     </el-dialog>
 
@@ -1056,7 +1053,7 @@ var app = new Vue({
           'bottom center',
           'bottom right'
       ]
-      return position[0]
+      return position[this.form.backgroundFill]
     },
     // 判断是什么设备
     isMobile() {
