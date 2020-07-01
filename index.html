@@ -450,9 +450,9 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar border-none" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 ">
-        <div>
-          <div  class="menu-item"   :style="{backgroundColor: form.colorPanel}">
+    <ul class="nav-pills nav-stacked skinbar border-none" :class="isMobile?'nav-mobile':'nav'" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 ">
+        <div >
+          <div class="menu-item"   :style="{backgroundColor: form.colorPanel}">
               <div>
                 <span  class="icon iconfont iconcatalog"></span >目录
               </div>
@@ -463,8 +463,8 @@
     </ul>
 
 
-    <!-- 目录区 -->
-    <ul class="nav nav-pills nav-stacked skinbar border-none" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1">
+    <!-- 缩略图区 -->
+    <ul class="nav-pills nav-stacked skinbar border-none" :class="isMobile?'nav-mobile':'nav'" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1">
         <div>
             <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}">
               <div>
@@ -472,9 +472,11 @@
               </div>
                <i class="el-icon-close" @click="form.navigation = 2"></i>
             </div>
-             <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
-                <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
-                <p>第{{ index + 1 }}页</p>
+            <div :class="isMobile?'thum-mobile':'thum'">
+               <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
+                  <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
+                  <p>第{{ index + 1 }}页</p>
+              </div>              
             </div>
         </div>
     </ul>
@@ -491,7 +493,7 @@
                 </form>
             </div>
             <div style="flex-grow: 1" class="bookBox">
-              <div id="flipbook">
+<!--               <div id="flipbook">
                 <div class="hard"> Turn.js </div>
                 <div class="hard"></div>
                 <div> Page 2 </div>
@@ -502,14 +504,14 @@
                 <div> Page 6 </div>
                 <div class="hard"></div>
                 <div class="hard"></div>
-              </div>
+              </div> -->
             </div>
             <div :class="isMobile?'':'page-footer'" :class="toggleSkinClass(form.skin)" >
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
             </div>    
             <img :src="form.logo" class="logo" v-if="!isMobile">  
 
-            <div class="active-password" v-if="form.passwordEnable && currentCollapse == '密码'">
+            <div class="active-password" v-if="(form.passwordEnable && currentCollapse == '密码') || (form.passwordEnable && isMobile)">
               <div class="content">
                 <p style="color: #FFF;margin:20px 0;">{{ form.title }}</p>
                 <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;">
@@ -527,7 +529,7 @@
 
     <!-- 右侧搜索区 -->
     <!-- 移动端不显示外链按钮 -->
-    <ul class="search-box" :class="toggleSkinClass(form.skin)"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
+    <ul class="nav-pills nav-stacked skinbar border-none" :class="isMobile?'nav-mobile':'nav'" :class="toggleSkinClass(form.skin)"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
         <div  class="menu-item" :style="{backgroundColor: form.colorPanel}">
           <div>
             <span  class="icon iconfont iconsearch"></span >搜索
@@ -540,8 +542,8 @@
             <span  class="icon iconfont iconsearch" ></span >
           </div>
         </div>
-        <li class="text-list" >
-            <p class="item" v-for="(item, index) in searchList" :key="index">
+        <li class="search-list" >
+            <p class="item" v-for="(item, index) in [1,2,3]" :key="index">
                 第1页. www
             </p>
         </li>
@@ -708,6 +710,9 @@
               <a download href="http://book.baige.me/download?bookId=2&page=1">当前页面(5.2M)</a> 
           </div>
       </div>
+      <span slot="footer" class="dialog-footer">
+        <!-- <el-button type="primary"  @click="sendEmail">确定</el-button> -->
+      </span>
     </el-dialog>
 
     <!--分享对话框 -->
@@ -726,6 +731,7 @@
           <el-button type="primary"  @click="copy(share.link)" style="float: right; margin-top: 10px;">复制</el-button>
         </div>
       </div>
+      <span slot="footer" class="dialog-footer"></span>
     </el-dialog>
 
 
@@ -740,9 +746,25 @@
       </div>
       <div style="display: flex;">
         <el-input  placeholder="发送至邮箱" v-model="inputEmail"></el-input>
+        <div style="width: 10px;"></div>
+        <el-button type="primary"  @click="sendEmail">确定</el-button>
+      </div>
+      <span slot="footer" class="dialog-footer"></span>
+    </el-dialog>
+
+    <!--声音对话框 -->
+    <el-dialog title="声音" :visible.sync="dialogSound">
+      <div slot="title" class="dialog-title">
+        <span class="icon iconfont iconmute-off" ></span>
+        <span class="title-text">声音</span>
+        <div class="button-right">
+          <span class="title-close" @click="dialogShare = false"></span>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <span class="icon iconfont iconmute-off" @click="audioControl"></span>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="sendEmail">确定</el-button>
       </span>
     </el-dialog>
     
@@ -755,11 +777,11 @@
           <span class="title-close" @click="dialogShare = false"></span>
         </div>
       </div>
-      <div style="text-align: center;">
-        电话号码:{{ form.contactTel }}
+      <div style="display: flex; justify-content: center;">
+        <span class="icon iconfont icontelphone" ></span>:{{ form.contactTel }}
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="dialogContactTel = false">确定</el-button>
+        <!-- <el-button type="primary"  @click="dialogContactTel = false">确定</el-button> -->
       </span>
     </el-dialog>
 
@@ -918,6 +940,7 @@ var app = new Vue({
     dialogEmail: false,
     dialogColor: false,
     dialogContactTel: false,
+    dialogSound: false,
     saveBtn: '保存',
     color: '#EEE',
     
@@ -1006,8 +1029,8 @@ var app = new Vue({
       {'group':1,'label': 'thumbnail','title': '目录', 'icon': 'iconcatalog', 'checked': false, 'bottomLine': true},
       {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
-      {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
-      {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true, hiddenBottom: true},
+      // {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+      {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
       {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
       {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, hiddenBottom: true},
       {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true}
@@ -1168,8 +1191,8 @@ var app = new Vue({
 
   methods: {
     initThumbnail() {
-      for (var i = 0; i < 100; i++) {
-        this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i + 1}.jpg`
+      for (var i = 1; i <= this.bookPageNum; i++) {
+        this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i}.jpg`
         )
       } 
     },
@@ -1304,7 +1327,11 @@ var app = new Vue({
             this.form.navigation = 2
           }
         } else if (item.title == '声音') {
-          this.audioControl()
+          if (this.isMobile) {
+            this.dialogSound = true
+          } else {
+            this.audioControl()
+          }
         } else if (item.title == '全屏') {
           this.sceenControl()
         } else if (item.title == '搜索') {

@@ -112,15 +112,13 @@ body {
 }
 .el-dialog__footer {
     text-align: center!important;
+    /*border-top: 1px solid #EBEEF5*/
 }
 .el-collapse-item__content {
     background-color: #EFEFEF
 }
 .el-dialog__header {
     border-bottom: 1px solid #EBEEF5
-}
-.el-dialog__footer {
-    border-top: 1px solid #EBEEF5
 }
 .el-popover_item {
     padding: 0 6px;
@@ -144,9 +142,6 @@ body {
     border-radius: 50%!important;
     overflow:hidden;
 }
-.el-dialog {
-    width: 350px!important
-}
 .el-tree {
     background-color: transparent!important;
 }
@@ -154,6 +149,29 @@ body {
 .el-tree-node__content:hover {
     background-color: none!important
 }
+
+/*媒体查询，动态更新弹出框的样式*/
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 450px) {
+    .el-dialog {
+        width: 100%!important;
+        height: 100vh;
+        margin: 0!important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 450px) {
+    .el-dialog {
+        width: 350px!important
+    }
+
+}
+
+
 .rank {
     display: flex;
     justify-content: space-between;
@@ -206,7 +224,16 @@ body {
     flex-shrink: 0;
     border-right: 1px solid #EBEEF5
 }
-
+.nav-mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 50px;
+    left: 0;
+    background-color: #EFEFEF;
+    z-index: 999;
+    overflow-y: scroll;
+}
 .nav-pills > li {
     border-bottom: 1px solid #eaebeb;
 }
@@ -758,7 +785,7 @@ body {
     justify-content: center;
 }
 .main .active-password .content {
-    width: 30%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -954,8 +981,7 @@ body {
     padding: 7px 15px;
 }
 
-.search-box li:nth-child(3),
-.search-box .text-list {
+.search-list {
     padding: 7px 15px;
     color: #7f7d7d;
     font-size: 12px;
@@ -992,6 +1018,16 @@ body {
 }
 
 /*缩略图*/
+.thum {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column; 
+}
+.thum-mobile {
+    display: flex;
+    flex-wrap: wrap;
+
+}
 .thum-item {
     width: 100%;
     padding: 6px 0;
@@ -1001,6 +1037,7 @@ body {
     display: block; 
     margin: 10px auto;
     overflow: hidden;
+    width: 30%;
 }
 .thum-item:hover {
     background-color: #EFEFEF
