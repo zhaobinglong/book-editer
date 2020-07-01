@@ -480,7 +480,7 @@
     </ul>
     
     <!-- 主编辑区 -->
-        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position}">
+        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: 'no-repeat'}">
             <div class="header" :class="toggleSkinClass(form.skin)" >
                 <form class="form-inline" style="text-align: center;">
                 {{ form.title }} | 页  <input placeholder="" style="width: 40px;">  | /32
