@@ -64,7 +64,7 @@
 <body >
 
 <!-- 隐藏的book页数 -->
-<input type="hidden" value="100" id="bookPage">
+<input type="hidden" value="100" id="bookPageNum">
 
 <!-- 隐藏的分享链接 -->
 <input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
@@ -481,7 +481,11 @@
     
     <!-- 主编辑区 -->
         <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: 'no-repeat', backgroundSize: backgroundSize}">
-            <div class="header" :class="toggleSkinClass(form.skin)" >
+            <div v-if="isMobile" class="header-mobile" >
+              <div>1/{{ bookPageNum }}</div>
+              <img :src="form.logo" style="width: 50px; height: auto;">
+            </div>
+            <div class="header" :class="toggleSkinClass(form.skin)" v-else>
                 <form class="form-inline" style="text-align: center;">
                 {{ form.title }} | 页  <input placeholder="" style="width: 40px;">  | /32
                 </form>
@@ -500,10 +504,11 @@
                 <div class="hard"></div>
               </div>
             </div>
-            <div class="page-footer" :class="toggleSkinClass(form.skin)" >
+            <div :class="isMobile?'':'page-footer'" :class="toggleSkinClass(form.skin)" >
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
             </div>    
-            <img :src="form.logo" class="logo">   
+            <img :src="form.logo" class="logo" v-if="!isMobile">  
+
             <div class="active-password" v-if="form.passwordEnable && currentCollapse == '密码'">
               <div class="content">
                 <p style="color: #FFF;margin:20px 0;">{{ form.title }}</p>
@@ -521,6 +526,7 @@
 
 
     <!-- 右侧搜索区 -->
+    <!-- 移动端不显示外链按钮 -->
     <ul class="search-box" :class="toggleSkinClass(form.skin)"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
         <div  class="menu-item" :style="{backgroundColor: form.colorPanel}">
           <div>
@@ -542,7 +548,10 @@
         <!-- <li class="search-more" >xianshi</li> -->
     </ul>
     <div class="earch-box-small" v-else>
+      <div v-if="!isMobile">
         <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a><i class="el-icon-search" @click="form.navigation = 3"></i>
+      </div>
+        
     </div>
 
     <!-- 颜色选择器 -->
@@ -818,6 +827,7 @@ var app = new Vue({
       }
   },
   data: {
+    bookPageNum: 0, // book的总页数
     showHiddenMenu: false, // 隐藏的菜单
     currentCollapse: '', // 当前展开的菜单
     showPassWordBox: false, // 显示密码框遮盖
@@ -1135,6 +1145,7 @@ var app = new Vue({
       },
   } ,  
   mounted() {   
+     this.bookPageNum = document.getElementById('bookPageNum').value
      let data = {bookId:  2 }
      axios.get('/api/getFlipbook', {
       params: data

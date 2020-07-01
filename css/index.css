@@ -709,6 +709,14 @@ body {
     padding: 10px 20px;
     height: 50px;
 }
+.main .header-mobile {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;   
+    align-items: center;
+    padding: 20px; 
+}
+.main .header-mobile
 .main .bookBox {
     display: flex;
     align-items: center;
