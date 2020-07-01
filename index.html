@@ -480,7 +480,7 @@
     </ul>
     
     <!-- 主编辑区 -->
-        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: 'no-repeat'}">
+        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: 'no-repeat', backgroundSize: backgroundSize}">
             <div class="header" :class="toggleSkinClass(form.skin)" >
                 <form class="form-inline" style="text-align: center;">
                 {{ form.title }} | 页  <input placeholder="" style="width: 40px;">  | /32
@@ -1040,6 +1040,10 @@ var app = new Vue({
     searchList: [] 
   },
   computed: {
+    backgroundSize() {
+      let backgroundSize = ['cover', 'contain', 'auto auto']
+      return backgroundSize[this.form.backgroundPlace]
+    }, 
     // https://www.w3school.com.cn/cssref/pr_background-position.asp
     position() {
       let position = [
