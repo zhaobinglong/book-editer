@@ -100,8 +100,8 @@ body {
     align-items: center;
   }
   .avatar {
-    width: 178px;
-    height: 178px;
+    min-width: 200px;
+    height: auto;
     display: block;
   }
 
@@ -783,6 +783,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1
 }
 .main .active-password .content {
     width: 70%;
@@ -1045,7 +1046,7 @@ body {
 
 /*资源上传*/
 #upload .el-dialog__body {
-   padding: 30px 0!important;
+   padding: 0 0 30px!important;
    text-align: center;
 }
 .upload-img {

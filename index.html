@@ -85,8 +85,8 @@
     <!-- 左侧菜单栏区域 -->
     <div class="nav nav-pills nav-stacked sidebar" style="overflow: hidden;" v-if="!isMobile">
         <div class="menu-item" style="background-color: #F3F7Fa; color: #4493b1 ">
-            <span >
-                <span class="glyphicon glyphicon-menu-left" @click="goBack"></span>首页
+            <span @click="goBack">
+                <span class="glyphicon glyphicon-menu-left" ></span>首页
             </span>
 <!--             <el-button type="primary" slot="reference" @click="mainSave"> 
                       
@@ -547,7 +547,7 @@
     </ul>
     <div class="earch-box-small" v-else>
       <div v-if="!isMobile">
-        <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a><i class="el-icon-search" @click="form.navigation = 3"></i>
+        <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
       </div>
         
     </div>
@@ -606,7 +606,6 @@
               <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
             </el-popover>
         </div>
-        <!-- action="http://m.baige.me/api/book/saveSettingImage" -->
         <el-upload
           class="upload-demo"
           :http-request="uploadLogo"
@@ -617,12 +616,13 @@
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
-<!--         <div style="height: 20px;"></div>
-        <el-input v-model="form.logoInput" placeholder="https://your-website.com"></el-input>
- -->
+        <div style="padding: 20px;">
+        <el-input v-model="logoInput" placeholder="https://your-website.com"></el-input>
+        </div>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="mainSave">OK</el-button>
+        <el-button type="primary" @click="dialogLogoSave">OK</el-button>
       </span>
     </el-dialog>
 
@@ -684,7 +684,7 @@
         <span class="icon iconfont iconxiazai" ></span>
         <span class="title-text">下载出版物</span>
         <div class="button-right">
-          <span class="title-close" @click="dialogShare = false"></span>
+          <span class="title-close" @click="dialogDownload = false"></span>
         </div>
       </div>
       <div class="download">
@@ -700,7 +700,7 @@
           </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <!-- <el-button type="primary"  @click="sendEmail">确定</el-button> -->
+        <span @click="dialogDownload = false" v-if="isMobile">取消</span>
       </span>
     </el-dialog>
 
@@ -720,7 +720,9 @@
           <el-button type="primary"  @click="copy(share.link)" style="float: right; margin-top: 10px;">复制</el-button>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer"></span>
+      <span slot="footer" class="dialog-footer">
+        <span @click="dialogShare = false" v-if="isMobile">取消</span>
+      </span>
     </el-dialog>
 
 
@@ -730,15 +732,16 @@
         <span class="icon iconfont iconEMAIL" ></span>
         <span class="title-text">邮件</span>
         <div class="button-right">
-          <span class="title-close" @click="dialogShare = false"></span>
+          <span class="title-close" @click="dialogEmail = false"></span>
         </div>
       </div>
       <div style="display: flex;">
-        <el-input  placeholder="发送至邮箱" v-model="inputEmail"></el-input>
-        <div style="width: 10px;"></div>
-        <el-button type="primary"  @click="sendEmail">确定</el-button>
+        <el-input  placeholder="发送至邮箱" v-model="inputEmail" style="margin-right: -5px"></el-input>
+        <el-button type="primary"  @click="sendEmail" >确定</el-button>
       </div>
-      <span slot="footer" class="dialog-footer"></span>
+      <span slot="footer" class="dialog-footer">
+        <span @click="dialogEmail = false" v-if="isMobile">取消</span>
+      </span>
     </el-dialog>
 
     <!--声音对话框 -->
@@ -747,13 +750,14 @@
         <span class="icon iconfont iconmute-off" ></span>
         <span class="title-text">声音</span>
         <div class="button-right">
-          <span class="title-close" @click="dialogShare = false"></span>
+          <span class="title-close" @click="dialogSound = false"></span>
         </div>
       </div>
       <div style="text-align: center;">
-        <span class="icon iconfont iconmute-off" @click="audioControl"></span>
+        <span class="icon iconfont iconmute-off" @click="audioControl" :style="{textDecoration: soundStatus}"></span>
       </div>
       <span slot="footer" class="dialog-footer">
+        <span @click="dialogSound = false" v-if="isMobile">取消</span>
       </span>
     </el-dialog>
     
@@ -763,13 +767,14 @@
         <span class="icon iconfont icontelphone" ></span>
         <span class="title-text">电话</span>
         <div class="button-right">
-          <span class="title-close" @click="dialogShare = false"></span>
+          <span class="title-close" @click="dialogContactTel = false"></span>
         </div>
       </div>
       <div style="display: flex; justify-content: center;">
         <span class="icon iconfont icontelphone" ></span>:{{ form.contactTel }}
       </div>
       <span slot="footer" class="dialog-footer">
+        <span @click="dialogContactTel = false" v-if="isMobile">取消</span>
         <!-- <el-button type="primary"  @click="dialogContactTel = false">确定</el-button> -->
       </span>
     </el-dialog>
@@ -784,10 +789,20 @@
               :show-file-list="false">
               <img  :src="form.background" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>            
+            </el-upload> 
+            <el-popover
+              placement="right"
+              width="200"
+              trigger="click">
+              <div>
+                 <p @click="backgroundSetting" class="el-popover_item">Back to Default</p>
+                 <p @click="backgroundSetting" class="el-popover_item">Remove</p>
+              </div>
+              <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
+            </el-popover>           
         </div>
+        <div style="padding: 20px">
         <el-form label-width="140px" ref="form" :model="form">
-
           <el-form-item
             label="Image Placement"
           >
@@ -816,7 +831,9 @@
               <el-input slot="reference" v-model="backgroundFill" ></el-input>
             </el-popover>
           </el-form-item>
-        </el-form>
+        </el-form>          
+        </div>
+
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBackground = false">CANCEL</el-button>
@@ -838,6 +855,8 @@ var app = new Vue({
       }
   },
   data: {
+    logoInput: '',// 输入logo的链接
+    soundStatus: 'none', 
     bookPageNum: 0, // book的总页数
     showHiddenMenu: false, // 隐藏的菜单
     currentCollapse: '', // 当前展开的菜单
@@ -947,6 +966,7 @@ var app = new Vue({
       "externalText": "1",
       "externalEnable": false,
       keepBackground: false,
+      bookTable: false,
       download: false,
       share: false,
       sound: false,
@@ -1015,7 +1035,7 @@ var app = new Vue({
       {'group':1,'label': 'download','title': '下载', 'icon': 'iconxiazai', 'checked': false},
       // {'group':1,'label': 'textSelect','title': 'Text Selection', 'icon': 'icontext_tool', 'checked': false},
       {'group':1,'label': 'thumbnail','title': '缩略图', 'icon': 'iconview-thumbs', 'checked': false},
-      {'group':1,'label': 'thumbnail','title': '目录', 'icon': 'iconcatalog', 'checked': false, 'bottomLine': true},
+      {'group':1,'label': 'bookTable','title': '目录', 'icon': 'iconcatalog', 'checked': false, 'bottomLine': true},
       {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
       // {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
@@ -1130,12 +1150,16 @@ var app = new Vue({
         }
         return item
       })
+
+      // 手机端不显示全屏按钮
+      if (this.isMobile) {
+        arr = arr.filter(item => item.label != 'fullScreen')
+      }
     
       // 最有一个icon的右侧不能有分隔符号
       if (arr.length > 0) {
         arr[arr.length-1].rightLine = false
       }
-      console.log(arr)
       return arr
     }
   },  
@@ -1280,6 +1304,9 @@ var app = new Vue({
     logoSetting () {
       this.form.logo = ''
     },
+    backgroundSetting() {
+      this.form.background = ''
+    },
     navigationSetting (obj) {
       console.log(obj)
       this.navigationArr = this.navigationArr.map(item => {
@@ -1411,11 +1438,7 @@ var app = new Vue({
           type: 'warning'
         }).then(() => {
           window.history.back(-1); 
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });          
+        }).catch(() => {         
         });
       } else {
         
@@ -1475,9 +1498,11 @@ var app = new Vue({
     },
     audioControl() {
      var audio = document.getElementById('myAudio');
-      if(audio.paused)                     {                 
+      if(audio.paused) { 
+        this.soundStatus = 'none'                
         audio.play(); //audio.play();// 这个就是播放  
       }else{
+        this.soundStatus = 'line-through'   
         audio.pause(); // 这个就是暂停
       }
     },
@@ -1537,6 +1562,15 @@ var app = new Vue({
       }
       axios.post('/api/email', Qs.stringify(data)).then(res => {
         console.log(res)
+        this.$message({
+          message: res,
+          type: 'success'
+        }); 
+      }).catch(res => {
+        this.$message({
+          message: res,
+          type: 'error'
+        });         
       })
       this.dialogEmail = false
     },
@@ -1563,22 +1597,27 @@ var app = new Vue({
     },
     toggleHiddenMenu() {
       this.showHiddenMenu =  !this.showHiddenMenu
-      this.$nextTick(() => {
-        document.addEventListener('mouseup',(e) =>{
-          var _con = document.getElementById('setDefault')
-          if(_con) {
-            if(!_con.contains(e.target)) {
-              this.showHiddenMenu = false
-            }
-          }
-        })
-      })
+      // this.$nextTick(() => {
+      //   document.addEventListener('mousedown',(e) =>{
+      //     var _con = document.getElementById('setDefault')
+      //     if(_con) {
+      //       if(!_con.contains(e.target)) {
+      //          this.showHiddenMenu = false
+      //       } 
+      //     }
+      //   })
+      // })  
+
     },
     // 
     initBook () {
     },
     toggleSkinClass(skin){
       return 'skin' + skin
+    },
+    dialogLogoSave () {
+      this.form.logo = this.logoInput
+      this.dialogLogo = false
     }
   }
 })
