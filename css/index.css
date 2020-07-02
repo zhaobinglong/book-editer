@@ -222,7 +222,7 @@ body {
     overflow-y: auto;
     background-color: #FFF;
     flex-shrink: 0;
-    border-right: 1px solid #EBEEF5
+    border-right: 1px solid #CFCFCF
 }
 .nav-mobile {
     position: fixed;

@@ -532,11 +532,9 @@
           </div>
            <i class="el-icon-close" @click="form.navigation = 2"></i>
         </div>
-        <div class="input-group" style="display: flex; padding: 4px;">
-          <input type="text" style="height: 100%" class="form-control" placeholder="在此输入文本..." v-model="searchKey">
-          <div style="width: 50px;display: flex;align-items: center;justify-content: center; background-color: #FFF;margin-left: 4px;">
-            <span  class="icon iconfont iconsearch" ></span >
-          </div>
+        <div class="input-group" >
+            <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey">
+            <div class="input-group-addon" @click="search"><span  class="icon iconfont iconsearch" ></span ></div>
         </div>
         <li class="search-list" >
             <p class="item" v-for="(item, index) in [1,2,3]" :key="index">
