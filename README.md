@@ -108,7 +108,7 @@ npm run dev
 3. logo下加一个输入框， 为logoLink; logo灰色div，左右padding为0;
 4. colorPanel,colorBackground, 更改后，灰度<128;其区域的文字采用黑色;灰度>=128;其区域文字采用白色;
 5. 背景图片的删除，更新，参照文档；
-6. Tile模式，需要重复图片，以铺满空间；
+6. ✅Tile模式，需要重复图片，以铺满空间；
 7. favico的预览背景，灰色， 左右padding为0;
 8. color pallete 参照文档设计，选色器默认打开的。不另外打开div; 
 9. //

@@ -592,10 +592,7 @@
     </el-dialog>
 
     <!-- logo选择器 -->
-    <el-dialog
-      title="编辑logo"
-      :visible.sync="dialogLogo"
-      width="40%">
+    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="40%">
         <div class="mb20 upload-img">
            <img :src="form.logo" style="max-height:50px;max-width:250px;width: auto;height: auto;">
             <el-popover
@@ -653,10 +650,7 @@
     </el-dialog>
 
     <!-- favicon选择器 -->
-    <el-dialog
-      title="EDIT FAVICON"
-      :visible.sync="dialogFavicon"
-      width="40%">
+    <el-dialog id="upload" title="EDIT FAVICON" :visible.sync="dialogFavicon" width="40%">
         <div class="mb20 upload-img">
             <img :src="form.favico"  >
             <el-popover
@@ -674,8 +668,7 @@
           class="upload-demo"
           :http-request="uploadFavicon"
           :show-file-list="false"
-          action=""
-          list-type="picture">
+          action="">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
     
@@ -782,7 +775,7 @@
     </el-dialog>
 
     <!-- 背景选择器 -->
-    <el-dialog title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="40%">
+    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="40%">
         <div  class="mb20 upload-img">
             <el-upload
               class="avatar-uploader"
