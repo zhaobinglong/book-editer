@@ -484,7 +484,7 @@
     </ul>
     
     <!-- 主编辑区 -->
-        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: 'no-repeat', backgroundSize: backgroundSize}">
+        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize,}" :class="setMainBackground">
             <div v-if="isMobile" class="header-mobile" >
               <div>1/{{ bookPageNum }}</div>
               <img :src="form.logo" style="width: 50px; height: auto;">
@@ -1069,6 +1069,13 @@ var app = new Vue({
     searchList: [] 
   },
   computed: {
+    backgroundRepeat () {
+      if (this.form.backgroundPlace == 2) {
+        return 'repeat'
+      } else {
+        return 'no-repeat'
+      }
+    },
     backgroundSize() {
       let backgroundSize = ['cover', 'contain', 'auto auto']
       return backgroundSize[this.form.backgroundPlace]
@@ -1191,6 +1198,12 @@ var app = new Vue({
   },
 
   methods: {
+    // 动态控制背景图
+    setMainBackground() {
+      if (!this.form.keepBackground) {
+        this.form.background = ''
+      }
+    },
     initThumbnail() {
       for (var i = 1; i <= this.bookPageNum; i++) {
         this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i}.jpg`
