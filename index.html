@@ -554,7 +554,7 @@
     </div>
 
     <!-- 颜色选择器 -->
-    <el-dialog title="SELECT COLORS" :visible.sync="dialogColor" width="30%">
+    <el-dialog title="SELECT COLORS" :visible.sync="dialogColor" width="450px">
       <div style="display: flex">
         <div >
             <div v-for="(item, index) in colors" style="display: flex; align-items: center; padding: 5px;margin-right: 10px;" :key="index" @click="initColorSelect(item.label, form[item.label], index)" :class="currentColorPicker == index ? 'color-picker-item-active' : ''"> 
@@ -574,10 +574,7 @@
     </el-dialog>
 
     <!-- skin皮肤选择器 -->
-    <el-dialog
-      title="选择皮肤"
-      :visible.sync="dialogSkin"
-      width="50%">
+    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="350px">
         <el-form v-if="form.background">
             <el-form-item label="Keep current background">
                 <el-switch v-model="form.keepBackground"></el-switch>
@@ -596,7 +593,7 @@
     </el-dialog>
 
     <!-- logo选择器 -->
-    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="40%">
+    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="350px">
         <div class="mb20 upload-img">
            <img :src="form.logo" style="max-height:50px;max-width:250px;width: auto;height: auto;">
             <el-popover
@@ -631,11 +628,8 @@
     </el-dialog>
 
     <!-- button选择器 -->
-    <el-dialog
-      title="EDIT BUTTON"
-      :visible.sync="dialogButton"
-      width="40%">
-
+    <el-dialog title="EDIT BUTTON" :visible.sync="dialogButton"
+      width="350px">
         <el-form ref="form" :model="form" >
             <el-form-item label="Show Contacts Button">
                 <el-switch v-model="form.externalEnable"></el-switch>
@@ -654,7 +648,7 @@
     </el-dialog>
 
     <!-- favicon选择器 -->
-    <el-dialog id="upload" title="EDIT FAVICON" :visible.sync="dialogFavicon" width="40%">
+    <el-dialog id="upload" title="EDIT FAVICON" :visible.sync="dialogFavicon" width="350px">
         <div class="mb20 upload-img">
             <img :src="form.favico"  >
             <el-popover
@@ -683,7 +677,7 @@
     </el-dialog>
 
     <!-- 下载选择器 -->
-    <el-dialog title="下载出版物" :visible.sync="dialogDownload">
+    <el-dialog title="下载出版物" :visible.sync="dialogDownload" width="350px">
       <div slot="title" class="dialog-title">
         <span class="icon iconfont iconxiazai" ></span>
         <span class="title-text">下载出版物</span>
@@ -709,7 +703,7 @@
     </el-dialog>
 
     <!--分享对话框 -->
-    <el-dialog title="分享" :visible.sync="dialogShare">
+    <el-dialog title="分享" :visible.sync="dialogShare" width="350px">
         <div slot="title" class="dialog-title">
           <span class="icon iconfont iconfenxiang2" ></span>
           <span class="title-text">分享</span>
@@ -731,7 +725,7 @@
 
 
     <!--发送邮件对话框 -->
-    <el-dialog title="邮件" :visible.sync="dialogEmail">
+    <el-dialog title="邮件" :visible.sync="dialogEmail" width="350px">
       <div slot="title" class="dialog-title">
         <span class="icon iconfont iconEMAIL" ></span>
         <span class="title-text">邮件</span>
@@ -749,7 +743,7 @@
     </el-dialog>
 
     <!--声音对话框 -->
-    <el-dialog title="声音" :visible.sync="dialogSound">
+    <el-dialog title="声音" :visible.sync="dialogSound" width="350px">
       <div slot="title" class="dialog-title">
         <span class="icon iconfont iconmute-off" ></span>
         <span class="title-text">声音</span>
@@ -766,7 +760,7 @@
     </el-dialog>
     
     <!-- 电话对话框 -->
-    <el-dialog title="电话" :visible.sync="dialogContactTel">
+    <el-dialog title="电话" :visible.sync="dialogContactTel" width="350px">
       <div slot="title" class="dialog-title">
         <span class="icon iconfont icontelphone" ></span>
         <span class="title-text">电话</span>
@@ -784,7 +778,7 @@
     </el-dialog>
 
     <!-- 背景选择器 -->
-    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="40%">
+    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="350px">
         <div  class="mb20 upload-img">
             <el-upload
               class="avatar-uploader"

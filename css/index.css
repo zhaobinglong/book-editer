@@ -166,7 +166,7 @@ body {
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 450px) {
     .el-dialog {
-        /*width: 350px!important*/
+        width: 350px
     }
 
 }
@@ -1093,7 +1093,7 @@ body {
     border-radius: 50%;
 }
 .color-picker-item-active {
-    background-color: #EFEFEF
+    background-color: #EFEFEF;
 }
 
 /*样式粒子化*/
