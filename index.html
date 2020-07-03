@@ -61,6 +61,9 @@
 
     <!-- 引入二维码插件 -->
     <script src="./js/qrcode.min.js"></script>
+
+    <!-- 引入颜色选择器插件 -->
+    <script src="./js/colorpicker.js"></script>
 </head>
 
 <body >
@@ -152,7 +155,7 @@
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <button class="brand-btns logo" slot="reference"  @click="dialogColor = true">Custon ···</button>
+                        <button class="brand-btns logo" slot="reference"  @click="initColorSelect('colorPanel', form.colorPanel, 0)">Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
@@ -551,16 +554,19 @@
     </div>
 
     <!-- 颜色选择器 -->
-    <el-dialog
-      title="SELECT COLORS"
-      :visible.sync="dialogColor"
-      width="30%">
+    <el-dialog title="SELECT COLORS" :visible.sync="dialogColor" width="30%">
+      <div style="display: flex">
         <div >
-            <div v-for="(item, index) in colors" style="display: flex; align-items: center;" :key="index"> 
-              <el-color-picker v-model="form[item.label]"></el-color-picker>
+            <div v-for="(item, index) in colors" style="display: flex; align-items: center; padding: 5px;margin-right: 10px;" :key="index" @click="initColorSelect(item.label, form[item.label], index)" :class="currentColorPicker == index ? 'color-picker-item-active' : ''"> 
+              <span class="color-picker-item"  :style="{backgroundColor: form[item.label] }"></span>
               <span style="padding-left: 10px">{{ item.label }}</span>
             </div>
         </div>
+        <div>
+          <div id="color-picker"></div>
+          <div id="color-render-box"></div>
+        </div>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogColor = false">CANCEL</el-button>
         <el-button type="primary" @click="dialogColor = false">OK</el-button>
@@ -853,6 +859,7 @@ var app = new Vue({
       }
   },
   data: {
+    currentColorPicker: 0, // 默认当前激活的是第一个
     logoInput: '',// 输入logo的链接
     soundStatus: 'none', 
     bookPageNum: 0, // book的总页数
@@ -1616,15 +1623,32 @@ var app = new Vue({
     dialogLogoSave () {
       this.form.logo = this.logoInput
       this.dialogLogo = false
+    },
+    initColorSelect(label, color, index) {
+      console.log(label, color)
+      this.currentColorPicker = index
+      this.dialogColor = true
+      this.$nextTick( () => {
+        new Colorpicker({
+            el: "color-picker",
+            color: color,
+            change: (elem, hex) => {
+                console.log(hex)
+                this.form[label] = hex
+                //document.getElementById("color-picker").value=hex;
+            }
+        })        
+      })
+
     }
   }
 })
 </script>
 <script type="text/javascript">
-       $("#flipbook").turn({
-        width: 400,
-        height: 300,
-        autoCenter: true
-      }); 
+    $("#flipbook").turn({
+      width: 400,
+      height: 300,
+      autoCenter: true
+    }); 
 </script>
 </html>
