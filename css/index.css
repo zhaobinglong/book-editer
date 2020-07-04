@@ -735,6 +735,15 @@ body {
     width: 100%;
     padding: 10px 20px;
     height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main .header .name {
+    max-width: 250px; 
+    white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
 }
 .main .header-mobile {
     width: 100%;

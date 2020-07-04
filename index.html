@@ -493,16 +493,17 @@
               <img :src="form.logo" style="width: 50px; height: auto;">
             </div>
             <div class="header" :class="toggleSkinClass(form.skin)" v-else>
-                <form class="form-inline" style="text-align: center;">
-                {{ form.title }} | 页  <input placeholder="" style="width: 40px;">  | /32
-                </form>
+                <span class="name" style="">{{ form.title }} </span>
+                <span> | 页 </span>
+                <input placeholder="" style="width: 40px;"> 
+                <span> | /{{ bookPageNum }}</span>
             </div>
             <div style="flex-grow: 1" class="bookBox">
               <div id="flipbook">
-                <div class="hard"> Turn.js </div>
+<!--                 <div class="hard"> Turn.js </div>
                 <div class="hard"></div>
                 <div class="hard"></div>
-                <div class="hard"></div>
+                <div class="hard"></div> -->
               </div>
             </div>
             <div :class="isMobile?'':'page-footer'" :class="toggleSkinClass(form.skin)" >
@@ -596,10 +597,7 @@
     <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="350px">
         <div class="mb20 upload-img">
            <img :src="form.logo" style="max-height:50px;max-width:250px;width: auto;height: auto;">
-            <el-popover
-              placement="right"
-              width="200"
-              trigger="click">
+            <el-popover placement="right" width="200" trigger="click">
               <div>
                  <p @click="logoSetting" class="el-popover_item">Back to Default</p>
                  <p @click="logoSetting" class="el-popover_item">Remove</p>
@@ -608,13 +606,12 @@
             </el-popover>
         </div>
         <el-upload
+          ref="uploadLogo"
           class="upload-demo"
           :http-request="uploadLogo"
           :show-file-list="false"
           action=""
-          :limit="1" 
-          :auto-upload="true"
-          list-type="picture">
+          :auto-upload="true">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
         <div style="padding: 20px;">
@@ -1263,6 +1260,7 @@ var app = new Vue({
       document.getElementsByTagName('head')[0].appendChild(link);
     },
     uploadLogo (files) {
+      console.log(files)
         let formData = new FormData()
         formData.append('file', files.file)
         axios.post('/api/book/saveSettingImage', formData).then(res => {
@@ -1348,16 +1346,16 @@ var app = new Vue({
             this.qrcode()
           })
         } else if (item.title == '缩略图') {
-          if (this.form.navigation == 2) {
-            this.form.navigation = 1
-          } else {
+          if (this.form.navigation != 2) {
             this.form.navigation = 2
+          } else {
+            this.form.navigation = 1
           }
         } else if (item.title == '目录') {
-          if (this.form.navigation == 2) {
-            this.form.navigation = 0
-          } else {
+          if (this.form.navigation != 2) {
             this.form.navigation = 2
+          } else {
+            this.form.navigation = 0
           }
         } else if (item.title == '声音') {
           if (this.isMobile) {
@@ -1368,7 +1366,7 @@ var app = new Vue({
         } else if (item.title == '全屏') {
           this.sceenControl()
         } else if (item.title == '搜索') {
-          if (this.form.navigation == 3) {
+          if (this.form.navigation != 2) {
             this.form.navigation = 2
           } else {
             this.form.navigation = 3
