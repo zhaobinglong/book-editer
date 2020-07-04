@@ -221,7 +221,7 @@
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox"  v-model="form.chatEnable">
+                            <input @click="toggleChat" class="switch switch-anim" type="checkbox"  v-model="form.chatEnable">
                         </div>
                     </div>
                     <div v-if="form.chatEnable" :class="form.chatEnable? 'bottom-line':''" >
@@ -393,6 +393,7 @@
           </div>
           <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
         </div>
+        <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
 
 
@@ -412,14 +413,21 @@
               </div>              
             </div>
         </div>
+        <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
     
     <!-- 主编辑区 -->
         <div class="main" :class="setMainBackground">
             <div class="main-bk" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" v-if="form.keepBackground"></div>
+
             <div v-if="isMobile" class="header-mobile" >
               <div>1/{{ bookPageNum }}</div>
-              <img :src="form.logo" style="width: 50px; height: auto;">
+              <!-- <img :src="form.logo" style="width: 50px; height: auto;"> -->
+              <div class="earch-box-small">
+                <div >
+                  <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
+                </div>
+              </div>
             </div>
             <div class="header" :class="toggleSkinClass(form.skin)" v-else>
                 <span class="name" style="">{{ form.title }} </span>
@@ -435,7 +443,7 @@
                 <div class="hard"></div> -->
               </div>
             </div>
-            <div :class="isMobile?'':'page-footer'" :class="toggleSkinClass(form.skin)" >
+            <div :class="isMobile?'page-footer-mobile':'page-footer'" :class="toggleSkinClass(form.skin)" >
                 <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
             </div>    
             <img :src="form.logo" class="logo" v-if="!isMobile">  
@@ -475,6 +483,7 @@
             </p>
         </li>
         <!-- <li class="search-more" >xianshi</li> -->
+        <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
     <div class="earch-box-small" v-else>
       <div v-if="!isMobile">
@@ -549,7 +558,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogLogoSave">OK</el-button>
+        <el-button type="primary" @click="dialogLogo = false">OK</el-button>
       </span>
     </el-dialog>
 
@@ -779,6 +788,7 @@ var app = new Vue({
       }
   },
   data: {
+    chatDom: false, // 在线客服的dom是否存在
     currentColorPicker: 0, // 默认当前激活的是第一个
     logoInput: '',// 输入logo的链接
     soundStatus: 'none', 
@@ -1054,18 +1064,13 @@ var app = new Vue({
     icons: function () {
       // 把form和controls关联
       this.controls = this.controls.map(item => {
-        console.log(item.checked, this.form[item.label])
         item.checked = this.form[item.label]
         return item
       })
 
       // 过滤被选中的control
       let arr = this.controls.filter(item => item.checked )
-      console.log(arr)
-
-      // 根据group来计算分割线
       arr.map((item, index) => {
-        console.log(item.group, index)
         if (index < arr.length-1 ) {
             if (item.group != arr[index + 1].group) {
               item.rightLine = true   
@@ -1116,7 +1121,7 @@ var app = new Vue({
         },
         deep:true//对象内部的属性监听，也叫深度监听
       },
-  } ,  
+  },  
   mounted() {   
      this.bookPageNum = document.getElementById('bookPageNum').value
      let data = {bookId:  2 }
@@ -1133,7 +1138,9 @@ var app = new Vue({
       res.data.skin = parseInt(res.data.skin)
       Object.assign(this.form, res.data)
       this.initThumbnail()
-
+      if (res.data.chatEnable) {
+        this.clickStaff()
+      }
       this.setIcon(res.data.favico)
      })  
      this.initBook()
@@ -1338,6 +1345,21 @@ var app = new Vue({
 
     // 保存修改
     mainSave () {
+      if (this.form.title.length == 0 ) {
+        this.$message({
+          type: 'warning',
+          message: '标题不能为空'
+        });    
+        return false    
+      }
+
+      if (this.form.title.length >128 ) {
+        this.$message({
+          type: 'warning',
+          message: '标题长度不成超过128'
+        });    
+        return false    
+      }
 
       if (this.form.description.length == 0 ) {
         this.$message({
@@ -1351,8 +1373,58 @@ var app = new Vue({
         this.$message({
           type: 'warning',
           message: '描述长度不成超过255'
-        });        
-      }      
+        }); 
+        return false        
+      } 
+
+
+      if (this.form.emailWelcome.length > 255 || this.form.emailWelcome.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: 'emailWelcome不能为空且不能长度不能大于255'
+        }); 
+        return false        
+      } 
+
+      if (this.form.emailUsername.length > 50 || this.form.emailUsername.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: 'emailWelcome不能为空且不能长度不能大于50'
+        }); 
+        return false        
+      } 
+
+      if (this.form.emailPassword.length > 50 || this.form.emailPassword.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: 'emailPassword不能为空且不能长度不能大于50'
+        }); 
+        return false        
+      } 
+
+      if (this.form.emailServer.length > 50 || this.form.emailServer.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: 'emailServer不能为空且不能长度不能大于50'
+        }); 
+        return false        
+      } 
+
+      if (this.form.emailPort.length > 11 || this.form.emailPort.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: 'emailPort不能为空且不能长度不能大于11'
+        }); 
+        return false        
+      } 
+
+      if (this.form.emailSign.length > 255 || this.form.emailSign.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: 'emailSign不能为空且不能长度不能大于255'
+        }); 
+        return false        
+      } 
 
       axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
       axios.post('/api/book/saveSetting', Qs.stringify(this.form)).then(res => {
@@ -1472,20 +1544,28 @@ var app = new Vue({
       }   
     },
     clickStaff() {
-        var code = $('#tawk').val();
-        //console.log(" widget ...."+wdiget);
-        if (code!='') {
-         //console.log("display widget ....");
-         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-         (function() {
-          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-          s1.async = true;
-          s1.src =  code;
-          s1.charset = 'UTF-8';
-          s1.setAttribute('crossorigin', '*');
-          s0.parentNode.insertBefore(s1, s0);
-         })();
-        }
+      this.chatDom = true
+      var code = $('#tawk').val();
+      //console.log(" widget ...."+wdiget);
+      if (code!='') {
+       //console.log("display widget ....");
+       var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+       (function() {
+        var s1 = document.createElement("script")
+        var s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src =  code;
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+       })();
+      }
+    },
+    // 隐藏在线客服
+    removeChat() {
+      var ifr=document.getElementsByTagName('iframe');
+      let obj = ifr[0].parentNode
+      obj.style.display = 'none'
     },
     // 发送邮件
     sendEmail() {
@@ -1518,23 +1598,6 @@ var app = new Vue({
     clickControlCollapse(activeNames) {
       console.log(activeNames)
       this.currentCollapse = activeNames
-    },
-    sendPassword () {
-      // let data = {
-      //   'bookId': 2,
-      //   'password': this.inputPassword
-      // }
-
-      // axios.post('/api/password', Qs.stringify(data)).then(res => {
-      //   console.log(res)
-      //   this.showPassWordBox = false
-      // }).catch(res => {
-      //   this.showPassWordBox = false
-      //   this.$message({
-      //     message: res,
-      //     type: 'error'
-      //   });  
-      // })      
     },
     toggleHiddenMenu() {
       this.showHiddenMenu =  !this.showHiddenMenu
@@ -1576,6 +1639,22 @@ var app = new Vue({
         })        
       })
 
+    },
+    // 切换在线客服按钮
+    toggleChat() {
+      if (this.form.chatEnable) {
+        this.removeChat()
+      } else {
+        if (this.chatDom) {
+          var ifr=document.getElementsByTagName('iframe');
+          let obj = ifr[0].parentNode
+          obj.style.setProperty("display","block","important");       
+        } else {
+          this.$nextTick( () => {
+            this.clickStaff()        
+          })
+        }
+      }
     }
   }
 })
