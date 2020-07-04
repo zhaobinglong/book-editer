@@ -132,7 +132,7 @@
           <div class="menu-item" style="padding: 0 10px;border-bottom: 1px solid #EBEEF5">
             <div >皮肤</div>
             <div class="unActive-a flex" style="padding: 10px 17px">
-                <span style="color: #999" @click="dialogSkin = true">White Style ···</span>
+                <span style="color: #999" @click="dialogSkin = true">{{ skins[form.skin].name }}</span>
             </div>
           </div>
           <el-collapse-item name="品牌">
@@ -182,78 +182,6 @@
                             <input class="switch switch-anim" type="checkbox" v-model="form[item.label]">
                         </div>
                     </div>
-                    <!--
-                     <div class="controls-col "  >
-                        <div>
-                           <span class="icon iconfont" class="iconxiazai"></span>
-                            <span>下载</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.download">
-                        </div>
-                    </div>
-
-                    <div class="controls-col "  >
-                        <div>
-                           <span class="icon iconfont" class="iconxiazai"></span>
-                            <span>Text Selection</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" >
-                        </div>
-                    </div>
-
-                   <div class="controls-col bottom-line"  >
-                        <div>
-                           <span class="icon iconfont" class="iconview-thumbs"></span>
-                            <span>缩略图</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" >
-                        </div>
-                    </div>
-
-                   <div class="controls-col "  >
-                        <div>
-                           <span class="icon iconfont" class="iconmute-off"></span>
-                            <span>声音</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.sound">
-                        </div>
-                    </div>
-
-
-                   <div class="controls-col "  >
-                        <div>
-                           <span class="icon iconfont" class="iconfull-screen"></span>
-                            <span>全屏</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" >
-                        </div>
-                    </div>
-
-                   <div class="controls-col "  >
-                        <div>
-                           <span class="icon iconfont" class="iconzoom-in"></span>
-                            <span>放大镜</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" >
-                        </div>
-                    </div>
-
-                   <div class="controls-col bottom-line"  >
-                        <div>
-                           <span class="icon iconfont" class="iconsearch"></span>
-                            <span>搜索</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="form.search">
-                        </div>
-                    </div> 
-                  -->
 
                     <!-- 电话区域 -->
                     <div class="controls-col" >
@@ -487,16 +415,17 @@
     </ul>
     
     <!-- 主编辑区 -->
-        <div class="main" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize,}" :class="setMainBackground">
+        <div class="main" :class="setMainBackground">
+            <div class="main-bk" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" v-if="form.keepBackground"></div>
             <div v-if="isMobile" class="header-mobile" >
               <div>1/{{ bookPageNum }}</div>
               <img :src="form.logo" style="width: 50px; height: auto;">
             </div>
             <div class="header" :class="toggleSkinClass(form.skin)" v-else>
                 <span class="name" style="">{{ form.title }} </span>
-                <span> | 页 </span>
+                <span style="display: inline-block;padding: 0 4px;"> | 页: </span>
                 <input placeholder="" style="width: 40px;"> 
-                <span> | /{{ bookPageNum }}</span>
+                <span> /{{ bookPageNum }}</span>
             </div>
             <div style="flex-grow: 1" class="bookBox">
               <div id="flipbook">
@@ -913,7 +842,7 @@ var app = new Vue({
     ],
     skins: [
       {index: 0, name: '灰白色', color: '#EFEFEF', checked: false},
-      {index: 1, name: '深灰色', color: '#333333', checked: false},
+      {index: 1, name: '深灰色', color: '#333333', checked: false}
     ],
     colors: [
       {label: 'colorPanel'},
@@ -1201,7 +1130,7 @@ var app = new Vue({
        params: data
      }).then(res => {
       console.log(res)       
-      let icon = res. favico
+      res.data.skin = parseInt(res.data.skin)
       Object.assign(this.form, res.data)
       this.initThumbnail()
 
@@ -1409,6 +1338,21 @@ var app = new Vue({
 
     // 保存修改
     mainSave () {
+
+      if (this.form.description.length == 0 ) {
+        this.$message({
+          type: 'warning',
+          message: '描述不能为空'
+        });    
+        return false    
+      }
+
+      if (this.form.description.length > 255) {
+        this.$message({
+          type: 'warning',
+          message: '描述长度不成超过255'
+        });        
+      }      
 
       axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
       axios.post('/api/book/saveSetting', Qs.stringify(this.form)).then(res => {

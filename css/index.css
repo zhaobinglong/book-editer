@@ -228,7 +228,7 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    bottom: 50px;
+    bottom: 0;
     left: 0;
     background-color: #EFEFEF;
     z-index: 999;
@@ -729,6 +729,14 @@ body {
     flex-grow: 1;
     position: relative;
 }
+.main .main-bk {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1
+}
 .main .header {
     position: absolute;
     top: 0;
@@ -736,14 +744,15 @@ body {
     padding: 10px 20px;
     height: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
 }
 .main .header .name {
     max-width: 250px; 
     white-space: nowrap;
-text-overflow: ellipsis;
-overflow: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
 }
 .main .header-mobile {
     width: 100%;
