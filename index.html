@@ -1125,13 +1125,13 @@ var app = new Vue({
   mounted() {   
      this.bookPageNum = document.getElementById('bookPageNum').value
      let data = {bookId:  2 }
-     axios.get('/api/getFlipbook', {
+     axios.get('http://m.baige.me/api/getFlipbook', {
       params: data
      }).then(res => {
       console.log(res)
       Object.assign(this.form, res.data)
      })
-     axios.get('/api/book/getMainSetting', {
+     axios.get('http://m.baige.me/api/book/getMainSetting', {
        params: data
      }).then(res => {
       console.log(res)       
@@ -1175,7 +1175,7 @@ var app = new Vue({
     uploadBackground(files) {
         let formData = new FormData()
         formData.append('file', files.file)
-        axios.post('/api/book/saveSettingImage', formData).then(res => {
+        axios.post('http://m.baige.me/api/book/saveSettingImage', formData).then(res => {
           console.log(res)
           this.form.background = res.data
         })      
@@ -1183,7 +1183,7 @@ var app = new Vue({
     uploadFavicon(files) {
         let formData = new FormData()
         formData.append('file', files.file)
-        axios.post('/api/book/saveSettingImage', formData).then(res => {
+        axios.post('http://m.baige.me/api/book/saveSettingImage', formData).then(res => {
           this.setIcon(res.data)
           this.form.favico = res.data
         })
@@ -1199,7 +1199,7 @@ var app = new Vue({
       console.log(files)
         let formData = new FormData()
         formData.append('file', files.file)
-        axios.post('/api/book/saveSettingImage', formData).then(res => {
+        axios.post('http://m.baige.me/api/book/saveSettingImage', formData).then(res => {
           this.form.logo = res.data
         })
     },
@@ -1427,7 +1427,7 @@ var app = new Vue({
       } 
 
       axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-      axios.post('/api/book/saveSetting', Qs.stringify(this.form)).then(res => {
+      axios.post('http://m.baige.me/api/book/saveSetting', Qs.stringify(this.form)).then(res => {
       // api.saveSetting(Qs.stringify(this.form)).then(res => {
         console.log(res)
         this.saveBtn = '已保存'
