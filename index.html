@@ -383,24 +383,24 @@
     </div>
     
     <!-- 目录区 -->
-    <ul class="nav-pills nav-stacked skinbar border-none" :class="isMobile?'nav-mobile':'nav'" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 ">
+    <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 " :class="changeBackGroundGrayClass(form.colorBackground)">
         <div >
-          <div class="menu-item"   :style="{backgroundColor: form.colorPanel}">
+          <div class="menu-item" :style="{backgroundColor: form.colorPanel}" :class="changeMenuGrayClass(form.colorPanel)">
               <div>
                 <span  class="icon iconfont iconcatalog"></span >目录
               </div>
                <i class="el-icon-close" @click="form.navigation = 2"></i>
           </div>
-          <el-tree :data="treeData" @node-click="handleNodeClick"></el-tree>
+          <el-tree :highlight-current="false" :data="treeData" @node-click="handleNodeClick"></el-tree>
         </div>
         <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
 
 
     <!-- 缩略图区 -->
-    <ul class="nav-pills nav-stacked skinbar border-none" :class="isMobile?'nav-mobile':'nav'" :class="toggleSkinClass(form.skin)" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1">
+    <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1" :class="changeBackGroundGrayClass(form.colorBackground)">
         <div>
-            <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}">
+            <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
               <div>
                 <span  class="icon iconfont iconview-thumbs"></span >缩略图
               </div>
@@ -466,8 +466,8 @@
 
     <!-- 右侧搜索区 -->
     <!-- 移动端不显示外链按钮 -->
-    <ul class="nav-pills nav-stacked skinbar border-none" :class="isMobile?'nav-mobile':'nav'" :class="toggleSkinClass(form.skin)"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3">
-        <div  class="menu-item" :style="{backgroundColor: form.colorPanel}">
+    <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
+        <div  class="menu-item" :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
           <div>
             <span  class="icon iconfont iconsearch"></span >搜索
           </div>
@@ -1654,6 +1654,58 @@ var app = new Vue({
             this.clickStaff()        
           })
         }
+      }
+    },
+    // 计算灰度，动态修改样式
+    changeMenuGrayClass(color) {
+      console.log('start :' + color)
+      let rgb = color.replace(/#/g,'')
+      console.log(rgb)
+      if (rgb.length != 6) {
+        return ''
+      } else {
+        let r = parseInt(rgb.substring(0,2),16) 
+        let g = parseInt(rgb.substring(2,4),16)
+        let b = parseInt(rgb.substring(4),16)
+        // console.log(r,g,b)
+        let gray = r*0.299 + g*0.587 + b*0.114
+        console.log(gray)
+        if (gray < 128) {
+          return 'color-white'
+        } else {
+          return 'class-black'
+        }
+      }
+    },
+    // 16进制颜色计算灰度
+    getGray(color) {
+      if (!color) {
+        return 0
+      }
+      let rgb = color.replace(/#/g,'')
+      if (rgb.length != 6) {
+        return 0
+      } else {
+        let r = parseInt(rgb.substring(0,2),16) 
+        let g = parseInt(rgb.substring(2,4),16)
+        let b = parseInt(rgb.substring(4),16)
+        // console.log(r,g,b)
+        return r*0.299 + g*0.587 + b*0.114
+      }      
+    },
+    changeBackGroundGrayClass (color) {
+      let mobile = ''
+      if (this.isMobile) {
+        mobile = 'nav-mobile'
+      } else {
+        mobile = 'nav'
+      }
+      let gray = this.getGray(color)
+      console.log('changeBackGroundGrayClass:' + gray)
+      if (gray < 128) {
+        return mobile + ' color-white'
+      } else {
+        return mobile + ' color-black'
       }
     }
   }

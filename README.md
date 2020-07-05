@@ -5,6 +5,14 @@
 browser-sync start --server --files "css/*.css, *.html"
 ```
 
+## 16进制颜色转灰度值
+对于彩色转灰度，有一个很著名的心理学公式：
+```
+Gray = R*0.299 + G*0.587 + B*0.114
+```
+
+
+
 ## 后端API记录
 https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&projectHashKey=1p1TgW9351875c5c90550139cf822a516e8e2bc71a19f0c&spaceKey=baige
 
@@ -128,15 +136,16 @@ npm run dev
 1. ✅名字的显示的样式控制 max-width 250px， 居左;
 2. ✅描述的长度验证;
 3. ✅皮肤不保留背景未生效；皮肤更改后，名称未改变；"white style..."
-4. ✅logo 恢复默认，删除后第二次上传未成功；5.icon恢复默认；
+4. ✅logo 恢复默认，删除后第二次上传未成功；
+5.❌icon恢复默认；
 6. ✅有目录时，点击搜索，不能直接显示搜索，点两次才显示；
 7. ✅移动端，目录，搜索，缩略图， 不显示下面的菜单，下部也显示"取消"
 8. ✅下部工具栏，居底部， 高度50px;logo PC端样式控制;移动端样式控制；高最大50px;宽200px;
 9. ✅缩略图懒加载， 按目录8张图测试，懒加载7,8两张；
 10.✅外链长度控制 ，手机版，logo的地方显示为外链；
-11. colorPanel,colorBackground, 更改后，灰度<128;其区域的文字采用黑色;灰度>=128;其区域文字采用白色;
+11. ❌colorPanel,colorBackground, 更改后，灰度<128;其区域的文字采用黑色;灰度>=128;其区域文字采用白色;
 12. ✅在线聊天.没有生效;
-需要验证的字段；
+13. ✅需要验证的字段；
  `emailWelcome` varchar(255) DEFAULT NULL,
   `emailUsername` varchar(50) DEFAULT NULL,
   `emailPassword` varchar(50) DEFAULT NULL,

@@ -47,6 +47,12 @@ button {
 .right-line {
     border-right: 1px solid #ccc;
 }
+.color-white {
+    color: #FFF!important
+}
+.color-bloack {
+    color: #000!important
+}
 body {
     background-color: #EFEFEF;
 }
@@ -106,6 +112,9 @@ body {
   }
 
 /*样式重置*/
+.el-tree {
+    color: inherit!important
+}
 .el-layout {
     width: 200px;
     height: 200px;
@@ -147,7 +156,10 @@ body {
 }
 
 .el-tree-node__content:hover {
-    background-color: none!important
+    background-color: rgba(0,0,0,.1)!important
+}
+.el-tree-node:focus > .el-tree-node__content {
+    background-color: transparent !important;
 }
 
 /*媒体查询，动态更新弹出框的样式*/
@@ -1019,7 +1031,6 @@ body {
 
 .search-list {
     padding: 7px 15px;
-    color: #7f7d7d;
     font-size: 12px;
     font-weight: 600;
 }
@@ -1079,7 +1090,7 @@ body {
     width: 30%;
 }
 .thum-item:hover {
-    background-color: #EFEFEF
+    background-color: rgba(0,0,0,.1)
 }
 
 /*资源上传*/
