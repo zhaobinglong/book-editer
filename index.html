@@ -21,14 +21,7 @@
     <link rel="stylesheet" type="text/css" href="./css/switch.css">
 
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
     <script src="./js/vue.min.js"></script>
-
-    
-    <!-- <script src="./css/bootstrap.min.js"></script> -->
-    <!-- 引入样式 -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
-    <link rel="stylesheet" href="./css/elementui.css">
 
     <!-- 引入组件库 -->
     <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
@@ -45,9 +38,8 @@
     <!-- <script src="../../context/js/tween.js"></script> -->
     <!-- <script src="../../context/js/velocity.min.js"></script> -->
     
-    <!-- 引入弹出层组件库 -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
-    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <!-- 引入弹出层组件 -->
+    <link rel="stylesheet" href="./css/elementui.css">
     <script src="./js/elementui.js"></script>
 
     <!-- 异步请求库 -->
@@ -91,26 +83,12 @@
             <span @click="goBack">
                 <span class="glyphicon glyphicon-menu-left" ></span>首页
             </span>
-<!--             <el-button type="primary" slot="reference" @click="mainSave"> 
-                      
-            </el-button> -->
             <div class="button-save">
               <span @click="mainSave">{{ saveBtn }}</span> | <i class="el-icon-caret-bottom"  @click="toggleHiddenMenu"></i>
               <div class="button-save-hidden-menu" v-if="showHiddenMenu" id="setDefault">
                   <el-checkbox v-model="form.main" >设为默认</el-checkbox>
               </div>
             </div>
-            <!-- <div class="btn-group"> -->
-<!--                 <el-popover
-                  placement="right"
-                  width="100"
-                  trigger="hover">
-                  <div>
-                      <el-checkbox v-model="form.main">设为默认</el-checkbox>
-                  </div>
-                   
-                </el-popover> -->
-
         </div>
         <div style="height: 100vh; overflow-y: scroll;">
         <el-collapse accordion @change="clickControlCollapse">
@@ -140,9 +118,6 @@
               <div style="padding-left: 10px">品牌</div>
             </template>
             <li role="presentation" class="branding">
- <!--                <a href="#" class="unActive-a">
-                    <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
-                </a> -->
 
                 <div role="presentation" class="menu-down show-menu" style="display: block;">
                     <div class="brand-col">
@@ -316,70 +291,6 @@
              <p style="line-height: 30px">添加视频及链接, 让您的电子书更吸引人。</p>
            </div>
        </div>
-        <!-- <ul role="presentation"  style="flex-grow: 1;overflow-y: scroll; height: 100vh" > -->
-            
-            <!-- 名字和描述区域 -->
-<!--             <li role="presentation" class="name-desc">
-
-            </li>
-            <li role="presentation" >
-                <div class="unActive-a flex" style="padding: 10px 17px">
-                    <span>皮肤 </span>
-                    <span style="color: #999" @click="clickSelectSkin">White Style ···</span>
-                </div>
-            </li> -->
-
-<!--             <li role="presentation" class="branding">
-                <a href="#" class="unActive-a">
-                    <span>品牌 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span>
-                </a>
-
-                <div role="presentation" class="menu-down show-menu" style="display: block;">
-                    <div class="brand-col">
-                        <span>Logo</span>
-                        <button class="brand-btns logo" @click="handleLogoDialog">Custon ···</button>
-                    </div>
-                    <div class="brand-col">
-                        <span>背景图</span>
-                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
-                    </div>
-                    <div class="brand-col">
-                        <span>颜色</span>
-                        <el-color-picker v-model="form.color"></el-color-picker>
-                    </div>
-                    <div class="brand-col">
-                        <span>icon</span>
-                        <button class="brand-btns favicon" @click="dialogFavicon = true">Default ···</button>
-                    </div>
-                </div>
-            </li> -->
-
- 
-<!--             <li role="presentation" class="password">
-                <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a>
-                <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
-
-                    <div class="controls-col" :class="setPassWord ? '':'bottom-line'">
-                        <div>
-                            <span>Enable</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox" checked="" v-model="setPassWord">
-                        </div>
-                    </div>
-
-
-                    <form v-if="setPassWord">
-                        <span style="margin-top: 15px;">设置密码</span>
-                        <div>
-                            <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1">
-                        </div>                    
-                    </form>
-                    <div v-else style="color: #999">Set a password to share your flipbook width select viewers only.</div>
-                    
-                </div>
-            </li> -->
-        <!-- </ul> -->
     </div>
     
     <!-- 目录区 -->
@@ -422,7 +333,6 @@
 
             <div v-if="isMobile" class="header-mobile" >
               <div>1/{{ bookPageNum }}</div>
-              <!-- <img :src="form.logo" style="width: 50px; height: auto;"> -->
               <div class="earch-box-small">
                 <div >
                   <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
@@ -437,10 +347,6 @@
             </div>
             <div style="flex-grow: 1" class="bookBox">
               <div id="flipbook">
-<!--                 <div class="hard"> Turn.js </div>
-                <div class="hard"></div>
-                <div class="hard"></div>
-                <div class="hard"></div> -->
               </div>
             </div>
             <div :class="isMobile?'page-footer-mobile':'page-footer'" :class="toggleSkinClass(form.skin)" >
@@ -465,7 +371,6 @@
 
 
     <!-- 右侧搜索区 -->
-    <!-- 移动端不显示外链按钮 -->
     <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
         <div  class="menu-item" :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
           <div>
@@ -778,15 +683,9 @@
 </body>
 <script type="text/javascript">
 
-// 接管双向数据绑定
+// 双向数据绑定
 var app = new Vue({
   el: '#app',
-  //定义私用局部过滤器。只能在当前 vue 对象中使用
-  filters: {
-      dataFormat(msg) {
-          return msg+'xxxxx';
-      }
-  },
   data: {
     chatDom: false, // 在线客服的dom是否存在
     currentColorPicker: 0, // 默认当前激活的是第一个
@@ -1128,13 +1027,11 @@ var app = new Vue({
      axios.get('http://m.baige.me/api/getFlipbook', {
       params: data
      }).then(res => {
-      console.log(res)
       Object.assign(this.form, res.data)
      })
      axios.get('http://m.baige.me/api/book/getMainSetting', {
        params: data
-     }).then(res => {
-      console.log(res)       
+     }).then(res => {   
       res.data.skin = parseInt(res.data.skin)
       Object.assign(this.form, res.data)
       this.initThumbnail()
@@ -1143,6 +1040,7 @@ var app = new Vue({
       }
       this.setIcon(res.data.favico)
      })  
+
      this.initBook()
   },
 
@@ -1282,13 +1180,13 @@ var app = new Vue({
             this.qrcode()
           })
         } else if (item.title == '缩略图') {
-          if (this.form.navigation != 2) {
+          if (this.form.navigation == 1) {
             this.form.navigation = 2
           } else {
             this.form.navigation = 1
           }
         } else if (item.title == '目录') {
-          if (this.form.navigation != 2) {
+          if (this.form.navigation == 0) {
             this.form.navigation = 2
           } else {
             this.form.navigation = 0
@@ -1302,7 +1200,7 @@ var app = new Vue({
         } else if (item.title == '全屏') {
           this.sceenControl()
         } else if (item.title == '搜索') {
-          if (this.form.navigation != 2) {
+          if (this.form.navigation == 3) {
             this.form.navigation = 2
           } else {
             this.form.navigation = 3
@@ -1613,9 +1511,7 @@ var app = new Vue({
       // })  
 
     },
-    // 
-    initBook () {
-    },
+
     toggleSkinClass(skin){
       return 'skin' + skin
     },
@@ -1658,9 +1554,7 @@ var app = new Vue({
     },
     // 计算灰度，动态修改样式
     changeMenuGrayClass(color) {
-      console.log('start :' + color)
       let rgb = color.replace(/#/g,'')
-      console.log(rgb)
       if (rgb.length != 6) {
         return ''
       } else {
@@ -1669,7 +1563,6 @@ var app = new Vue({
         let b = parseInt(rgb.substring(4),16)
         // console.log(r,g,b)
         let gray = r*0.299 + g*0.587 + b*0.114
-        console.log(gray)
         if (gray < 128) {
           return 'color-white'
         } else {
@@ -1701,21 +1594,24 @@ var app = new Vue({
         mobile = 'nav'
       }
       let gray = this.getGray(color)
-      console.log('changeBackGroundGrayClass:' + gray)
       if (gray < 128) {
         return mobile + ' color-white'
       } else {
         return mobile + ' color-black'
       }
-    }
+    },
+    // 
+    initBook () {
+      $("#flipbook").turn({
+        width: 400,
+        height: 300,
+        autoCenter: true
+      }); 
+    },
   }
 })
 </script>
 <script type="text/javascript">
-    $("#flipbook").turn({
-      width: 400,
-      height: 300,
-      autoCenter: true
-    }); 
+
 </script>
 </html>
