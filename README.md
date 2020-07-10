@@ -159,4 +159,11 @@ npm run dev
 `title` varchar(128) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
 
+## 验收后web端第四轮修改
+1. 因为turnjs不支bootstrap布局的css,现在页面的bootstrap css需要手机布齐;
+2. css 样式的修改;
+3. skin检查
+4. 工具栏内容;
+5. 目录、搜索，缩略图接口对接
+
 
