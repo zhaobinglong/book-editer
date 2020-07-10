@@ -383,8 +383,8 @@
             <div class="input-group-addon" @click="search"><span  class="icon iconfont iconsearch" ></span ></div>
         </div>
         <li class="search-list" >
-            <p class="item" v-for="(item, index) in [1,2,3]" :key="index">
-                第1页. www
+            <p class="item" v-for="(item, index) in searchList" :key="index" @click="clickSearchItem(item)">
+              第{{ item.pageNumber }}页：{{ item.text }}
             </p>
         </li>
         <!-- <li class="search-more" >xianshi</li> -->
@@ -1040,6 +1040,8 @@ var app = new Vue({
         this.form.background = ''
       }
     },
+    // 初始化缩略图
+    // 缩略图的路径拼接规则
     initThumbnail() {
       for (var i = 1; i <= this.bookPageNum; i++) {
         this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i}.jpg`
@@ -1373,18 +1375,32 @@ var app = new Vue({
       }
       x.send();
     },
+    // 搜索
     search () {
       if (this.searchKey) {
-          this.$message({
-            message: '搜索不到内容',
-            type: 'warning'
-          });
+        // http://book.baige.me/api/query?bookId=113302&page=1&kw=with
+        let data = {
+          bookId: this.form.bookId, 
+          page: 1,
+          kw: this.searchKey
+        }
+       axios.get('http://m.baige.me/api/query', {
+        params: data
+       }).then(res => {
+         let json = JSON.parse(res.data.bookPages)
+         console.log(json)
+         this.searchList = json
+       })
       } else {
           this.$message({
             message: '搜索内容不能为空',
             type: 'warning'
           });
       }
+    },
+    // 点击搜索结果
+    clickSearchItem(item) {
+      console.log(item)
     },
     clickThumItem(item, index) {
       this.$message({

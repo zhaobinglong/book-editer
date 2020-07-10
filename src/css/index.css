@@ -922,3 +922,11 @@ body {
 .thum-item:hover {
     background-color: #EFEFEF
 }
+
+/**/
+.search-list {
+
+}
+.search-list .item {
+  margin-bottom: 20px;
+}
