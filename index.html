@@ -58,6 +58,9 @@
 <body >
 
 <!-- 隐藏的book页数 -->
+<input type="hidden" value="113302" id="bookId">
+
+<!-- 隐藏的book页数 -->
 <input type="hidden" value="100" id="bookPageNum">
 
 <!-- 隐藏的分享链接 -->
@@ -1020,7 +1023,8 @@ var app = new Vue({
   },  
   mounted() {   
      this.bookPageNum = document.getElementById('bookPageNum').value
-     let data = {bookId:  2 }
+     this.form.bookId = document.getElementById('bookId').value
+     let data = {bookId:  this.form.bookId }
      axios.get('http://m.baige.me/api/getFlipbook', {
       params: data
      }).then(res => {
@@ -1028,7 +1032,10 @@ var app = new Vue({
      })
      axios.get('http://m.baige.me/api/book/getMainSetting', {
        params: data
-     }).then(res => {   
+     }).then(res => { 
+      if (res.data.skin == 'gray') {
+        res.data.skin = 0
+      }  
       res.data.skin = parseInt(res.data.skin)
       Object.assign(this.form, res.data)
       this.initThumbnail()
