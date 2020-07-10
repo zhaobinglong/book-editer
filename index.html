@@ -972,7 +972,6 @@ var app = new Vue({
       // },
       form:{
         handler:function(val,oldval){
-          console.log(val)
           this.saveBtn = '保存'
           if (val.search) {
             this.navigationArr = this.navigationArr.map(item => {
@@ -1031,13 +1030,57 @@ var app = new Vue({
      axios.get('http://m.baige.me/api/getCatalog', {
       params: {bookId: this.form.bookId, parent: 0}
      }).then(res => {
-       console.log(res.data)
-       res.data.map(item => {
-        this.catalog.push({
-          label: item.name,
-        })
-       })
+       this.buildCatalog(res.data)
      })
+    },
+    
+    // 先把第一级的目录拿出来
+    buildCatalog(data) {
+      let sub = []
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].level == 1) {
+          let item = {
+            label: data[i].sort + ':' +data[i].name,
+            sort: data[i].sort
+          }
+          this.catalog.push(item)
+        } else {
+          sub.push(data[i])
+        }
+      }
+      for (var j = 0; j < sub.length; j++) {
+        this.catalog = this.buildSubCatalog(JSON.parse(JSON.stringify(this.catalog)) , sub[j])
+      }
+    },
+    buildSubCatalog(arr, obj) {
+      console.log(arr, obj)
+      let newArr = arr.map(item => {
+        if (item.sort == obj.parent) {
+          if (item.children) {
+            item.children.push({
+              label: obj.name,
+              sort: obj.sort,
+              parent: obj.parent
+            })
+          } else {
+            item.children = [{
+              label: obj.name,
+              sort: obj.sort,
+              parent: obj.parent
+            }]
+          }
+          return item
+        } else {
+          if (item.children) {
+            console.log('item.children ok', item.children)
+            item.children = this.buildSubCatalog(item.children, obj)
+            return item
+          } else {
+            return item
+          }
+        }
+      })
+      return newArr
     },
 
     // 动态控制背景图
@@ -1129,7 +1172,6 @@ var app = new Vue({
         }
         return i
       })
-      console.log(this.rank)
     },
     logoSetting () {
       this.form.logo = ''
@@ -1138,7 +1180,6 @@ var app = new Vue({
       this.form.background = ''
     },
     navigationSetting (obj) {
-      console.log(obj)
       this.navigationArr = this.navigationArr.map(item => {
          if (item.value == obj.value) {
             item.checked = true
@@ -1609,7 +1650,6 @@ var app = new Vue({
       }      
     },
     changeBackGroundGrayClass (color) {
-      console.log('changeBackGroundGrayClass', color)
       let mobile = ''
       if (this.isMobile) {
         mobile = 'nav-mobile'

@@ -162,15 +162,17 @@ npm run dev
 ## 验收后web端第四轮修改
 1. 因为turnjs不支bootstrap布局的css,现在页面的bootstrap css需要手机布齐;
 2. css 样式的修改;
-3. skin检查
+3. ✅skin检查
 4. 工具栏内容;
-5. 目录、搜索，缩略图接口对接
+5. ✅目录、搜索，缩略图接口对接
 
 ## skin修改记录
 灰白色   0    "0"   "gray"
 深灰色   1    "1"   "deepGray"
 
 ## 目录上下级关系
+level目录的层级，parent 目录的父级，一级目录的父级为0
+
 bookId: 113302
 created: 1594262083738
 id: 167
