@@ -102,7 +102,7 @@
             <div role="presentation" class="menu-down show-menu" style="display: block;">
 
                 <span style="margin-top: 15px;">书名</span>
-                <input type="text" class="form-control" placeholder="Flipbook Name" v-model="form.title">
+                <input type="text" class="form-control" placeholder="Flipbook Name" v-model="form.title" @input="changeTitle(form.title)">
                 <span style="margin-top: 15px;">描述</span>
                 <!-- <textarea type="text"></textarea> -->
                  <textarea type="text" class="form-control" placeholder="Description" v-model="form.description"></textarea>
@@ -1000,6 +1000,7 @@ var app = new Vue({
       params: data
      }).then(res => {
       Object.assign(this.form, res.data)
+      this.changeTitle(res.data.title)
      })
      
      axios.get('http://m.baige.me/api/book/getMainSetting', {
@@ -1053,7 +1054,6 @@ var app = new Vue({
       }
     },
     buildSubCatalog(arr, obj) {
-      console.log(arr, obj)
       let newArr = arr.map(item => {
         if (item.sort == obj.parent) {
           if (item.children) {
@@ -1072,7 +1072,6 @@ var app = new Vue({
           return item
         } else {
           if (item.children) {
-            console.log('item.children ok', item.children)
             item.children = this.buildSubCatalog(item.children, obj)
             return item
           } else {
@@ -1665,6 +1664,11 @@ var app = new Vue({
     },
     sendPassword() {
 
+    },
+    // 更改网页的title
+    changeTitle(title) {
+      console.log('change title')
+      document.title = title
     }
     
     
