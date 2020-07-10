@@ -1154,11 +1154,11 @@ body {
 }
 
 /*皮肤切换的样式*/
-.skin0 {
+.skingray {
      background-color: #EFEFEF;
     color: #000;   
 }
-.skin1 {
+.skindeepGray {
     background-color: #333;
     color: #FFF;
 }

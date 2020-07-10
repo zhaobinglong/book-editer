@@ -60,6 +60,8 @@
 <!-- 隐藏的book页数 -->
 <input type="hidden" value="113302" id="bookId">
 
+<input type="hidden" value="153e7360-7e08-4ff2-9a3b-c3e7320052f1" id="uploadId">
+
 <!-- 隐藏的book页数 -->
 <input type="hidden" value="100" id="bookPageNum">
 
@@ -425,9 +427,9 @@
             </el-form-item>
         </el-form>
         <div >
-          <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(index)" >
+          <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" >
             <div :style="{backgroundColor: item.color}" style="height: 100px; width: 100px"></div>
-            <p style="text-align: center;line-height: 20px;" ><span :class="item.index == form.skin ? 'skinTextChecked':''">{{ item.name }}</span></p>
+            <p style="text-align: center;line-height: 20px;" ><span :class="index == form.skin ? 'skinTextChecked':''">{{ item.name }}</span></p>
           </div>
         </div>
       <span slot="footer" class="dialog-footer">
@@ -715,10 +717,10 @@ var app = new Vue({
       {icon: 'el-icon-bottom', checked: false, label: '下'},
       {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
-    skins: [
-      {index: 0, name: '灰白色', color: '#EFEFEF', checked: false},
-      {index: 1, name: '深灰色', color: '#333333', checked: false}
-    ],
+    skins: {
+      gray: {name: '灰白色', color: '#EFEFEF', checked: false},
+      deepGray: {name: '深灰色', color: '#333333', checked: false}
+    },
     colors: [
       {label:'colorBackground', name: '面板颜色'},
       {label:'colorPanel', name: '背景颜色'},
@@ -755,7 +757,6 @@ var app = new Vue({
     form: {
       "bookId": 1,
       "main": true,
-      "skin": "2",
       "background": "1",
       backgroundFill: 1,
       "backgroundPlace": 1,
@@ -795,7 +796,7 @@ var app = new Vue({
       emailSign: "1",
       password: '',
       passwordEnable: false,
-      skin: 0,
+      skin: 'gray',
     },
     background: {
       url:'',
@@ -1002,10 +1003,10 @@ var app = new Vue({
      axios.get('http://m.baige.me/api/book/getMainSetting', {
        params: data
      }).then(res => { 
-      if (res.data.skin == 'gray') {
-        res.data.skin = 0
+      if (res.data.skin == '0') {
+        res.data.skin = 'gray'
       }  
-      res.data.skin = parseInt(res.data.skin)
+      // res.data.skin = parseInt(res.data.skin)
       Object.assign(this.form, res.data)
       this.initThumbnail()
       if (res.data.chatEnable) {
@@ -1045,8 +1046,10 @@ var app = new Vue({
     // 初始化缩略图
     // 缩略图的路径拼接规则
     initThumbnail() {
-      for (var i = 1; i <= this.bookPageNum; i++) {
-        this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/${i}.jpg`
+      let uploadId = document.getElementById('uploadId').value
+      let bookPageNum = document.getElementById('bookPageNum').value
+      for (var i = 1; i <= bookPageNum; i++) {
+        this.myList.push(`https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/${uploadId}/${i}.jpg`
         )
       } 
     },
@@ -1154,8 +1157,8 @@ var app = new Vue({
         console.log(file);
     },
 
-    clickSkinItem (index) {
-      this.form.skin = index
+    clickSkinItem (item, key) {
+      this.form.skin = key
     },
     clickSelectSkin () {
         this.dialogSkin = true
