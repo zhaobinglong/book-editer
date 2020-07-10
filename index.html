@@ -184,30 +184,6 @@
                       </div>        
                     </div>
 
-                    <!-- 邮件区域 -->
-                    <div class="controls-col" >
-                        <div>
-                            <span class="icon iconfont iconEMAIL"></span>
-                            <span>邮件</span>
-                        </div>
-                        <div>
-                        </div>
-                    </div>
-                    <div class="controls-col" :class="form.emailEnable ? '':'bottom-line'">
-                        <div>
-                            <span>Enable</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox"  v-model="form.emailEnable">
-                        </div>
-                    </div>
-                    <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
-                          <div class="form-group" v-for="(item, index) in email" :key="index">
-                            <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input type="email" class="form-control"  placeholder="" v-model="form[item.value]">
-                          </div>
-                    </div>                
-
                     <div class="controls-col" >
                         <div>
                            <span class="icon iconfont" ></span>
@@ -277,12 +253,6 @@
                       </div>
                       
                   </div>
-<!--                   <form v-if="form.passwordEnable">
-                      <span style="margin-top: 15px;">设置密码</span>
-                      <div>
-                          <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1" v-model="form.password">
-                      </div>                    
-                  </form> -->
                   <form v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
                     <span style="margin-top: 15px;">号码</span>
                     <div >
@@ -292,6 +262,32 @@
               </div>
               
             </el-collapse-item>
+
+          <el-collapse-item name="邮件">
+            <template slot="title">
+              <div style="padding-left: 10px">邮件</div>
+            </template>
+
+                <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
+
+                    <div class="controls-col" >
+                        <div>
+                            <span>Enable</span>
+                        </div>
+                        <div>
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.emailEnable">
+                        </div>
+                    </div>
+                    <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
+                          <div class="form-group" v-for="(item, index) in email" :key="index">
+                            <label for="exampleInputEmail1">{{ item.label }}</label>
+                            <input type="email" class="form-control"  placeholder="" v-model="form[item.value]">
+                          </div>
+                    </div> 
+                    
+                </div>
+             </el-collapse-item>
+
 
            </el-collapse>
 

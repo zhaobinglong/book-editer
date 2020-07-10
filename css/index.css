@@ -394,7 +394,7 @@ body {
 }
 
 /*密码*/
-.password-menu div:nth-of-type(1) {
+/*.password-menu div:nth-of-type(1) {
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -411,7 +411,7 @@ body {
 .password-menu div:nth-of-type(2) input {
     height: 30px;
     padding-left: 10px;
-}
+}*/
 
 .password-menu div:nth-of-type(2) .eye {
     position: absolute;
