@@ -535,11 +535,11 @@
             <img src="./css/pdf.webp" style="width: 50px; height: 50px;">
             <div class="desc">
                 <p>全部出版物 37.8M</p> 
-                <a download href="http://book.baige.me/download?bookId=2&page=">下载刊物为PDF文件</a> 
+                <a download :href="'http://book.baige.me/download?bookId='+ form.bookId +'&page='">下载刊物为PDF文件</a> 
             </div>
           </div>
           <div class="download-current">
-              <a download href="http://book.baige.me/download?bookId=2&page=1">当前页面(5.2M)</a> 
+              <a download :href="'http://book.baige.me/download?bookId=' + form.bookId + '&page=1'">当前页面(5.2M)</a> 
           </div>
       </div>
       <span slot="footer" class="dialog-footer">
