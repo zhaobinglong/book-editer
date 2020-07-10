@@ -160,30 +160,6 @@
                         </div>
                     </div>
 
-                    <!-- 电话区域 -->
-                    <div class="controls-col" >
-                        <div>
-                           <span class="icon iconfont icontelphone"></span>
-                            <span>电话</span>
-                        </div>
-                        <div>
-                        </div>
-                    </div>
-                    <div class="controls-col " :class="form.contactEnable? '':'bottom-line'">
-                        <div>
-                            <span>Enable</span>
-                        </div>
-                        <div>
-                            <input class="switch switch-anim" type="checkbox"  v-model="form.contactEnable">
-                        </div>
-                    </div>
-                    <div v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
-                          <div class="form-group" v-for="(item, index) in phone" :key="index">
-                            <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input class="form-control"  placeholder="" v-model="form.contactTel">
-                          </div>         
-                    </div>
-
                     <!--在线客服区域 -->
                     <div class="controls-col" >
                         <div>
@@ -263,7 +239,6 @@
               <div style="padding-left: 10px">密码</div>
             </template>
             <li role="presentation" class="password">
-<!--                 <a href="#" class="unActive-a"><span>密码 <span class="glyphicon glyphicon-menu-down toggle-arrows toggle-arrows-change"></span></span></a> -->
                 <div role="presentation" class="menu-down password-menu show-menu" style="display: block;">
 
                     <div class="controls-col" :class="form.passwordEnable ? '':'bottom-line'">
@@ -287,7 +262,39 @@
                 </div>
                </li>
              </el-collapse-item>
+            <el-collapse-item name="电话">
+              <template slot="title">
+                <div style="padding-left: 10px">电话</div>
+              </template>
+              <div class="controls-col menu-down " style="display: block;">
+                  
+                  <div class="controls-col" >
+                    <div>
+                      <span>Enable</span>
+                    </div>
+                      <div>
+                        <input class="switch switch-anim" type="checkbox"  v-model="form.contactEnable">
+                      </div>
+                      
+                  </div>
+<!--                   <form v-if="form.passwordEnable">
+                      <span style="margin-top: 15px;">设置密码</span>
+                      <div>
+                          <input type="text" class="form-control" placeholder="PASSWORD" aria-describedby="basic-addon1" v-model="form.password">
+                      </div>                    
+                  </form> -->
+                  <form v-if="form.contactEnable" :class="form.contactEnable? 'bottom-line':''">
+                    <span style="margin-top: 15px;">号码</span>
+                    <div >
+                      <input class="form-control"  placeholder="" v-model="form.contactTel">
+                    </div>         
+                  </form>
+              </div>
+              
+            </el-collapse-item>
+
            </el-collapse>
+
            <div class="flex-column" style="padding: 10px">
              <div style=" display: inline-block; padding: 10px 14px; border: 1px solid #EBEEF5">添加视频及链接</div>
              <p style="line-height: 30px">添加视频及链接, 让您的电子书更吸引人。</p>
@@ -1620,6 +1627,9 @@ var app = new Vue({
         return mobile + ' color-black'
       }
     },
+    sendPassword() {
+
+    }
     
     
     // 

@@ -167,8 +167,16 @@ npm run dev
 5. 目录、搜索，缩略图接口对接
 
 ## skin修改记录
-
 灰白色   0    "0"   "gray"
 深灰色   1    "1"   "deepGray"
+
+## 目录上下级关系
+bookId: 113302
+created: 1594262083738
+id: 167
+level: 1
+name: "Contents"
+parent: 0
+sort: 2
 
 
