@@ -302,7 +302,7 @@
               </div>
                <i class="el-icon-close" @click="form.navigation = 2"></i>
           </div>
-          <el-tree :highlight-current="false" :data="treeData" @node-click="handleNodeClick"></el-tree>
+          <el-tree :highlight-current="false" :data="catalog" @node-click="handleNodeClick"></el-tree>
         </div>
         <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
@@ -403,7 +403,7 @@
         <div >
             <div v-for="(item, index) in colors" style="display: flex; align-items: center; padding: 5px;margin-right: 10px;" :key="index" @click="initColorSelect(item.label, form[item.label], index)" :class="currentColorPicker == index ? 'color-picker-item-active' : ''"> 
               <span class="color-picker-item"  :style="{backgroundColor: form[item.label] }"></span>
-              <span style="padding-left: 10px">{{ item.label }}</span>
+              <span style="padding-left: 10px">{{ item.name }}</span>
             </div>
         </div>
         <div>
@@ -703,41 +703,7 @@ var app = new Vue({
     searchKey: '', // 搜索用关键词
     myList: [],
     visible: false,
-    treeData: [{
-      label: '一级 1',
-      children: [{
-        label: '二级 1-1',
-        children: [{
-          label: '三级 1-1-1'
-        }]
-      }]
-    }, {
-      label: '一级 2',
-      children: [{
-        label: '二级 2-1',
-        children: [{
-          label: '三级 2-1-1'
-        }]
-      }, {
-        label: '二级 2-2',
-        children: [{
-          label: '三级 2-2-1'
-        }]
-      }]
-    }, {
-      label: '一级 3',
-      children: [{
-        label: '二级 3-1',
-        children: [{
-          label: '三级 3-1-1'
-        }]
-      }, {
-        label: '二级 3-2',
-        children: [{
-          label: '三级 3-2-1'
-        }]
-      }]
-    }],
+    catalog: [],
     rank: [
       {icon: 'el-icon-top-left', checked: false, label: '左上'},
       {icon: 'el-icon-top', checked: false, label: '上'},
@@ -754,9 +720,9 @@ var app = new Vue({
       {index: 1, name: '深灰色', color: '#333333', checked: false}
     ],
     colors: [
-      {label: '面板颜色'},
-      {label: '背景颜色'},
-      {label: '链接颜色'},
+      {label:'colorBackground', name: '面板颜色'},
+      {label:'colorPanel', name: '背景颜色'},
+      {label:'colorLink', name: '链接颜色'},
     ],
     navigationArr: [
       {index: 0, value: '目录', checked: false, hidden: false},
@@ -1030,6 +996,7 @@ var app = new Vue({
      }).then(res => {
       Object.assign(this.form, res.data)
      })
+     
      axios.get('http://m.baige.me/api/book/getMainSetting', {
        params: data
      }).then(res => { 
@@ -1048,11 +1015,25 @@ var app = new Vue({
      })  
      
      
-
+     this.getCatalog()
 //     this.initBook()
   },
 
   methods: {
+    // 初始化目录
+    getCatalog () {
+     axios.get('http://m.baige.me/api/getCatalog', {
+      params: {bookId: this.form.bookId, parent: 0}
+     }).then(res => {
+       console.log(res.data)
+       res.data.map(item => {
+        this.catalog.push({
+          label: item.name,
+        })
+       })
+     })
+    },
+
     // 动态控制背景图
     setMainBackground() {
       if (!this.form.keepBackground) {
@@ -1596,6 +1577,7 @@ var app = new Vue({
       }      
     },
     changeBackGroundGrayClass (color) {
+      console.log('changeBackGroundGrayClass', color)
       let mobile = ''
       if (this.isMobile) {
         mobile = 'nav-mobile'
