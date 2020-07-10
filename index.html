@@ -380,14 +380,14 @@
         </div>
         <div class="input-group" >
             <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey">
-            <div class="input-group-addon" @click="search"><span  class="icon iconfont iconsearch" ></span ></div>
+            <div class="input-group-addon" @click="search(1)"><span  class="icon iconfont iconsearch" ></span ></div>
         </div>
         <li class="search-list" >
             <p class="item" v-for="(item, index) in searchList" :key="index" @click="clickSearchItem(item)">
               第{{ item.pageNumber }}页：{{ item.text }}
             </p>
         </li>
-        <!-- <li class="search-more" >xianshi</li> -->
+        <li class="search-more" v-if="searchList.length < searchCount" @click="searchListShowMore">更多</li>
         <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
     <div class="earch-box-small" v-else>
@@ -879,7 +879,9 @@ var app = new Vue({
         }]
       }]
     }],
-    searchList: [] 
+    searchList: [],
+    searchCount: 0,
+    searchCurrentPage: 1
   },
   computed: {
     backgroundRepeat () {
@@ -1376,20 +1378,25 @@ var app = new Vue({
       x.send();
     },
     // 搜索
-    search () {
+    search (page) {
+      if (page == 1) {
+        this.searchList = []
+      }
       if (this.searchKey) {
-        // http://book.baige.me/api/query?bookId=113302&page=1&kw=with
         let data = {
           bookId: this.form.bookId, 
-          page: 1,
+          page: page,
           kw: this.searchKey
         }
        axios.get('http://m.baige.me/api/query', {
         params: data
        }).then(res => {
+        console.log(res)
          let json = JSON.parse(res.data.bookPages)
          console.log(json)
-         this.searchList = json
+         this.searchList = this.searchList.concat(json)
+         this.searchCount = res.data.count
+         this.searchCurrentPage = res.data.currentPage
        })
       } else {
           this.$message({
@@ -1401,6 +1408,9 @@ var app = new Vue({
     // 点击搜索结果
     clickSearchItem(item) {
       console.log(item)
+    },
+    searchListShowMore () {
+      this.search(this.searchCurrentPage + 1)
     },
     clickThumItem(item, index) {
       this.$message({

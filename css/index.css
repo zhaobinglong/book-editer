@@ -1045,11 +1045,12 @@ body {
     margin-bottom: 20px;
 }
 
-.search-box .text-list span {
+.search-list .text-list span {
     color: #aaa;
 }
-.search-box .search-more {
+.search-more {
     text-align: center;
+    line-height: 50px;
 }
 .earch-box-small {
     padding: 10px 20px;
