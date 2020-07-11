@@ -281,7 +281,13 @@
                     <div v-if="form.emailEnable" :class="form.emailEnable ? 'bottom-line':''">
                           <div class="form-group" v-for="(item, index) in email" :key="index">
                             <label for="exampleInputEmail1">{{ item.label }}</label>
-                            <input type="email" class="form-control"  placeholder="" v-model="form[item.value]">
+                            <div v-if="item.label == '签名' || item.label == '欢迎词'">
+                              <textarea rows="3" class="form-control"   v-model="form[item.value]" >
+                            </div>
+                            <div v-else >
+                              <input  class="form-control"  v-model="form[item.value]" >
+                            </div>
+                            
                           </div>
                     </div> 
                     
@@ -384,7 +390,7 @@
            <i class="el-icon-close" @click="form.navigation = 2"></i>
         </div>
         <div class="input-group" >
-            <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey">
+            <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey" v-on:keyup.enter="search(1)">
             <div class="input-group-addon" @click="search(1)"><span  class="icon iconfont iconsearch" ></span ></div>
         </div>
         <li class="search-list" >
@@ -392,14 +398,15 @@
               第{{ item.pageNumber }}页：{{ item.text }}
             </p>
         </li>
-        <li class="search-more" v-if="searchList.length < searchCount" @click="searchListShowMore">更多</li>
+        <li class="search-more"  @click="searchListShowMore">
+          {{ searchListMoreBtnText }}
+        </li>       
         <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
     </ul>
     <div class="earch-box-small" v-else>
       <div v-if="!isMobile">
         <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
       </div>
-        
     </div>
 
     <!-- 颜色选择器 -->
@@ -630,8 +637,8 @@
               :http-request="uploadBackground"
               action=""
               :show-file-list="false">
-              <img  :src="form.background" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <img  :src="form.background" class="avatar" v-if="form.background">
+              <i class="el-icon-plus avatar-uploader-icon" v-else></i>
             </el-upload> 
             <el-popover
               placement="right"
@@ -692,6 +699,7 @@
 var app = new Vue({
   el: '#app',
   data: {
+    searchListMoreBtnText: '',
     chatDom: false, // 在线客服的dom是否存在
     currentColorPicker: 0, // 默认当前激活的是第一个
     logoInput: '',// 输入logo的链接
@@ -1022,7 +1030,6 @@ var app = new Vue({
      
      
      this.getCatalog()
-//     this.initBook()
   },
 
   methods: {
@@ -1042,7 +1049,8 @@ var app = new Vue({
         if (data[i].level == 1) {
           let item = {
             label: data[i].sort + ':' +data[i].name,
-            sort: data[i].sort
+            sort: data[i].sort,
+            pageNumber: data[i].pageNumber
           }
           this.catalog.push(item)
         } else {
@@ -1060,13 +1068,15 @@ var app = new Vue({
             item.children.push({
               label: obj.name,
               sort: obj.sort,
-              parent: obj.parent
+              parent: obj.parent,
+              pageNumber: obj.pageNumber
             })
           } else {
             item.children = [{
               label: obj.name,
               sort: obj.sort,
-              parent: obj.parent
+              parent: obj.parent,
+              pageNumber: obj.pageNumber
             }]
           }
           return item
@@ -1437,20 +1447,31 @@ var app = new Vue({
        axios.get('http://m.baige.me/api/query', {
         params: data
        }).then(res => {
-        console.log(res)
+         console.log(res)
          let json = JSON.parse(res.data.bookPages)
-         console.log(json)
          this.searchList = this.searchList.concat(json)
          this.searchCount = res.data.count
          this.searchCurrentPage = res.data.currentPage
+         if (this.searchList.length <  this.searchCount){
+          console.log(this.searchCount)
+          console.log(this.searchList.length)
+          let num = this.searchCount - this.searchList.length
+          this.searchListMoreBtnText = `还有${num}条记录`
+         } else {
+          if (res.data.count == 0) {
+            this.searchListMoreBtnText = '没有搜索到内容'
+          } else {
+            this.searchListMoreBtnText = '没有了'
+          }
+          
+         }
        })
       } else {
-          this.$message({
-            message: '搜索内容不能为空',
-            type: 'warning'
-          });
+        console.log(this.searchKey)
+        this.searchListMoreBtnText = '搜索关键词不能为空'
       }
     },
+
     // 点击搜索结果
     clickSearchItem(item) {
       console.log(item)
