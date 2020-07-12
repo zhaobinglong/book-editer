@@ -749,11 +749,13 @@ body {
     height: 100vh;
     flex-grow: 1;
     position: relative;
+    z-index: 1
 }
 .main-right {
     flex-grow: 1;
     display: flex;
     position: relative;
+    z-index: 1
 }
 
 .main .main-bk {
@@ -1169,4 +1171,10 @@ body {
 .skindeepGray {
     background-color: #333;
     color: #FFF;
+}
+.skinpaper {
+    background-color: transparent;
+}
+.skinwater {
+    background: url('https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg')
 }

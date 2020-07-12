@@ -304,7 +304,7 @@
        </div>
     </div>
     
-    <div class="main-right">
+    <div class="main-right" :style="{backgroundColor: form.colorBackground}">
 
       <!-- 目录区 -->
       <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 " :class="changeBackGroundGrayClass(form.colorBackground)">
@@ -341,7 +341,7 @@
       </ul>
       
       <!-- 主编辑区 -->
-          <div class="main" :class="setMainBackground">
+          <div class="main" :style="{backgroundImage:'url(' + skins[form.skin].url + ')'}">
               <div class="main-bk" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" v-if="form.keepBackground"></div>
 
               <div v-if="isMobile" class="header-mobile" >
@@ -439,16 +439,19 @@
     </el-dialog>
 
     <!-- skin皮肤选择器 -->
-    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="350px">
+    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="400px">
         <el-form v-if="form.background">
             <el-form-item label="Keep current background">
-                <el-switch v-model="form.keepBackground"></el-switch>
+                <el-switch v-model="form.keepBackground" ></el-switch>
             </el-form-item>
         </el-form>
         <div >
           <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" >
-            <div :style="{backgroundColor: item.color}" style="height: 100px; width: 100px"></div>
-            <p style="text-align: center;line-height: 20px;" ><span :class="index == form.skin ? 'skinTextChecked':''">{{ item.name }}</span></p>
+            <img v-if="item.url" :src="item.url" style="height: 100px; width: 100px">
+            <div v-else :style="{backgroundColor: item.color}" style="height: 100px; width: 100px"></div>
+            <p style="text-align: center;height: 20px; margin-top: 10px" >
+              <span :class="index == form.skin ? 'skinTextChecked':''" style="display: inline-block; padding: 0 10px; border-radius: 10px">{{ item.name }}</span>
+            </p>
           </div>
         </div>
       <span slot="footer" class="dialog-footer">
@@ -737,8 +740,12 @@ var app = new Vue({
       {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
     skins: {
-      gray: {name: '灰白色', color: '#EFEFEF', checked: false},
-      deepGray: {name: '深灰色', color: '#333333', checked: false}
+      gray: {name: '灰白色', color: '#EFEFEF', checked: false, url: ''},
+      deepGray: {name: '深灰色', color: '#333333', checked: false, url: ''},
+      paper: {name: 'paper', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg'},
+      metal: {name: 'metal', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
+      water: {name: 'water', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
+      falling: {name: 'falling', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
     },
     colors: [
       {label:'colorBackground', name: '面板颜色'},
@@ -753,7 +760,7 @@ var app = new Vue({
     setPhone: false,
     setStaff: false,
     setEmail: false,
-    dialogSkin: false,
+    dialogSkin: true,
     dialogLogo: false,
     dialogBackground: false,
     dialogFavicon: false,
@@ -1121,10 +1128,9 @@ var app = new Vue({
     },
 
     // 动态控制背景图
-    setMainBackground() {
-      if (!this.form.keepBackground) {
-        this.form.background = ''
-      }
+    setMainBackground(skin) {
+      console.log(skin)
+      return 'skin' + skin
     },
     // 初始化缩略图
     // 缩略图的路径拼接规则
@@ -1237,9 +1243,12 @@ var app = new Vue({
     handlePreview(file) {
         console.log(file);
     },
-
+    // 点击选择皮肤
     clickSkinItem (item, key) {
       this.form.skin = key
+      // if (item.url && !this.form.keepBackground) {
+      //   this.form.background = item.url
+      // }
     },
     clickSelectSkin () {
         this.dialogSkin = true
@@ -1538,7 +1547,7 @@ var app = new Vue({
         return item 
       })
     },
-    
+
     sceenControl() {
       let element = document.documentElement
       if (this.currentScreen == 'full') {
