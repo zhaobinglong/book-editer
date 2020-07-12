@@ -1165,7 +1165,7 @@ body {
 
 /*皮肤切换的样式*/
 .skingray {
-     background-color: #EFEFEF;
+    background-color: #EFEFEF;
     color: #000;   
 }
 .skindeepGray {
@@ -1176,5 +1176,8 @@ body {
     background-color: transparent;
 }
 .skinwater {
-    background: url('https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg')
+
+}
+.skinfalling {
+    background-color: #eb691d
 }

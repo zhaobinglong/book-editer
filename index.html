@@ -353,7 +353,7 @@
                 </div>
               </div>
 
-              <div class="header" :class="toggleSkinClass(form.skin)" v-else>
+              <div :style="{backgroundColor: setBarStyle(form.skin, 'up'), color: skins[form.skin].color}" class="header"  v-else>
                   <span class="name" style="">{{ form.title }} </span>
                   <span style="display: inline-block;padding: 0 4px;"> | 页: </span>
                   <input placeholder="" style="width: 40px;"> 
@@ -364,10 +364,12 @@
                 <div id="flipbook">
                 </div>
               </div>
-
-              <div :class="isMobile?'page-footer-mobile':'page-footer'" :class="toggleSkinClass(form.skin)" >
+              
+              <!-- 下工具栏 -->
+              <div :style="{backgroundColor: setBarStyle(form.skin, 'down'),color: skins[form.skin].color}" class="page-footer"  >
                   <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
               </div>    
+
               <img :src="form.logo" class="logo" v-if="!isMobile">  
 
               
@@ -448,7 +450,7 @@
         <div >
           <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" >
             <img v-if="item.url" :src="item.url" style="height: 100px; width: 100px">
-            <div v-else :style="{backgroundColor: item.color}" style="height: 100px; width: 100px"></div>
+            <div v-else :style="{backgroundColor: item.backgroundColor}" style="height: 100px; width: 100px"></div>
             <p style="text-align: center;height: 20px; margin-top: 10px" >
               <span :class="index == form.skin ? 'skinTextChecked':''" style="display: inline-block; padding: 0 10px; border-radius: 10px">{{ item.name }}</span>
             </p>
@@ -740,12 +742,12 @@ var app = new Vue({
       {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
     skins: {
-      gray: {name: '灰白色', color: '#EFEFEF', checked: false, url: ''},
-      deepGray: {name: '深灰色', color: '#333333', checked: false, url: ''},
+      gray: {name: '灰白色', color: '#000', backgroundColor: '#EFEFEF' ,checked: false, url: ''},
+      deepGray: {name: '深灰色', color: '#FFF',backgroundColor: '#333333', checked: false, url: ''},
       paper: {name: 'paper', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg'},
-      metal: {name: 'metal', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
-      water: {name: 'water', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
-      falling: {name: 'falling', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
+      metal: {name: 'metal', color: '#333333',backgroundColor: '#cac7c7', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
+      water: {name: 'water', color: '#333333', backgroundColor: '#2e79c6',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
+      falling: {name: 'falling', color: '#333', backgroundColor: '#eb691d', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
     },
     colors: [
       {label:'colorBackground', name: '面板颜色'},
@@ -1644,7 +1646,7 @@ var app = new Vue({
 
     },
 
-    toggleSkinClass(skin){
+    toggleSkinClass(skin, param){
       return 'skin' + skin
     },
     dialogLogoSave () {
@@ -1739,6 +1741,17 @@ var app = new Vue({
     changeTitle(title) {
       console.log('change title')
       document.title = title
+    },
+
+    // 设置上下工具栏颜色
+    setBarStyle (item, para) {
+      if (item == 'metal' && para == 'down') {
+        return 'transparent'
+      }
+      if (item == 'water' && para == 'up') {
+        return 'transparent'
+      }
+      return this.skins[item].backgroundColor
     }
     
     
