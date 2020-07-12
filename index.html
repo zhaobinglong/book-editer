@@ -307,13 +307,13 @@
     <div class="main-right" :style="{backgroundColor: form.colorBackground}">
 
       <!-- 目录区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 " :class="changeBackGroundGrayClass(form.colorBackground)">
+      <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 && !userCloseNavigation" :class="changeBackGroundGrayClass(form.colorBackground)">
           <div >
             <div class="menu-item" :style="{backgroundColor: form.colorPanel}" :class="changeMenuGrayClass(form.colorPanel)">
                 <div>
                   <span  class="icon iconfont iconcatalog"></span >目录
                 </div>
-                 <i class="el-icon-close" @click="form.navigation = 2"></i>
+                 <i class="el-icon-close" @click="userCloseNavigation = true "></i>
             </div>
             <el-tree :highlight-current="false" :data="catalog" @node-click="handleNodeClick"></el-tree>
           </div>
@@ -328,7 +328,7 @@
                 <div>
                   <span  class="icon iconfont iconview-thumbs"></span >缩略图
                 </div>
-                 <i class="el-icon-close" @click="form.navigation = 2"></i>
+                 <i class="el-icon-close" @click="userCloseNavigation = true "></i>
               </div>
               <div :class="isMobile?'thum-mobile':'thum'">
                  <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
@@ -352,26 +352,26 @@
                   </div>
                 </div>
               </div>
-
+              
+              <!-- 上工具栏 -->
               <div :style="{backgroundColor: setBarStyle(form.skin, 'up'), color: skins[form.skin].color}" class="header"  v-else>
                   <span class="name" style="">{{ form.title }} </span>
                   <span style="display: inline-block;padding: 0 4px;"> | 页: </span>
                   <input placeholder="" style="width: 40px;"> 
                   <span> /{{ bookPageNum }}</span>
-              </div>
+              </div> 
 
               <div style="flex-grow: 1" class="bookBox">
                 <div id="flipbook">
                 </div>
               </div>
-              
-              <!-- 下工具栏 -->
-              <div :style="{backgroundColor: setBarStyle(form.skin, 'down'),color: skins[form.skin].color}" class="page-footer"  >
-                  <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
-              </div>    
 
               <img :src="form.logo" class="logo" v-if="!isMobile">  
 
+            <!-- 下工具栏 -->
+              <div :style="{backgroundColor: setBarStyle(form.skin, 'down'),color: skins[form.skin].color}" class="page-footer"  >
+                  <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
+              </div>  
               
           </div>
 
@@ -383,7 +383,7 @@
             <div>
               <span  class="icon iconfont iconsearch"></span >搜索
             </div>
-             <i class="el-icon-close" @click="form.navigation = 2"></i>
+             <i class="el-icon-close" @click="userCloseNavigation = true "></i>
           </div>
           <div class="input-group" >
               <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey" v-on:keyup.enter="search(1)">
@@ -712,6 +712,7 @@
 var app = new Vue({
   el: '#app',
   data: {
+    userCloseNavigation: false,
     searchListMoreBtnText: '',
     chatDom: false, // 在线客服的dom是否存在
     currentColorPicker: 0, // 默认当前激活的是第一个
@@ -1229,6 +1230,7 @@ var app = new Vue({
          if (item.value == obj.value) {
             item.checked = true
             this.form.navigation = item.index
+            this.userCloseNavigation = false
          } else {
             item.checked = false
          }
