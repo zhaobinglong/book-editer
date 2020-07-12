@@ -304,109 +304,118 @@
        </div>
     </div>
     
-    <!-- 目录区 -->
-    <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 " :class="changeBackGroundGrayClass(form.colorBackground)">
-        <div >
-          <div class="menu-item" :style="{backgroundColor: form.colorPanel}" :class="changeMenuGrayClass(form.colorPanel)">
-              <div>
-                <span  class="icon iconfont iconcatalog"></span >目录
-              </div>
-               <i class="el-icon-close" @click="form.navigation = 2"></i>
+    <div class="main-right">
+
+      <!-- 目录区 -->
+      <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 " :class="changeBackGroundGrayClass(form.colorBackground)">
+          <div >
+            <div class="menu-item" :style="{backgroundColor: form.colorPanel}" :class="changeMenuGrayClass(form.colorPanel)">
+                <div>
+                  <span  class="icon iconfont iconcatalog"></span >目录
+                </div>
+                 <i class="el-icon-close" @click="form.navigation = 2"></i>
+            </div>
+            <el-tree :highlight-current="false" :data="catalog" @node-click="handleNodeClick"></el-tree>
           </div>
-          <el-tree :highlight-current="false" :data="catalog" @node-click="handleNodeClick"></el-tree>
-        </div>
-        <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
-    </ul>
+          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
+      </ul>
 
 
-    <!-- 缩略图区 -->
-    <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1" :class="changeBackGroundGrayClass(form.colorBackground)">
-        <div>
-            <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
-              <div>
-                <span  class="icon iconfont iconview-thumbs"></span >缩略图
-              </div>
-               <i class="el-icon-close" @click="form.navigation = 2"></i>
-            </div>
-            <div :class="isMobile?'thum-mobile':'thum'">
-               <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
-                  <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
-                  <p>第{{ index + 1 }}页</p>
-              </div>              
-            </div>
-        </div>
-        <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
-    </ul>
-    
-    <!-- 主编辑区 -->
-        <div class="main" :class="setMainBackground">
-            <div class="main-bk" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" v-if="form.keepBackground"></div>
-
-            <div v-if="isMobile" class="header-mobile" >
-              <div>1/{{ bookPageNum }}</div>
-              <div class="earch-box-small">
-                <div >
-                  <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
-                </div>
-              </div>
-            </div>
-            <div class="header" :class="toggleSkinClass(form.skin)" v-else>
-                <span class="name" style="">{{ form.title }} </span>
-                <span style="display: inline-block;padding: 0 4px;"> | 页: </span>
-                <input placeholder="" style="width: 40px;"> 
-                <span> /{{ bookPageNum }}</span>
-            </div>
-            <div style="flex-grow: 1" class="bookBox">
-              <div id="flipbook">
-              </div>
-            </div>
-            <div :class="isMobile?'page-footer-mobile':'page-footer'" :class="toggleSkinClass(form.skin)" >
-                <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
-            </div>    
-            <img :src="form.logo" class="logo" v-if="!isMobile">  
-
-            <div class="active-password" v-if="(form.passwordEnable && currentCollapse == '密码') || (form.passwordEnable && isMobile)">
-              <div class="content">
-                <p style="color: #FFF;margin:20px 0;">{{ form.title }}</p>
-                <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;">
-                <p style="color: #FFF;margin:20px 0;">该文档为非公开文档，请输入密码打开</p>
-                <div style="display: flex;position: relative;">
-                    <input type="password" placeholder="" v-model="inputPassword">
-                    <el-button type="primary" @click="sendPassword" style="margin-left: -4px">确定</el-button>
-                </div>
-              </div>
-              
-            </div>
-        </div>
-
-
-
-    <!-- 右侧搜索区 -->
-    <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
-        <div  class="menu-item" :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
+      <!-- 缩略图区 -->
+      <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1" :class="changeBackGroundGrayClass(form.colorBackground)">
           <div>
-            <span  class="icon iconfont iconsearch"></span >搜索
+              <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
+                <div>
+                  <span  class="icon iconfont iconview-thumbs"></span >缩略图
+                </div>
+                 <i class="el-icon-close" @click="form.navigation = 2"></i>
+              </div>
+              <div :class="isMobile?'thum-mobile':'thum'">
+                 <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
+                    <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
+                    <p>第{{ index + 1 }}页</p>
+                </div>              
+              </div>
           </div>
-           <i class="el-icon-close" @click="form.navigation = 2"></i>
+          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
+      </ul>
+      
+      <!-- 主编辑区 -->
+          <div class="main" :class="setMainBackground">
+              <div class="main-bk" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" v-if="form.keepBackground"></div>
+
+              <div v-if="isMobile" class="header-mobile" >
+                <div>1/{{ bookPageNum }}</div>
+                <div class="earch-box-small">
+                  <div >
+                    <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="header" :class="toggleSkinClass(form.skin)" v-else>
+                  <span class="name" style="">{{ form.title }} </span>
+                  <span style="display: inline-block;padding: 0 4px;"> | 页: </span>
+                  <input placeholder="" style="width: 40px;"> 
+                  <span> /{{ bookPageNum }}</span>
+              </div>
+
+              <div style="flex-grow: 1" class="bookBox">
+                <div id="flipbook">
+                </div>
+              </div>
+
+              <div :class="isMobile?'page-footer-mobile':'page-footer'" :class="toggleSkinClass(form.skin)" >
+                  <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
+              </div>    
+              <img :src="form.logo" class="logo" v-if="!isMobile">  
+
+              
+          </div>
+
+
+
+      <!-- 右侧搜索区 -->
+      <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
+          <div  class="menu-item" :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
+            <div>
+              <span  class="icon iconfont iconsearch"></span >搜索
+            </div>
+             <i class="el-icon-close" @click="form.navigation = 2"></i>
+          </div>
+          <div class="input-group" >
+              <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey" v-on:keyup.enter="search(1)">
+              <div class="input-group-addon" @click="search(1)"><span  class="icon iconfont iconsearch" ></span ></div>
+          </div>
+          <li class="search-list" >
+              <p class="item" v-for="(item, index) in searchList" :key="index" @click="clickSearchItem(item)">
+                第{{ item.pageNumber }}页：{{ item.text }}
+              </p>
+          </li>
+          <li class="search-more"  @click="searchListShowMore">
+            {{ searchListMoreBtnText }}
+          </li>       
+          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
+      </ul>
+      <div class="earch-box-small" v-else>
+        <div v-if="!isMobile">
+          <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
         </div>
-        <div class="input-group" >
-            <input type="text" class="form-control" placeholder="在此输入文本..." v-model="searchKey" v-on:keyup.enter="search(1)">
-            <div class="input-group-addon" @click="search(1)"><span  class="icon iconfont iconsearch" ></span ></div>
-        </div>
-        <li class="search-list" >
-            <p class="item" v-for="(item, index) in searchList" :key="index" @click="clickSearchItem(item)">
-              第{{ item.pageNumber }}页：{{ item.text }}
-            </p>
-        </li>
-        <li class="search-more"  @click="searchListShowMore">
-          {{ searchListMoreBtnText }}
-        </li>       
-        <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
-    </ul>
-    <div class="earch-box-small" v-else>
-      <div v-if="!isMobile">
-        <a class="earch-box-small-tip" :href="form.external" v-if="form.externalEnable">{{ form.externalText }}</a>
       </div>
+      
+      <!-- 密码遮盖 -->
+      <div class="active-password" v-if="(form.passwordEnable && currentCollapse == '密码') || (form.passwordEnable && isMobile)">
+        <div class="content">
+          <p style="color: #FFF;margin:20px 0;">{{ form.title }}</p>
+          <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;">
+          <p style="color: #FFF;margin:20px 0;">该文档为非公开文档，请输入密码打开</p>
+          <div style="display: flex;position: relative;">
+              <input type="password" placeholder="" v-model="inputPassword">
+              <el-button type="primary" @click="sendPassword" style="margin-left: -4px">确定</el-button>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- 颜色选择器 -->
@@ -632,14 +641,7 @@
     <!-- 背景选择器 -->
     <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="350px">
         <div  class="mb20 upload-img">
-            <el-upload
-              class="avatar-uploader"
-              :http-request="uploadBackground"
-              action=""
-              :show-file-list="false">
-              <img  :src="form.background" class="avatar" v-if="form.background">
-              <i class="el-icon-plus avatar-uploader-icon" v-else></i>
-            </el-upload> 
+            <img  :src="form.background" class="avatar" >
             <el-popover
               placement="right"
               width="200"
@@ -651,6 +653,14 @@
               <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
             </el-popover>           
         </div>
+        <el-upload
+          class="upload-demo"
+          :http-request="uploadBackground"
+          :show-file-list="false"
+          action="">
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
+
         <div style="padding: 20px">
         <el-form label-width="140px" ref="form" :model="form">
           <el-form-item
@@ -683,8 +693,6 @@
           </el-form-item>
         </el-form>          
         </div>
-
-
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBackground = false">CANCEL</el-button>
         <el-button type="primary" @click="dialogBackground = false">OK</el-button>
@@ -736,12 +744,6 @@ var app = new Vue({
       {label:'colorBackground', name: '面板颜色'},
       {label:'colorPanel', name: '背景颜色'},
       {label:'colorLink', name: '链接颜色'},
-    ],
-    navigationArr: [
-      {index: 0, value: '目录', checked: false, hidden: false},
-      {index: 1, value: '缩略图', checked: false, hidden: false},
-      {index: 2, value: '无', checked: false, hidden: false},
-      {index: 3, value: '搜索', checked: false, hidden: false}
     ],
     showMenu: true,
     fileList: [],
@@ -896,6 +898,32 @@ var app = new Vue({
     searchCurrentPage: 1
   },
   computed: {
+    navigationArr() { 
+      let arr = [
+        {index: 0, value: '目录', checked: false, hidden: false},
+        {index: 1, value: '缩略图', checked: false, hidden: false},
+        {index: 2, value: '无', checked: false, hidden: false},
+        {index: 3, value: '搜索', checked: false, hidden: false}
+      ]
+      if (this.form.bookTable) {
+        arr[0].hidden = false
+      } else {
+        arr[0].hidden = true
+      }
+
+      if (this.form.thumbnail) {
+        arr[1].hidden = false
+      } else {
+        arr[1].hidden = true
+      }
+
+      if (this.form.search) {
+        arr[3].hidden = false
+      } else {
+        arr[3].hidden = true
+      }
+      return arr
+    },
     backgroundRepeat () {
       if (this.form.backgroundPlace == 2) {
         return 'repeat'
@@ -1244,7 +1272,7 @@ var app = new Vue({
           if (this.isMobile) {
             this.dialogSound = true
           } else {
-            this.audioControl()
+            this.audioControl(item)
           }
         } else if (item.title == '全屏') {
           this.sceenControl()
@@ -1283,6 +1311,14 @@ var app = new Vue({
       }
     },
     setIconClass (item) {
+      console.log(item)
+      // if (item.title == '声音') {
+      //   if (item.icon == "iconmute-off") {
+      //     item.icon = ''
+      //   } else {
+      //     item.icon = 'iconmute-off'
+      //   }
+      // }
       if (item.rightLine) {
         return 'right-line ' + item.icon
       } else {
@@ -1489,16 +1525,20 @@ var app = new Vue({
       console.log(this.form.navigation)
       this.form.navigation = 3
     },
-    audioControl() {
-     var audio = document.getElementById('myAudio');
-      if(audio.paused) { 
-        this.soundStatus = 'none'                
-        audio.play(); //audio.play();// 这个就是播放  
-      }else{
-        this.soundStatus = 'line-through'   
-        audio.pause(); // 这个就是暂停
-      }
+    audioControl(item) {
+      console.log(item)
+      this.controls = this.controls.map(item => {
+        if (item.title == '声音') {
+          if (item.icon == 'iconmute-off') {
+            item.icon = ''
+          } else {
+            item.icon = 'iconmute-off'
+          }
+        } 
+        return item 
+      })
     },
+    
     sceenControl() {
       let element = document.documentElement
       if (this.currentScreen == 'full') {
