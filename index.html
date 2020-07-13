@@ -132,7 +132,7 @@
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
-                        <button class="brand-btns logo" slot="reference"  @click="initColorSelect('colorPanel', form.colorPanel, 0)">Custon ···</button>
+                        <button class="brand-btns logo" slot="reference"  @click="initColorSelect('colorPanel', skins[form.skin].colorPanel, 0)">Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>icon</span>
@@ -304,12 +304,12 @@
        </div>
     </div>
     
-    <div class="main-right" :style="{backgroundColor: form.colorBackground}">
+    <div class="main-right"  :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
 
       <!-- 目录区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none" :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 0 && !userCloseNavigation" :class="changeBackGroundGrayClass(form.colorBackground)">
+      <ul class="nav-pills nav-stacked skinbar border-none"  v-if="form.navigation == 0 && !userCloseNavigation" >
           <div >
-            <div class="menu-item" :style="{backgroundColor: form.colorPanel}" :class="changeMenuGrayClass(form.colorPanel)">
+            <div class="menu-item" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
                 <div>
                   <span  class="icon iconfont iconcatalog"></span >目录
                 </div>
@@ -322,9 +322,9 @@
 
 
       <!-- 缩略图区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 1" :class="changeBackGroundGrayClass(form.colorBackground)">
+      <ul class="nav-pills nav-stacked skinbar border-none"   v-if="form.navigation == 1" >
           <div>
-              <div  class="menu-item"  :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
+              <div  class="menu-item"  :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
                 <div>
                   <span  class="icon iconfont iconview-thumbs"></span >缩略图
                 </div>
@@ -354,7 +354,7 @@
               </div>
               
               <!-- 上工具栏 -->
-              <div :style="{backgroundColor: setBarStyle(form.skin, 'up'), color: skins[form.skin].color}" class="header"  v-else>
+              <div class="header" :style="{backgroundColor: setBarStyle(form.skin, 'up')}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)" v-else>
                   <span class="name" style="">{{ form.title }} </span>
                   <span style="display: inline-block;padding: 0 4px;"> | 页: </span>
                   <input placeholder="" style="width: 40px;"> 
@@ -369,7 +369,7 @@
               <img :src="form.logo" class="logo" v-if="!isMobile">  
 
             <!-- 下工具栏 -->
-              <div :style="{backgroundColor: setBarStyle(form.skin, 'down'),color: skins[form.skin].color}" class="page-footer"  >
+              <div  class="page-footer" :style="{backgroundColor: setBarStyle(form.skin, 'down')}"  :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
                   <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
               </div>  
               
@@ -378,8 +378,8 @@
 
 
       <!-- 右侧搜索区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: form.colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
-          <div  class="menu-item" :style="{backgroundColor: form.colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
+      <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: skins[form.skin].colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
+          <div  class="menu-item" :style="{backgroundColor: skins[form.skin].colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
             <div>
               <span  class="icon iconfont iconsearch"></span >搜索
             </div>
@@ -424,7 +424,7 @@
     <el-dialog title="SELECT COLORS" :visible.sync="dialogColor" width="450px">
       <div style="display: flex">
         <div >
-            <div v-for="(item, index) in colors" style="display: flex; align-items: center; padding: 5px;margin-right: 10px;" :key="index" @click="initColorSelect(item.label, form[item.label], index)" :class="currentColorPicker == index ? 'color-picker-item-active' : ''"> 
+            <div v-for="(item, index) in colors" style="display: flex; align-items: center; padding: 5px;margin-right: 10px;" :key="index" @click="initColorSelect(item.label, skins[form.skin][item.label], index)" :class="currentColorPicker == index ? 'color-picker-item-active' : ''"> 
               <span class="color-picker-item"  :style="{backgroundColor: form[item.label] }"></span>
               <span style="padding-left: 10px">{{ item.name }}</span>
             </div>
@@ -448,9 +448,9 @@
             </el-form-item>
         </el-form>
         <div >
-          <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" >
+          <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" v-if="index != 'custom'">
             <img v-if="item.url" :src="item.url" style="height: 100px; width: 100px">
-            <div v-else :style="{backgroundColor: item.backgroundColor}" style="height: 100px; width: 100px"></div>
+            <div v-else :style="{backgroundColor: item.colorBackground}" style="height: 100px; width: 100px"></div>
             <p style="text-align: center;height: 20px; margin-top: 10px" >
               <span :class="index == form.skin ? 'skinTextChecked':''" style="display: inline-block; padding: 0 10px; border-radius: 10px">{{ item.name }}</span>
             </p>
@@ -743,16 +743,17 @@ var app = new Vue({
       {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
     skins: {
-      gray: {name: '灰白色', color: '#000', backgroundColor: '#EFEFEF' ,checked: false, url: ''},
-      deepGray: {name: '深灰色', color: '#FFF',backgroundColor: '#333333', checked: false, url: ''},
-      paper: {name: 'paper', color: '#333333', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg'},
-      metal: {name: 'metal', color: '#333333',backgroundColor: '#cac7c7', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
-      water: {name: 'water', color: '#333333', backgroundColor: '#2e79c6',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
-      falling: {name: 'falling', color: '#333', backgroundColor: '#eb691d', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
+      gray: {name: '灰白色', colorPanel: '#777', colorBackground: '#EFEFEF' ,checked: false, url: ''},
+      deepGray: {name: '深灰色', colorPanel: '#777',colorBackground: '#333333', checked: false, url: ''},
+      paper: {name: 'paper', colorPanel: '#777',colorBackground: '#666666',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg'},
+      metal: {name: 'metal', colorPanel: '#777',colorBackground: '#cac7c7', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
+      water: {name: 'water', colorPanel: '#777', colorBackground: '#2e79c6',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
+      falling: {name: 'falling', colorPanel: '#eb691d', colorBackground: '#eb691d', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
+      custom: {name: '', colorPanel: '#777', colorBackground: '#000'}
     },
     colors: [
-      {label:'colorBackground', name: '面板颜色'},
-      {label:'colorPanel', name: '背景颜色'},
+      {label:'colorPanel', name: '面板颜色'},
+      {label:'colorBackground', name: '背景颜色'},
       {label:'colorLink', name: '链接颜色'},
     ],
     showMenu: true,
@@ -1324,14 +1325,6 @@ var app = new Vue({
       }
     },
     setIconClass (item) {
-      console.log(item)
-      // if (item.title == '声音') {
-      //   if (item.icon == "iconmute-off") {
-      //     item.icon = ''
-      //   } else {
-      //     item.icon = 'iconmute-off'
-      //   }
-      // }
       if (item.rightLine) {
         return 'right-line ' + item.icon
       } else {
@@ -1656,7 +1649,6 @@ var app = new Vue({
       this.dialogLogo = false
     },
     initColorSelect(label, color, index) {
-      console.log(label, color)
       this.currentColorPicker = index
       this.dialogColor = true
       this.$nextTick( () => {
@@ -1664,13 +1656,29 @@ var app = new Vue({
             el: "color-picker",
             color: color,
             change: (elem, hex) => {
-                console.log(hex)
-                this.form[label] = hex
-                //document.getElementById("color-picker").value=hex;
+              this.setCustomColor(label, hex)
             }
         })        
       })
+    },
+    setCustomColor(label, hex) {
+      console.log('set custom color')
+        this.form[label] = hex
+        let custom = null
+        if (this.form.skin != 'custom') {
+          custom = {...this.skins[this.form.skin]}
+          this.form.skin = 'custom'
+        } else {
+         custom = this.skins.custom
+        }
+        // console.log(this.skin)
+        // console.log(this.skins)
+        this.skins.custom[label] = hex
+        // this.$set(this.skins, 'custom', this.skins['custom'])
+        console.log(this.skin, custom)
+        // this.set(this.ms, 0, 100)
 
+        this.$set(this.skins, "custom",  custom)
     },
     // 切换在线客服按钮
     toggleChat() {
@@ -1702,7 +1710,7 @@ var app = new Vue({
         if (gray < 128) {
           return 'color-white'
         } else {
-          return 'class-black'
+          return 'color-black'
         }
       }
     },
@@ -1753,7 +1761,7 @@ var app = new Vue({
       if (item == 'water' && para == 'up') {
         return 'transparent'
       }
-      return this.skins[item].backgroundColor
+      return this.skins[item].colorPanel
     }
     
     
