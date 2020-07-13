@@ -307,7 +307,7 @@
     <div class="main-right"  :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
 
       <!-- 目录区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none"  v-if="form.navigation == 0 && !userCloseNavigation" >
+      <ul class="nav nav-pills nav-stacked skinbar border-none"  v-if="form.navigation == 0 && !userCloseNavigation" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
           <div >
             <div class="menu-item" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
                 <div>
@@ -317,12 +317,12 @@
             </div>
             <el-tree :highlight-current="false" :data="catalog" @node-click="handleNodeClick"></el-tree>
           </div>
-          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
+          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" >取消</div>
       </ul>
 
 
       <!-- 缩略图区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none"   v-if="form.navigation == 1" >
+      <ul class="nav nav-pills nav-stacked skinbar border-none"   v-if="form.navigation == 1" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
           <div>
               <div  class="menu-item"  :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
                 <div>
@@ -337,7 +337,7 @@
                 </div>              
               </div>
           </div>
-          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
+          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" >取消</div>
       </ul>
       
       <!-- 主编辑区 -->
@@ -378,8 +378,8 @@
 
 
       <!-- 右侧搜索区 -->
-      <ul class="nav-pills nav-stacked skinbar border-none"  :style="{backgroundColor: skins[form.skin].colorBackground}" v-if="form.navigation == 3" :class="changeBackGroundGrayClass(form.colorBackground)">
-          <div  class="menu-item" :style="{backgroundColor: skins[form.skin].colorPanel}"  :class="changeMenuGrayClass(form.colorPanel)">
+      <ul class="nav nav-pills nav-stacked skinbar border-none"   v-if="form.navigation == 3" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
+          <div  class="menu-item" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
             <div>
               <span  class="icon iconfont iconsearch"></span >搜索
             </div>
@@ -397,7 +397,7 @@
           <li class="search-more"  @click="searchListShowMore">
             {{ searchListMoreBtnText }}
           </li>       
-          <div @click="form.navigation = 2" class="nav-cancel" v-if="isMobile" :style="{backgroundColor: form.colorBackground}">取消</div>
+          <div  class="nav-cancel" @click="form.navigation = 2"  v-if="isMobile" :style="{backgroundColor: skins[form.skin].colorBackground}">取消</div>
       </ul>
       <div class="earch-box-small" v-else>
         <div v-if="!isMobile">
@@ -570,7 +570,7 @@
 
     <!--分享对话框 -->
     <el-dialog title="分享" :visible.sync="dialogShare" width="350px">
-        <div slot="title" class="dialog-title">
+        <div slot="title" class="dialog-title" >
           <span class="icon iconfont iconfenxiang2" ></span>
           <span class="title-text">分享</span>
           <div class="button-right">

@@ -161,6 +161,21 @@ body {
 .el-tree-node:focus > .el-tree-node__content {
     background-color: transparent !important;
 }
+/*.el-dialog__header {
+    padding: 0 !important;
+}
+.el-dialog__body {
+    padding: 0!important
+}
+.el-dialog_body {
+    padding: 30px 20px
+}
+.el-dialog__headerbtn .el-dialog__close {
+    color: inherit!important;
+}
+.dialog-title {
+    padding: 20px 20px 10px;
+}*/
 
 /*媒体查询，动态更新弹出框的样式*/
 /* Extra small devices (phones, 600px and down) */
@@ -172,6 +187,16 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+    .nav {
+        position: fixed;
+        width: 100%!important;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        overflow-y: scroll;
     }
 
 }
@@ -233,19 +258,8 @@ body {
     width: 250px;
     height: 100vh;
     overflow-y: auto;
-    background-color: #FFF;
     flex-shrink: 0;
     border-right: 1px solid #CFCFCF
-}
-.nav-mobile {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: #EFEFEF;
-    z-index: 999;
-    overflow-y: scroll;
 }
 .nav-pills > li {
     border-bottom: 1px solid #eaebeb;
