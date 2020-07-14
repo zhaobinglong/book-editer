@@ -421,9 +421,151 @@
 
     </div>
 
+    <!-- skin皮肤选择器 -->
+    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="400px">
+        <div slot="title" class="dialog-title" >
+          <span class="title-text">选择皮肤</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogSkin = false"></span>
+          </div>
+        </div>
+        <div class="dialog-body">
+          <el-form v-if="form.background">
+              <el-form-item label="Keep current background">
+                  <el-switch v-model="form.keepBackground" ></el-switch>
+              </el-form-item>
+          </el-form>
+          <div >
+            <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" v-if="index != 'custom'">
+              <img v-if="item.url" :src="item.url" style="height: 100px; width: 100px">
+              <div v-else :style="{backgroundColor: item.colorBackground}" style="height: 100px; width: 100px"></div>
+              <p style="text-align: center;height: 20px; margin-top: 10px" >
+                <span :class="index == form.skin ? 'skinTextChecked':''" style="display: inline-block; padding: 0 10px; border-radius: 10px">{{ item.name }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogSkin = false">CANCEL</el-button>
+          <el-button type="primary" @click="dialogSkin = false">OK</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- logo选择器 -->
+    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="350px">
+        <div slot="title" class="dialog-title" >
+          <span class="title-text">编辑logo</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogLogo = false"></span>
+          </div>
+        </div>
+        <div class="dialog-body">
+          <div class="mb20 upload-img">
+             <img :src="form.logo" style="max-height:50px;max-width:250px;width: auto;height: auto;">
+              <el-popover placement="right" width="200" trigger="click">
+                <div>
+                   <p @click="logoSetting" class="el-popover_item">Back to Default</p>
+                   <p @click="logoSetting" class="el-popover_item">Remove</p>
+                </div>
+                <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
+              </el-popover>
+          </div>
+          <el-upload
+            ref="uploadLogo"
+            class="upload-demo"
+            :http-request="uploadLogo"
+            :show-file-list="false"
+            action=""
+            :auto-upload="true">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+          <div style="padding: 20px;">
+            <el-input v-model="logoInput" placeholder="https://your-website.com"></el-input>
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogLogo = false">CANCEL</el-button>
+          <el-button type="primary" @click="dialogLogo = false">OK</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 背景选择器 -->
+    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="350px">
+        <div slot="title" class="dialog-title" >
+          <span class="title-text">EDIT BACKGROUND</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogBackground = false"></span>
+          </div>
+        </div>
+        <div class="dialog-body">
+          <div  class="mb20 upload-img">
+              <img  :src="form.background" class="avatar" >
+              <el-popover
+                placement="right"
+                width="200"
+                trigger="click">
+                <div>
+                   <p @click="backgroundSetting" class="el-popover_item">Back to Default</p>
+                   <p @click="backgroundSetting" class="el-popover_item">Remove</p>
+                </div>
+                <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
+              </el-popover>           
+          </div>
+          <el-upload
+            class="upload-demo"
+            :http-request="uploadBackground"
+            :show-file-list="false"
+            action="">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+          <div style="padding: 20px">
+            <el-form label-width="140px" ref="form" :model="form">
+              <el-form-item
+                label="Image Placement"
+              >
+                <el-select v-model="form.backgroundPlace" placeholder="请选择">
+                <el-option
+                  v-for="(item, index) in background.placement"
+                  :key="index"
+                  :label="item"
+                  :value="index">
+                </el-option>
+              </el-select>
+              </el-form-item>
+              <el-form-item
+                label="Filling Form"
+              >
+                <el-popover
+                  placement="right"
+                  width="180"
+                  trigger="click">
+                  <div  class="rank">
+                      <span class="rank-item" :class="item.checked ? 'rank-item-checked':''" v-for="(item, index) in rank" @click="clickRank(item)" :key="index">
+                        <i :class="item.icon ? item.icon : ''"></i>
+                      </span>
+                  </div>
+                  <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
+                  <el-input slot="reference" v-model="backgroundFill" ></el-input>
+                </el-popover>
+              </el-form-item>
+            </el-form>          
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogBackground = false">CANCEL</el-button>
+          <el-button type="primary" @click="dialogBackground = false">OK</el-button>
+        </div>
+    </el-dialog>
+
     <!-- 颜色选择器 -->
-    <el-dialog title="SELECT COLORS" :visible.sync="dialogColor" width="450px">
-      <div style="display: flex">
+    <el-dialog title="SELECT COLORS" :visible.sync="dialogColor" width="390px">
+        <div slot="title" class="dialog-title" >
+          <span class="title-text">SELECT COLORS</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogColor = false"></span>
+          </div>
+        </div>
+      <div style="display: flex" class="dialog-body">
         <div >
             <div v-for="(item, index) in colors" style="display: flex; align-items: center; padding: 5px;margin-right: 10px;" :key="index" @click="initColorSelect(item.label, skins[form.skin][item.label], index)" :class="currentColorPicker == index ? 'color-picker-item-active' : ''"> 
               <span class="color-picker-item"  :style="{backgroundColor: form[item.label] }"></span>
@@ -435,124 +577,87 @@
           <div id="color-render-box"></div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="dialogColor = false">CANCEL</el-button>
         <el-button type="primary" @click="dialogColor = false">OK</el-button>
-      </span>
+      </div>
     </el-dialog>
 
-    <!-- skin皮肤选择器 -->
-    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="400px">
-        <el-form v-if="form.background">
-            <el-form-item label="Keep current background">
-                <el-switch v-model="form.keepBackground" ></el-switch>
-            </el-form-item>
-        </el-form>
-        <div >
-          <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(item, index)" v-if="index != 'custom'">
-            <img v-if="item.url" :src="item.url" style="height: 100px; width: 100px">
-            <div v-else :style="{backgroundColor: item.colorBackground}" style="height: 100px; width: 100px"></div>
-            <p style="text-align: center;height: 20px; margin-top: 10px" >
-              <span :class="index == form.skin ? 'skinTextChecked':''" style="display: inline-block; padding: 0 10px; border-radius: 10px">{{ item.name }}</span>
-            </p>
+    <!-- favicon选择器 -->
+    <el-dialog id="upload" title="EDIT FAVICON" :visible.sync="dialogFavicon" width="350px">
+        <div slot="title" class="dialog-title" >
+          <span class="title-text">EDIT FAVICON</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogFavicon = false"></span>
           </div>
         </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogSkin = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogSkin = false">OK</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- logo选择器 -->
-    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="350px">
-        <div class="mb20 upload-img">
-           <img :src="form.logo" style="max-height:50px;max-width:250px;width: auto;height: auto;">
-            <el-popover placement="right" width="200" trigger="click">
-              <div>
-                 <p @click="logoSetting" class="el-popover_item">Back to Default</p>
-                 <p @click="logoSetting" class="el-popover_item">Remove</p>
-              </div>
-              <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
-            </el-popover>
+        <div class="dialog-body">
+          <div class="mb20 upload-img">
+              <img :src="form.favico"  >
+              <el-popover
+                placement="right"
+                width="200"
+                trigger="click">
+                <div>
+                   <p @click="faviconSetting">Back to Default</p>
+                   <p @click="faviconSetting">Remove</p>
+                </div>
+                <i slot="reference" class="el-icon-s-tools" ></i>
+              </el-popover>
+          </div>
+          <el-upload
+            class="upload-demo"
+            :http-request="uploadFavicon"
+            :show-file-list="false"
+            action="">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
         </div>
-        <el-upload
-          ref="uploadLogo"
-          class="upload-demo"
-          :http-request="uploadLogo"
-          :show-file-list="false"
-          action=""
-          :auto-upload="true">
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-        <div style="padding: 20px;">
-        <el-input v-model="logoInput" placeholder="https://your-website.com"></el-input>
-        </div>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLogo = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogLogo = false">OK</el-button>
-      </span>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFavicon = false">CANCEL</el-button>
+        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
+      </div>
     </el-dialog>
 
     <!-- button选择器 -->
     <el-dialog title="EDIT BUTTON" :visible.sync="dialogButton"
       width="350px">
-        <el-form ref="form" :model="form" >
-            <el-form-item label="Show Contacts Button">
-                <el-switch v-model="form.externalEnable"></el-switch>
-            </el-form-item>
-            <el-form-item label="Button Text">
-                <el-input v-model="form.externalText" placeholder=""></el-input>
-            </el-form-item>
-            <el-form-item label="Web Address(URL)">
-                <el-input v-model="form.external" placeholder="https://your-website.com"></el-input>
-            </el-form-item>
-        </el-form>
-      <span slot="footer" class="dialog-footer">
+        <div slot="title" class="dialog-title" >
+          <span class="title-text">EDIT BUTTON</span>
+          <div class="button-right">
+            <span class="title-close" @click="dialogButton = false"></span>
+          </div>
+        </div>
+        <div class="dialog-body">
+          <el-form ref="form" :model="form" >
+              <el-form-item label="Show Contacts Button">
+                  <el-switch v-model="form.externalEnable"></el-switch>
+              </el-form-item>
+              <el-form-item label="Button Text">
+                  <el-input v-model="form.externalText" placeholder=""></el-input>
+              </el-form-item>
+              <el-form-item label="Web Address(URL)">
+                  <el-input v-model="form.external" placeholder="https://your-website.com"></el-input>
+              </el-form-item>
+          </el-form>
+        </div>
+      <div slot="footer" class="dialog-footer">
         <el-button @click="dialogButton = false">CANCEL</el-button>
         <el-button type="primary" @click="mainSave">OK</el-button>
-      </span>
+      </div>
     </el-dialog>
 
-    <!-- favicon选择器 -->
-    <el-dialog id="upload" title="EDIT FAVICON" :visible.sync="dialogFavicon" width="350px">
-        <div class="mb20 upload-img">
-            <img :src="form.favico"  >
-            <el-popover
-              placement="right"
-              width="200"
-              trigger="click">
-              <div>
-                 <p @click="faviconSetting">Back to Default</p>
-                 <p @click="faviconSetting">Remove</p>
-              </div>
-              <i slot="reference" class="el-icon-s-tools" ></i>
-            </el-popover>
-        </div>
-        <el-upload
-          class="upload-demo"
-          :http-request="uploadFavicon"
-          :show-file-list="false"
-          action="">
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-    
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFavicon = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogFavicon = false">OK</el-button>
-      </span>
-    </el-dialog>
 
     <!-- 下载选择器 -->
     <el-dialog title="下载出版物" :visible.sync="dialogDownload" width="350px">
-      <div slot="title" class="dialog-title">
+      <div slot="title" class="dialog-title" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)" >
         <span class="icon iconfont iconxiazai" ></span>
         <span class="title-text">下载出版物</span>
         <div class="button-right">
           <span class="title-close" @click="dialogDownload = false"></span>
         </div>
       </div>
-      <div class="download">
+      <div class=" dialog-body download " style="display: flex;"  :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
           <div class="download-all">
             <img src="./css/pdf.webp" style="width: 50px; height: 50px;">
             <div class="desc">
@@ -564,145 +669,71 @@
               <a download :href="'http://book.baige.me/download?bookId=' + form.bookId + '&page=1'">当前页面(5.2M)</a> 
           </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}" >
         <span @click="dialogDownload = false" v-if="isMobile">取消</span>
-      </span>
+      </div>
     </el-dialog>
 
     <!--分享对话框 -->
-    <el-dialog title="分享" :visible.sync="dialogShare" width="350px">
-        <div slot="title" class="dialog-title" >
+    <el-dialog title="分享" :visible.sync="dialogShare" width="350px" >
+        <div class="dialog-title"  slot="title" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
           <span class="icon iconfont iconfenxiang2" ></span>
           <span class="title-text">分享</span>
           <div class="button-right">
             <span class="title-close" @click="dialogShare = false"></span>
           </div>
         </div>
-      <div style="display: flex;">
-        <div id="qrcode" style="padding-right: 10px"></div>
-        <div >
-          <el-input v-model="shareLink" ></el-input>
-          <el-button type="primary"  @click="copy(share.link)" style="float: right; margin-top: 10px;">复制</el-button>
+        <div style="display: flex;" class="dialog-body"  :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
+          <div id="qrcode" style="padding-right: 10px"></div>
+          <div >
+            <el-input v-model="shareLink" ></el-input>
+            <el-button type="primary"  @click="copy(share.link)" style="float: right; margin-top: 10px;">复制</el-button>
+          </div>
         </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <span @click="dialogShare = false" v-if="isMobile">取消</span>
-      </span>
+        <div slot="footer" class="dialog-footer" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}" >
+          <span @click="dialogShare = false" v-if="isMobile">取消</span>
+        </div>        
     </el-dialog>
 
 
     <!--发送邮件对话框 -->
     <el-dialog title="邮件" :visible.sync="dialogEmail" width="350px">
-      <div slot="title" class="dialog-title">
+      <div slot="title" class="dialog-title" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
         <span class="icon iconfont iconEMAIL" ></span>
         <span class="title-text">邮件</span>
         <div class="button-right">
           <span class="title-close" @click="dialogEmail = false"></span>
         </div>
       </div>
-      <div style="display: flex;">
+
+      <div style="display: flex;" class="dialog-body"  :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
         <el-input  placeholder="发送至邮箱" v-model="inputEmail" style="margin-right: -5px"></el-input>
         <el-button type="primary"  @click="sendEmail" >确定</el-button>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <span @click="dialogEmail = false" v-if="isMobile">取消</span>
-      </span>
-    </el-dialog>
 
-    <!--声音对话框 -->
-    <el-dialog title="声音" :visible.sync="dialogSound" width="350px">
-      <div slot="title" class="dialog-title">
-        <span class="icon iconfont iconmute-off" ></span>
-        <span class="title-text">声音</span>
-        <div class="button-right">
-          <span class="title-close" @click="dialogSound = false"></span>
-        </div>
+      <div slot="footer" class="dialog-footer" class="dialog-footer" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}" >
+        <span @click="dialogEmail = false" v-if="isMobile">取消</span>
       </div>
-      <div style="text-align: center;">
-        <span class="icon iconfont iconmute-off" @click="audioControl" :style="{textDecoration: soundStatus}"></span>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <span @click="dialogSound = false" v-if="isMobile">取消</span>
-      </span>
     </el-dialog>
     
     <!-- 电话对话框 -->
     <el-dialog title="电话" :visible.sync="dialogContactTel" width="350px">
-      <div slot="title" class="dialog-title">
+      <div slot="title" class="dialog-title" :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)" >
         <span class="icon iconfont icontelphone" ></span>
         <span class="title-text">电话</span>
         <div class="button-right">
           <span class="title-close" @click="dialogContactTel = false"></span>
         </div>
       </div>
-      <div style="display: flex; justify-content: center;">
+
+      <div style="display: flex; justify-content: center;" class="dialog-body"  :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}">
         <span class="icon iconfont icontelphone" ></span>:{{ form.contactTel }}
       </div>
-      <span slot="footer" class="dialog-footer">
+
+      <div slot="footer" class="dialog-footer" class="dialog-footer" :class="changeMenuGrayClass(skins[form.skin].colorBackground)" :style="{backgroundColor: skins[form.skin].colorBackground}" >
         <span @click="dialogContactTel = false" v-if="isMobile">取消</span>
         <!-- <el-button type="primary"  @click="dialogContactTel = false">确定</el-button> -->
-      </span>
-    </el-dialog>
-
-    <!-- 背景选择器 -->
-    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="350px">
-        <div  class="mb20 upload-img">
-            <img  :src="form.background" class="avatar" >
-            <el-popover
-              placement="right"
-              width="200"
-              trigger="click">
-              <div>
-                 <p @click="backgroundSetting" class="el-popover_item">Back to Default</p>
-                 <p @click="backgroundSetting" class="el-popover_item">Remove</p>
-              </div>
-              <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
-            </el-popover>           
-        </div>
-        <el-upload
-          class="upload-demo"
-          :http-request="uploadBackground"
-          :show-file-list="false"
-          action="">
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-
-        <div style="padding: 20px">
-        <el-form label-width="140px" ref="form" :model="form">
-          <el-form-item
-            label="Image Placement"
-          >
-            <el-select v-model="form.backgroundPlace" placeholder="请选择">
-            <el-option
-              v-for="(item, index) in background.placement"
-              :key="index"
-              :label="item"
-              :value="index">
-            </el-option>
-          </el-select>
-          </el-form-item>
-          <el-form-item
-            label="Filling Form"
-          >
-            <el-popover
-              placement="right"
-              width="180"
-              trigger="click">
-              <div  class="rank">
-                  <span class="rank-item" :class="item.checked ? 'rank-item-checked':''" v-for="(item, index) in rank" @click="clickRank(item)" :key="index">
-                    <i :class="item.icon ? item.icon : ''"></i>
-                  </span>
-              </div>
-              <!-- <el-select  v-model="form.background.filling" placeholder="请选择"> -->
-              <el-input slot="reference" v-model="backgroundFill" ></el-input>
-            </el-popover>
-          </el-form-item>
-        </el-form>          
-        </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogBackground = false">CANCEL</el-button>
-        <el-button type="primary" @click="dialogBackground = false">OK</el-button>
-      </span>
+      </div>
     </el-dialog>
 
 </div>

@@ -127,7 +127,7 @@ body {
     background-color: #EFEFEF
 }
 .el-dialog__header {
-    border-bottom: 1px solid #EBEEF5
+   border-bottom: none
 }
 .el-popover_item {
     padding: 0 6px;
@@ -161,21 +161,31 @@ body {
 .el-tree-node:focus > .el-tree-node__content {
     background-color: transparent !important;
 }
-/*.el-dialog__header {
+.el-dialog__header {
     padding: 0 !important;
 }
 .el-dialog__body {
-    padding: 0!important
+    padding: 0!important;
+    flex-grow: 1;
+    display: flex;
 }
-.el-dialog_body {
-    padding: 30px 20px
+.el-dialog__footer {
+    padding: 0!important;
 }
 .el-dialog__headerbtn .el-dialog__close {
     color: inherit!important;
 }
 .dialog-title {
     padding: 20px 20px 10px;
-}*/
+}
+.dialog-body {
+    padding: 30px 20px;
+    align-items: center;
+    width: 100%;
+}
+.dialog-footer {
+    padding: 10px 20px 20px ;
+}
 
 /*媒体查询，动态更新弹出框的样式*/
 /* Extra small devices (phones, 600px and down) */
@@ -235,7 +245,8 @@ body {
     height: 50px;
 }
 .download {
-  
+    flex-direction: column;
+    justify-content: center;
 }
 .download .download-all {
     display: flex;
@@ -1120,7 +1131,7 @@ body {
 
 /*资源上传*/
 #upload .el-dialog__body {
-   padding: 0 0 30px!important;
+   padding: 0!important;
    text-align: center;
 }
 .upload-img {
