@@ -2,8 +2,11 @@
 
 打开命令行，进入根目录，执行：
 ```
-browser-sync start --server --files "css/*.css, *.html"
+npm run dev
 ```
+
+## 部署
+不能直接部署，webpack把js代码从html里面剥离了出来
 
 ## 16进制颜色转灰度值
 对于彩色转灰度，有一个很著名的心理学公式：
