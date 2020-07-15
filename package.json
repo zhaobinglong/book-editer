@@ -24,7 +24,7 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --inline --progesss --colors --open",
-    "build": "webpack --progress --profile --colors --config webpack.production.config.js"
+    "build": "webpack --progress --profile --colors --config webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
