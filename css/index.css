@@ -177,6 +177,10 @@ body {
     width: 100%;
 }
 
+.dialog-title {
+    display: flex;
+    justify-content: space-between;
+}
 
 /*媒体查询，动态更新弹出框的样式*/
 /* Extra small devices (phones, 600px and down) */
@@ -261,7 +265,6 @@ body {
     height: 100vh;
     overflow-y: auto;
     flex-shrink: 0;
-    border-right: 1px solid #CFCFCF
 }
 .nav-pills > li {
     border-bottom: 1px solid #eaebeb;

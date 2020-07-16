@@ -61,6 +61,9 @@
 <!-- 隐藏的book页数 -->
 <input type="hidden" value="113302" id="bookId">
 
+<!-- 隐藏的book页数 -->
+<input type="hidden" value="113302" id="userId">
+
 <input type="hidden" value="153e7360-7e08-4ff2-9a3b-c3e7320052f1" id="uploadId">
 
 <!-- 隐藏的book页数 -->
@@ -113,7 +116,7 @@
           <div class="menu-item" style="padding: 0 10px;border-bottom: 1px solid #EBEEF5">
             <div >皮肤</div>
             <div class="unActive-a flex" style="padding: 10px 17px">
-                <span style="color: #999" @click="dialogSkin = true">{{ skins[form.skin].name }}</span>
+                <span style="color: #999" @click="showDialogSkin">{{ skins[form.skin].name }}</span>
             </div>
           </div>
           <el-collapse-item name="品牌">
@@ -125,11 +128,11 @@
                 <div role="presentation" class="menu-down show-menu" style="display: block;">
                     <div class="brand-col">
                         <span>Logo</span>
-                        <button class="brand-btns logo" @click="dialogLogo = true">Custon ···</button>
+                        <button class="brand-btns logo" @click="showDialogLogo">Custon ···</button>
                     </div>
                     <div class="brand-col">
                         <span>背景图</span>
-                        <button class="brand-btns bg-image" @click="dialogBackground = true">Default ···</button>
+                        <button class="brand-btns bg-image" @click="showDialogBackground">Default ···</button>
                     </div>
                     <div class="brand-col">
                         <span>颜色</span>
@@ -309,7 +312,7 @@
     <div class="main-right">
 
       <!-- 目录区 -->
-      <ul class="nav nav-pills nav-stacked skinbar border-none"  v-show="form.navigation == 0 && !userCloseNavigation" >
+      <ul class="nav nav-pills nav-stacked skinbar "  v-show="form.navigation == 0 && !userCloseNavigation" style="border-right: 1px solid #666; box-sizing: border-box">
           <div >
             <div class="menu-item div-panel" >
                 <div>
@@ -324,9 +327,9 @@
 
 
       <!-- 缩略图区 -->
-      <ul class="nav nav-pills nav-stacked skinbar border-none"   v-show="form.navigation == 1" >
+      <ul class="nav nav-pills nav-stacked skinbar " style="border-right: 1px solid #666"   v-show="form.navigation == 1" >
         <div>
-            <div  class="menu-item "  :style="{backgroundColor: skins[form.skin].colorPanel}" :class="changeMenuGrayClass(skins[form.skin].colorPanel)">
+            <div  class="menu-item div-panel"  >
               <div>
                 <span  class="icon iconfont iconview-thumbs"></span >缩略图
               </div>
@@ -343,8 +346,8 @@
       </ul>
       
       <!-- 主编辑区 -->
-          <div class="main" :style="{backgroundImage:'url(' + skins[form.skin].url + ')'}">
-              <div class="main-bk" :style="{backgroundImage: 'url(' + form.background + ')',  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" v-if="form.keepBackground"></div>
+          <div class="main" >
+              <div class="main-bk" :style="{backgroundImage: setBackground(form.skin, form.keepBackground, form.background),  backgroundPosition: position, backgroundRepeat: backgroundRepeat, backgroundSize: backgroundSize}" ></div>
 
               <div v-if="isMobile" class="header-mobile" >
                 <div>1/{{ bookPageNum }}</div>
@@ -370,9 +373,10 @@
 
               <img :src="form.logo" class="logo" v-if="!isMobile">  
 
-            <!-- 下工具栏 -->
+              <!-- 下工具栏 -->
               <div  class="page-footer" >
                   <span v-for="(item, index) in icons" :key="index"  class="icon iconfont" :class="setIconClass(item)"   style="padding: 0 4px; height: 20px;" @click="clickIcon(item)" v-if="!item.hiddenBottom"></span >
+
               </div>  
               
           </div>
@@ -423,12 +427,9 @@
     </div>
 
     <!-- skin皮肤选择器 -->
-    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="400px">
+    <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="400px" :show-close="false">
         <div slot="title" class="dialog-title" >
           <span class="title-text">选择皮肤</span>
-          <div class="button-right">
-            <span class="title-close" @click="dialogSkin = false"></span>
-          </div>
         </div>
         <div class="dialog-body">
           <el-form v-if="form.background">
@@ -438,7 +439,7 @@
           </el-form>
           <div >
             <div style="display: inline-block; margin-bottom: 20px; margin-right: 20px" v-for="(item, index) in skins" :key="index" @click="clickSkinItem(index)" v-if="index != 'custom'">
-              <img v-if="item.url" :src="item.url" style="height: 100px; width: 100px">
+              <img v-if="item.url" :src="item.thum" style="height: 100px; width: 100px">
               <div v-else :style="{backgroundColor: item.colorBackground}" style="height: 100px; width: 100px"></div>
               <p style="text-align: center;height: 20px; margin-top: 10px" >
                 <span :class="index == form.skin ? 'skinTextChecked':''" style="display: inline-block; padding: 0 10px; border-radius: 10px">{{ item.name }}</span>
@@ -447,17 +448,17 @@
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogSkin = false">CANCEL</el-button>
+          <el-button @click="closeDialogSkin">CANCEL</el-button>
           <el-button type="primary" @click="dialogSkin = false">OK</el-button>
         </div>
     </el-dialog>
 
     <!-- logo选择器 -->
-    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="350px">
+    <el-dialog id="upload" title="编辑logo" :visible.sync="dialogLogo" width="350px" :show-close="false">
         <div slot="title" class="dialog-title" >
           <span class="title-text">编辑logo</span>
-          <div class="button-right">
-            <span class="title-close" @click="dialogLogo = false"></span>
+          <div class="button-right" @click="closeDialogLogo(tmp)">
+            <i class="el-icon-close"></i>
           </div>
         </div>
         <div class="dialog-body">
@@ -485,17 +486,17 @@
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogLogo = false">CANCEL</el-button>
+          <el-button @click="closeDialogLogo(tmp)">CANCEL</el-button>
           <el-button type="primary" @click="dialogLogo = false">OK</el-button>
         </div>
     </el-dialog>
 
     <!-- 背景选择器 -->
-    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="350px">
+    <el-dialog id="upload" title="EDIT BACKGROUND" :visible.sync="dialogBackground" width="350px" :show-close="false">
         <div slot="title" class="dialog-title" >
           <span class="title-text">EDIT BACKGROUND</span>
-          <div class="button-right">
-            <span class="title-close" @click="dialogBackground = false"></span>
+          <div class="button-right" @click="closeDialogBackground">
+             <i class="el-icon-close"></i>
           </div>
         </div>
         <div class="dialog-body">
@@ -506,8 +507,8 @@
                 width="200"
                 trigger="click">
                 <div>
-                   <p @click="backgroundSetting" class="el-popover_item">Back to Default</p>
-                   <p @click="backgroundSetting" class="el-popover_item">Remove</p>
+                   <p @click="backgroundSetting(skins[form.skin].url)" class="el-popover_item">Back to Default</p>
+                   <p @click="backgroundSetting('')" class="el-popover_item">Remove</p>
                 </div>
                 <i slot="reference" class="el-icon-s-tools" style="position: absolute; "></i>
               </el-popover>           
@@ -553,7 +554,7 @@
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogBackground = false">CANCEL</el-button>
+          <el-button @click="closeDialogBackground" >CANCEL</el-button>
           <el-button type="primary" @click="dialogBackground = false">OK</el-button>
         </div>
     </el-dialog>
@@ -650,7 +651,7 @@
 
 
     <!-- 下载对话框 -->
-    <el-dialog title="下载出版物" :visible.sync="dialogDownload" width="350px">
+    <el-dialog  title="下载出版物" :visible.sync="dialogDownload" width="350px">
       <div slot="title" >
         <span class="icon iconfont iconxiazai" ></span>
         <span class="title-text">下载出版物</span>
@@ -666,9 +667,13 @@
                 <a download :href="'http://book.baige.me/download?bookId='+ form.bookId +'&page='">下载刊物为PDF文件</a> 
             </div>
           </div>
-          <div class="download-current">
-              <a download :href="'http://book.baige.me/download?bookId=' + form.bookId + '&page=1'">当前页面(5.2M)</a> 
+          <div class="download-current" v-if="currentPages.length == 2"> 
+              <a  download :href="'http://book.baige.me/download?bookId=' + form.bookId + '&page=' + currentPages[0]">当前第{{ currentPages[0] }}页</a> 
+              <a  download :href="'http://book.baige.me/download?bookId=' + form.bookId + '&page=' + currentPages[1]">当前第{{ currentPages[1] }}页</a> 
           </div>
+          <div class="download-current" v-else > 
+              <a  download :href="'http://book.baige.me/download?bookId=' + form.bookId + '&page=' + currentPages[0]">当前currentPages[0]页面</a> 
+          </div>          
       </div>
       <div slot="footer" >
         <span @click="dialogDownload = false" v-if="isMobile">取消</span>
@@ -718,7 +723,7 @@
     </el-dialog>
     
     <!-- 电话对话框 -->
-    <el-dialog title="电话" :visible.sync="dialogContactTel" width="350px">
+    <el-dialog title="电话" :visible.sync="dialogContactTel" width="350px" >
       <div slot="title"  >
         <span class="icon iconfont icontelphone" ></span>
         <span class="title-text">电话</span>
@@ -726,14 +731,16 @@
           <span class="title-close" @click="dialogContactTel = false"></span>
         </div>
       </div>
-
-      <div style="display: flex; justify-content: center;" class="dialog-body" >
-        <span class="icon iconfont icontelphone" ></span>:{{ form.contactTel }}
+      
+      <div style="display: flex; justify-content: center; flex-direction: column;" class="dialog-body" >
+        <p>{{ form.contactTel }}</p>
+        <p class="phone-button"  style="width: 50px; height: 50px; border-radius: 50%; text-align: center; line-height: 50px; margin-top: 20px;">
+          <span class="icon iconfont icontelphone" ></span>
+        </p>
       </div>
 
       <div slot="footer"  >
         <span @click="dialogContactTel = false" v-if="isMobile">取消</span>
-        <!-- <el-button type="primary"  @click="dialogContactTel = false">确定</el-button> -->
       </div>
     </el-dialog>
 
@@ -745,6 +752,7 @@
 var app = new Vue({
   el: '#app',
   data: {
+    currentPages: [], // 页码数组
     userCloseNavigation: false,
     searchListMoreBtnText: '',
     chatDom: false, // 在线客服的dom是否存在
@@ -776,12 +784,12 @@ var app = new Vue({
       {icon: 'el-icon-bottom-right', checked: false, label: '右下'}
     ],
     skins: {
-      gray: {name: '灰白色', colorPanel: '#FFFFFF', colorBackground: '#EFEFEF' ,checked: false, url: ''},
-      deepGray: {name: '深灰色', colorPanel: '#000000',colorBackground: '#333333', checked: false, url: ''},
-      paper: {name: 'paper', colorPanel: '#777777',colorBackground: '#666666',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg'},
-      metal: {name: 'metal', colorPanel: '#777777',colorBackground: '#cac7c7', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
-      water: {name: 'water', colorPanel: '#777777', colorBackground: '#2e79c6',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
-      falling: {name: 'falling', colorPanel: '#eb691d', colorBackground: '#eb691d', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
+      gray: {name: '灰白色', colorPanel: '#FFFFFF', colorBackground: '#EFEFEF' ,checked: false, url: '', thum: ''},
+      deepGray: {name: '深灰色', colorPanel: '#000000',colorBackground: '#333333', checked: false, url: '', thum: ''},
+      paper: {name: 'paper', colorPanel: '#777777',colorBackground: '#666666',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg', thum: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/67b82cb9-026e-44a5-8946-0c2f700e1987-WechatIMG614.jpeg'},
+      metal: {name: 'metal', colorPanel: '#777777',colorBackground: '#cac7c7', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg',thum: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/ba08ff99-96f4-49b5-94d3-12f739ce7fd2-WechatIMG615.jpeg'},
+      water: {name: 'water', colorPanel: '#777777', colorBackground: '#2e79c6',checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg', thum: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/68f8d55a-f0ea-49f6-9936-23b76bc0d796-WechatIMG617.jpeg'},
+      falling: {name: 'falling', colorPanel: '#eb691d', colorBackground: '#eb691d', checked: false, url: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg', thum: 'https://background-favico-logo-1251142715.cos.ap-shanghai.myqcloud.com/688522e7-f9ee-4d4d-bfcd-da2b4f8df0d9-WechatIMG616.jpeg'},
       custom: {name: '', colorPanel: '#777777', colorBackground: '#000000'}
     },
     colors: [
@@ -896,50 +904,17 @@ var app = new Vue({
       {'group':1,'label': 'bookTable','title': '目录', 'icon': 'iconcatalog', 'checked': false, 'bottomLine': true},
       {'group':2,'label': 'sound','title': '声音', 'icon': 'iconmute-off', 'checked': false},
       {'group':2,'label': 'fullScreen','title': '全屏', 'icon': 'iconfull-screen', 'checked': false},
-      // {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
+      {'group':2,'label': 'zoom','title': '放大镜', 'icon': 'iconzoom-in', 'checked': false},
       {'group':2,'label': 'search','title': '搜索', 'icon': 'iconsearch', 'checked': false, 'bottomLine': true},
       {'group':3,'label': 'contactEnable','title': '电话', 'icon': 'icontelphone', 'checked': false, hidden: true},
-      {'group':4,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, hiddenBottom: true},
-      {'group':5,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true}
+      {'group':3,'label': 'chatEnable','title': '在线客服', 'icon': 'iconchat', 'checked': false, hidden: true, hiddenBottom: true},
+      {'group':3,'label': 'emailEnable','title': '邮件', 'icon': 'iconEMAIL', 'checked': false, hidden: true}
     ],
-    treeData: [{
-      label: '一级 1',
-      children: [{
-        label: '二级 1-1',
-        children: [{
-          label: '三级 1-1-1'
-        }]
-      }]
-    }, {
-      label: '一级 2',
-      children: [{
-        label: '二级 2-1',
-        children: [{
-          label: '三级 2-1-1'
-        }]
-      }, {
-        label: '二级 2-2',
-        children: [{
-          label: '三级 2-2-1'
-        }]
-      }]
-    }, {
-      label: '一级 3',
-      children: [{
-        label: '二级 3-1',
-        children: [{
-          label: '三级 3-1-1'
-        }]
-      }, {
-        label: '二级 3-2',
-        children: [{
-          label: '三级 3-2-1'
-        }]
-      }]
-    }],
+    treeData: [],
     searchList: [],
     searchCount: 0,
-    searchCurrentPage: 1
+    searchCurrentPage: 1,
+    tmp: null 
   },
   computed: {
     navigationArr() { 
@@ -1090,6 +1065,11 @@ var app = new Vue({
       if (res.data.skin == 'custom') {
         res.data.skin = 'gray'
       }
+      
+      if (res.data.background == '') {
+        res.data.background = this.skins[this.form.skin].url
+      }
+
       Object.assign(this.form, res.data)
       this.initThumbnail()
       if (res.data.chatEnable) {
@@ -1122,7 +1102,7 @@ var app = new Vue({
       for (var i = 0; i < data.length; i++) {
         if (data[i].level == 1) {
           let item = {
-            label: data[i].sort + ':' +data[i].name,
+            label: data[i].name,
             sort: data[i].sort,
             pageNumber: data[i].pageNumber
           }
@@ -1200,6 +1180,7 @@ var app = new Vue({
         axios.post('http://m.baige.me/api/book/saveSettingImage', formData).then(res => {
           console.log(res)
           this.form.background = res.data
+          this.form.keepBackground = true
         })      
     },
     uploadFavicon(files) {
@@ -1258,8 +1239,16 @@ var app = new Vue({
     logoSetting () {
       this.form.logo = ''
     },
-    backgroundSetting() {
-      this.form.background = ''
+    backgroundSetting(url) {
+      // 恢复默认背景图
+      if (url) {
+        this.form.background = this.skins[this.form.skin].url
+        this.form.keepBackground = false
+      // 删除背景图
+      } else {
+        this.form.background = ''
+        this.form.keepBackground = true
+      }
     },
     navigationSetting (obj) {
       this.navigationArr = this.navigationArr.map(item => {
@@ -1288,9 +1277,11 @@ var app = new Vue({
     // 开始切换css样式
     clickSkinItem (key) {
       this.form.skin = key
-      console.log(this.skins[key])
       this.form.colorBackground = this.skins[key].colorBackground
       this.form.colorPanel = this.skins[key].colorPanel
+      if (!this.form.keepBackground) {
+        this.form.background = this.skins[key].url
+      }
       this.resetSkinStyle(key)
     },
     
@@ -1306,14 +1297,18 @@ var app = new Vue({
       }
 
       // 设置body的背景颜色和文字颜色
+      // el-dialog只需要设置最后的四个弹出框的body颜色，前面的不需要设置
       let bodyColor = this.getTextColor(skin.colorBackground)
       $('.main-right').css({"background-color": skin.colorBackground ,"color": bodyColor});
-      $('.el-dialog').css({"background-color": skin.colorBackground ,"color": bodyColor});
+      $('.el-dialog:gt(5)').css({"background-color": skin.colorBackground ,"color": bodyColor});
 
       // 设置面板的背景颜色和文字颜色
+      // el-dialog__header只需要设置最后的四个弹出框的面板颜色，前面的不需要设置
       let cp = this.getTextColor(skin.colorPanel)
       $('.div-panel').css({"background-color": skin.colorPanel ,"color": cp});
-      $('.el-dialog__header').css({"background-color": skin.colorPanel ,"color": cp});  
+      $('.el-dialog__header:gt(5)').css({"background-color": skin.colorPanel ,"color": cp}); 
+      $('.phone-button').css({"background-color": skin.colorPanel ,"color": cp});  
+
       if (sk == 'metal')  {
         // 设置下工具栏透明
         $('.page-footer').css({"background-color": "transparent" ,"color": cp});  
@@ -1325,6 +1320,7 @@ var app = new Vue({
       } else {
         $('.header').css({"background-color": skin.colorPanel ,"color": cp});  
       }
+
 
       if (this.isMobile) {
         $('ul').css({"background-color": skin.colorBackground ,"color": bodyColor});
@@ -1341,7 +1337,10 @@ var app = new Vue({
     clickIcon (item) {
         console.log(item)
         if (item.title == '下载') {
-            this.dialogDownload = true              
+            this.dialogDownload = true    
+            this.$nextTick(() => {
+               this.currentPages = this.getCurrentPages()
+            })          
         } else if (item.title == '分享') {
           this.dialogShare = true
           this.$nextTick(() => {
@@ -1376,7 +1375,17 @@ var app = new Vue({
         } else if (item.title == '在线客服') {
           this.clickStaff()
         } else if (item.title == '电话') {
-            this.dialogContactTel = true
+          this.dialogContactTel = true
+          this.$nextTick(() => {
+            let color = ''
+            if (this.form.colorPanel) {
+              color = this.form.colorPanel
+            } else {
+              color = this.skins[this.form.skin].colorPanel
+            }
+            let cp = this.getTextColor(color)
+            $('.phone-button').css({"background-color": color ,"color": cp}); 
+            })
         } else if (item.title == '邮件') {
             this.dialogEmail = true
         } else{
@@ -1673,8 +1682,8 @@ var app = new Vue({
     // 发送邮件
     sendEmail() {
       let data = {
-        'bookId': 2,
-        'userId': '',
+        'bookId': document.getElementById('bookId').value,
+        'userId': document.getElementById('userId').value,
         'email': this.inputEmail
       }
       if (!this.inputEmail) {
@@ -1684,15 +1693,14 @@ var app = new Vue({
         });          
         return false
       }
-      axios.post('/api/email', Qs.stringify(data)).then(res => {
-        console.log(res)
+      axios.post('http://book.baige.me/api/email', Qs.stringify(data)).then(res => {
         this.$message({
-          message: res,
+          message: '发送成功',
           type: 'success'
         }); 
       }).catch(res => {
         this.$message({
-          message: res,
+          message: '发送失败',
           type: 'error'
         });         
       })
@@ -1840,8 +1848,85 @@ var app = new Vue({
     changeTitle(title) {
       console.log('change title')
       document.title = title
-    }
-    
+    },
+    getCurrentPages(){
+      var pageRanges = $(".flipbook").turn("view");
+      pageRanges=pageRanges.filter(function(p){return p>0});
+      return pageRanges
+    },
+    // 
+    setBackground(skin, keepBackground, background) {
+      if (keepBackground) {
+        return `url(${background})`
+      } else {
+        return `url(${this.skins[skin].url})`
+      }
+    },
+    showDialogSkin() {
+      this.tmp = {
+        skin: this.form.skin,
+        keepBackground: this.form.keepBackground,
+        background: this.form.background,
+        colorBackground: this.form.colorBackground,
+        colorPanel: this.form.colorPanel
+      }
+      this.dialogSkin = true
+    },
+    closeDialogSkin() {
+      
+      this.form.skin = this.tmp.skin
+      this.form.keepBackground = this.tmp.keepBackground
+      this.form.background = this.tmp.background
+      this.form.colorBackground = this.tmp.backgroundColor
+      this.form.colorPanel = this.tmp.colorPanel
+      console.log(this.tmp)
+      this.resetSkinStyle(this.tmp.skin, this.tmp.colorBackground, this.tmp.colorPanel)
+      this.dialogSkin = false
+    },
+    showDialogLogo() {
+      this.tmp = this.form.logo
+      this.dialogLogo = true
+    },
+    closeDialogLogo(tmp) {
+      this.form.logo = tmp
+      this.dialogLogo = false
+    },
+    showDialogBackground() {
+      this.tmp = {
+        background: this.form.background,
+        backgroundFill: this.form.backgroundFill,
+        backgroundPlace: this.form.backgroundPlace,
+      }
+      this.dialogBackground = true
+    },
+    closeDialogBackground() {
+      this.form.background = this.tmp.background
+      this.form.backgroundFill = this.tmp.backgroundFill
+      this.form.backgroundPlace = this.tmp.backgroundPlace
+      this.dialogBackground = false
+    },
+    showDialogColor() {
+      this.tmp = {
+        colorBackground: this.form.colorBackground,
+        colorPanel: this.form.colorPanel
+      }
+      this.dialogColor = true
+    },
+    closeDialogColor() {
+      this.form.colorBackground = this.tmp.colorBackground
+      this.form.colorPanel = this.tmp.colorPanel
+      this.dialogColor = false
+    }, 
+    showDialogFavico () {
+      this.tmp = {
+        favico: this.form.favico
+      }
+      this.dialogFavicon = true
+    },
+    closeDialogFavico() {
+      this.form.favico = this.tmp.favico
+      this.dialogFavicon = false
+    },        
   }
 })
 </script>
