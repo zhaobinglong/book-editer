@@ -337,7 +337,8 @@
             </div>
             <div :class="isMobile?'thum-mobile':'thum'">
                <div  class="thum-item"  v-for="(item, index) in myList" @click="clickThumItem(item, index)" :key="index">
-                  <el-image :key="item" :src="item" fit="cover" lazy></el-image>  
+                  <img v-if="index<10" :src="item">
+                  <el-image v-else :key="item" :src="item" fit="cover" lazy></el-image>  
                   <p>第{{ index + 1 }}页</p>
               </div>              
             </div>
@@ -423,6 +424,7 @@
           </div>
         </div>
       </div>
+
 
     </div>
 
@@ -1704,8 +1706,8 @@ var app = new Vue({
           type: 'error'
         });         
       })
-      this.dialogEmail = false
     },
+
     clickControlCollapse(activeNames) {
       console.log(activeNames)
       this.currentCollapse = activeNames
@@ -1873,7 +1875,6 @@ var app = new Vue({
       this.dialogSkin = true
     },
     closeDialogSkin() {
-      
       this.form.skin = this.tmp.skin
       this.form.keepBackground = this.tmp.keepBackground
       this.form.background = this.tmp.background

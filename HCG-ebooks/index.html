@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="js-focus-visible"><!--<![endif]--><!--STATUS OK-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>白鸽 电子目录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="www.yunzhan365.com">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+    <meta name="description" content="">
+    <meta name="keywords" content="HCG 电子目录">
+    <link rel="icon" href="//www.yunzhan365.com/favicon.ico" type="image/x-icon"/>
+    <script type="text/javascript" language="javascript" src="./jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="./hammer.min.js"></script>
+    <script type="text/javascript" src="./Chinese.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./setConfig.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./bookConfig.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./userConfig.js" charset="utf-8"></script>
+    <script type="text/javascript" language="javascript" src="./Bookcase.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./HintPoint.css">
+    <link rel="stylesheet" type="text/css" href="./bookcase.min.css">
+    
+    <script type="text/javascript" src="./check.js"></script>
+    <script type="text/javascript" src="./bookcase-share.js"></script>
+    <script src="./jweixin-1.4.0.js" async="true" defer="defer"></script>
+<style type="text/css">
+  @font-face {
+    font-weight: 400;
+    font-style:  normal;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-Regular.woff2') format('woff2');
+  }
+  @font-face {
+    font-weight: 400;
+    font-style:  italic;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-Italic.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-weight: 500;
+    font-style:  normal;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-Medium.woff2') format('woff2');
+  }
+  @font-face {
+    font-weight: 500;
+    font-style:  italic;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-MediumItalic.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-weight: 700;
+    font-style:  normal;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-Bold.woff2') format('woff2');
+  }
+  @font-face {
+    font-weight: 700;
+    font-style:  italic;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-BoldItalic.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-weight: 900;
+    font-style:  normal;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-Black.woff2') format('woff2');
+  }
+  @font-face {
+    font-weight: 900;
+    font-style:  italic;
+    font-family: 'Inter-Loom';
+    src: url('https://cdn.loom.com/assets/fonts/inter/Inter-UI-BlackItalic.woff2') format('woff2');
+  }
+</style>
+<style>
+    :root {
+      --lns-unit:0.5rem;--lns-fontSize-small:calc(1.5 * var(--lns-unit));--lns-lineHeight-small:1.5;--lns-fontSize-medium:calc(1.75 * var(--lns-unit));--lns-lineHeight-medium:1.58;--lns-fontSize-large:calc(2.25 * var(--lns-unit));--lns-lineHeight-large:1.56;--lns-fontSize-xlarge:calc(2.8 * var(--lns-unit));--lns-lineHeight-xlarge:1.43;--lns-fontSize-xxlarge:calc(4 * var(--lns-unit));--lns-lineHeight-xxlarge:1.2;--lns-fontWeight-normal:400;--lns-fontWeight-semiBold:600;--lns-radius-medium:4px;--lns-radius-large:8px;--lns-shadow-small:0 1px 4px hsla(0,0%,0%,0.15);--lns-shadow-medium:0 1px 4px hsla(0,0%,0%,0.1), 0 4px 16px hsla(0,0%,0%,0.07);--lns-shadow-large:0 1px 4px hsla(0,0%,0%,0.07), 0 6px 24px hsla(0,0%,0%,0.1);--lns-space-xsmall:calc(0.5 * var(--lns-unit));--lns-space-small:calc(1 * var(--lns-unit));--lns-space-medium:calc(2 * var(--lns-unit));--lns-space-large:calc(3 * var(--lns-unit));--lns-space-xlarge:calc(5 * var(--lns-unit));--lns-space-xxlarge:calc(8 * var(--lns-unit));--lns-color-purple:hsla(230,84%,63%,1);--lns-color-salmon:hsla(359,98%,68%,1);--lns-color-green:hsla(149,78%,53%,1);--lns-color-blue:hsla(201,100%,55%,1);--lns-color-red:hsla(356,86%,55%,1);--lns-color-yellow:hsla(40,100%,66%,1);--lns-color-grey8:hsla(230,11%,19%,1);--lns-color-grey7:hsla(230,10%,30%,1);--lns-color-grey6:hsla(230,9%,45%,1);--lns-color-grey5:hsla(230,8%,60%,1);--lns-color-grey4:hsla(230,7%,75%,1);--lns-color-grey3:hsla(230,7%,84%,1);--lns-color-grey2:hsla(230,7%,92%,1);--lns-color-grey1:hsla(230,7%,97%,1);--lns-color-white:hsla(230,7%,100%,1);--lns-themeLight-color-body:hsla(230,11%,19%,1);--lns-themeLight-color-bodyDimmed:hsla(230,40%,19%,0.6);--lns-themeLight-color-background:hsla(230,7%,100%,1);--lns-themeLight-color-backgroundHover:hsla(230,8%,92%,1);--lns-themeLight-color-backgroundActive:hsla(230,7%,84%,1);--lns-themeLight-color-overlay:hsla(230,7%,100%,1);--lns-themeLight-color-primary:hsla(230,84%,63%,1);--lns-themeLight-color-primaryHover:hsla(230,84%,53%,1);--lns-themeLight-color-primaryActive:hsla(230,84%,43%,1);--lns-themeLight-color-focusRing:hsla(230,84%,63%,0.5);--lns-themeLight-color-record:hsla(359,98%,68%,1);--lns-themeLight-color-recordHover:hsla(359,98%,58%,1);--lns-themeLight-color-recordActive:hsla(359,98%,48%,1);--lns-themeLight-color-border:hsla(230,9%,45%,0.2);--lns-themeLight-color-disabledContent:hsla(230,8%,60%,1);--lns-themeLight-color-disabledBackground:hsla(230,7%,92%,1);--lns-themeLight-color-backdrop:hsla(230,11%,19%,0.5);--lns-themeLight-color-formFieldBorder:hsla(230,7%,84%,1);--lns-themeLight-color-formFieldBackground:hsla(230,7%,100%,1);--lns-themeDark-color-body:hsla(230,7%,97%,1);--lns-themeDark-color-bodyDimmed:hsla(230,40%,97%,0.6);--lns-themeDark-color-background:hsla(230,11%,19%,1);--lns-themeDark-color-backgroundHover:hsla(230,11%,26%,1);--lns-themeDark-color-backgroundActive:hsla(230,11%,14%,1);--lns-themeDark-color-overlay:hsla(230,10%,30%,1);--lns-themeDark-color-primary:hsla(230,84%,63%,1);--lns-themeDark-color-primaryHover:hsla(230,84%,53%,1);--lns-themeDark-color-primaryActive:hsla(230,84%,43%,1);--lns-themeDark-color-focusRing:hsla(230,84%,63%,0.5);--lns-themeDark-color-record:hsla(359,98%,68%,1);--lns-themeDark-color-recordHover:hsla(359,98%,58%,1);--lns-themeDark-color-recordActive:hsla(359,98%,48%,1);--lns-themeDark-color-border:hsla(230,7%,75%,0.2);--lns-themeDark-color-disabledContent:hsla(230,8%,60%,1);--lns-themeDark-color-disabledBackground:hsla(230,10%,30%,1);--lns-themeDark-color-backdrop:hsla(230,11%,19%,0.5);--lns-themeDark-color-formFieldBorder:hsla(230,9%,45%,1);--lns-themeDark-color-formFieldBackground:hsla(230,11%,19%,1);
+    }
+  
+    :root,
+    .theme-light {
+      --lns-color-body: var(--lns-themeLight-color-body);--lns-color-bodyDimmed: var(--lns-themeLight-color-bodyDimmed);--lns-color-background: var(--lns-themeLight-color-background);--lns-color-backgroundHover: var(--lns-themeLight-color-backgroundHover);--lns-color-backgroundActive: var(--lns-themeLight-color-backgroundActive);--lns-color-overlay: var(--lns-themeLight-color-overlay);--lns-color-primary: var(--lns-themeLight-color-primary);--lns-color-primaryHover: var(--lns-themeLight-color-primaryHover);--lns-color-primaryActive: var(--lns-themeLight-color-primaryActive);--lns-color-focusRing: var(--lns-themeLight-color-focusRing);--lns-color-record: var(--lns-themeLight-color-record);--lns-color-recordHover: var(--lns-themeLight-color-recordHover);--lns-color-recordActive: var(--lns-themeLight-color-recordActive);--lns-color-border: var(--lns-themeLight-color-border);--lns-color-disabledContent: var(--lns-themeLight-color-disabledContent);--lns-color-disabledBackground: var(--lns-themeLight-color-disabledBackground);--lns-color-backdrop: var(--lns-themeLight-color-backdrop);--lns-color-formFieldBorder: var(--lns-themeLight-color-formFieldBorder);--lns-color-formFieldBackground: var(--lns-themeLight-color-formFieldBackground);
+    }
+
+    .theme-dark {
+      --lns-color-body: var(--lns-themeDark-color-body);--lns-color-bodyDimmed: var(--lns-themeDark-color-bodyDimmed);--lns-color-background: var(--lns-themeDark-color-background);--lns-color-backgroundHover: var(--lns-themeDark-color-backgroundHover);--lns-color-backgroundActive: var(--lns-themeDark-color-backgroundActive);--lns-color-overlay: var(--lns-themeDark-color-overlay);--lns-color-primary: var(--lns-themeDark-color-primary);--lns-color-primaryHover: var(--lns-themeDark-color-primaryHover);--lns-color-primaryActive: var(--lns-themeDark-color-primaryActive);--lns-color-focusRing: var(--lns-themeDark-color-focusRing);--lns-color-record: var(--lns-themeDark-color-record);--lns-color-recordHover: var(--lns-themeDark-color-recordHover);--lns-color-recordActive: var(--lns-themeDark-color-recordActive);--lns-color-border: var(--lns-themeDark-color-border);--lns-color-disabledContent: var(--lns-themeDark-color-disabledContent);--lns-color-disabledBackground: var(--lns-themeDark-color-disabledBackground);--lns-color-backdrop: var(--lns-themeDark-color-backdrop);--lns-color-formFieldBorder: var(--lns-themeDark-color-formFieldBorder);--lns-color-formFieldBackground: var(--lns-themeDark-color-formFieldBackground);
+    }
+</style>
+</head>
+<body class="silver" style="">
+    <input id="domain" type="hidden" value="baidu.com"/>
+    <div style="position:absolute;width:0;height:0;top:0;left:0;overflow:hidden;">
+        <img src="./baige_book_190_65.png">
+    </div>
+    <div class="main-container">
+      <!-- <div class="bookcase-panel" style="width: 100%; height: 100%;">
+        <div class="bookcase-nav">
+          <div class="nav-bg"></div>
+          <div class="nav-left"></div>
+          <div class="nav-mid"></div>
+          <div class="nav-right"></div>
+        </div>
+        <div class="nav-left-content">
+          <div class="nav-folder-btn" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></div>
+          <div class="nav-min-search" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+          <div class="nav-search-content">
+            <input type="text" class="nav-search-input input-form">
+            <div class="nav-search-btn" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+          </div>
+        </div>
+        <div class="nav-header">
+          <span class="nav-title" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">HCG 电子目录</span>
+        </div>
+        <div class="nav-right-btns">
+          <div type="button" class="nav-share-btn" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+          <div class="nav-sort-btns user-select-none">
+            <div class="nav-name-sort" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+            <div class="nav-date-sort" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+          </div>
+          <div class="nav-change-btn list-show" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+        </div>
+      </div>
+      <div class="bookcase-content" style="touch-action: pan-x pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+        <div class="case-panel mode-3" style="top: 0px; touch-action: pan-x pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+          <div class="case-background">
+            <div class="case-row ">
+              <div class="case-left"></div>
+              <div class="case-mid"></div>
+              <div class="case-right"></div>
+            </div>
+            <div class="case-row ">
+              <div class="case-left"></div>
+              <div class="case-mid"></div>
+              <div class="case-right"></div>
+            </div>
+            <div class="case-row ">
+              <div class="case-left"></div>
+              <div class="case-mid"></div>
+              <div class="case-right"></div>
+            </div>
+            <div class="case-row ">
+              <div class="case-left"></div>
+              <div class="case-mid"></div>
+              <div class="case-right"></div>
+            </div>
+            <div class="case-row ">
+              <div class="case-left"></div>
+              <div class="case-mid"></div>
+              <div class="case-right"></div>
+            </div>
+          </div>
+          <div class="case-content user-select-none" style="touch-action: pan-x pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="case-row ">
+              <div class="case-wrapper" style="width: 1820px;">
+                <div class="book-content" data-index="1320499" data-id="0" load-status="loaded" style="width: 152px; height: 166px;">
+                  <div class="book-wrapper" data-index="1320499" data-id="0" style="width: 129.006px; height: 166px; left: 11.4971px; top: 0px;">
+                    <div class="book-outer-title mode-3">
+                      <span>2020零售型录</span>
+                    </div>
+                    <img class="book-img" src="./shot.jpg" style="display: inline;">
+                    <div class="book-border-container" style="right: -3px; width: 4px;">
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 164px; top: 1px; left: 1px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 162px; top: 2px; left: 2px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 160px; top: 3px; left: 3px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 158px; top: 4px; left: 4px;"></div></div>
+                    </div>
+                </div>
+                <div class="book-content" data-index="1236913" data-id="1" load-status="loaded" style="width: 152px; height: 166px;">
+                  <div class="book-wrapper" data-index="1236913" data-id="1" style="width: 129.006px; height: 166px; left: 11.4971px; top: 0px;">
+                    <div class="book-outer-title mode-3">
+                      <span>2020综合型录-套景＋企业</span>
+                    </div>
+                    <img class="book-img" src="./shot(1).jpg" style="display: inline;">
+                    <div class="book-border-container" style="right: -3px; width: 4px;">
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 164px; top: 1px; left: 1px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 162px; top: 2px; left: 2px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 160px; top: 3px; left: 3px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 158px; top: 4px; left: 4px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="book-content" data-index="1236910" data-id="2" load-status="loaded" style="width: 152px; height: 166px;">
+                  <div class="book-wrapper" data-index="1236910" data-id="2" style="width: 129.006px; height: 166px; left: 11.4971px; top: 0px;">
+                    <div class="book-outer-title mode-3">
+                      <span>2020综合型录-瓷器＋浴室柜</span>
+                    </div>
+                    <img class="book-img" src="./shot(2).jpg" style="display: inline;">
+                    <div class="book-border-container" style="right: -3px; width: 4px;">
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 164px; top: 1px; left: 1px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 162px; top: 2px; left: 2px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 160px; top: 3px; left: 3px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 158px; top: 4px; left: 4px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="book-content" data-index="1236909" data-id="3" load-status="loaded" style="width: 152px; height: 166px;">
+                  <div class="book-wrapper" data-index="1236909" data-id="3" style="width: 129.006px; height: 166px; left: 11.4971px; top: 0px;">
+                    <div class="book-outer-title mode-3">
+                      <span>2020综合型录-浴缸＋淋浴房</span>
+                    </div>
+                    <img class="book-img" src="./shot(3).jpg" style="display: inline;">
+                    <div class="book-border-container" style="right: -3px; width: 4px;">
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 164px; top: 1px; left: 1px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 162px; top: 2px; left: 2px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(204, 204, 204); height: 160px; top: 3px; left: 3px;"></div>
+                      <div style="position: absolute; width: 1px; background: rgb(255, 255, 255); height: 158px; top: 4px; left: 4px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="case-row ">
+              <div class="case-wrapper" style="width: 1820px;"></div>
+            </div>
+            <div class="case-row ">
+              <div class="case-wrapper" style="width: 1820px;"></div>
+            </div>
+            <div class="case-row ">
+              <div class="case-wrapper" style="width: 1820px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bookcase-footer user-select-none">
+        <a rel="nofollow" class="footer-logo" href="javascript:void(0);">
+          <img src="./baige_book_190_65.png">
+        </a>
+        <div class="footer-skin-btn" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+          <ul class="footer-skin">
+            <div></div>
+            <li class="red" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></li>
+            <li class="gold" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></li>
+            <li class="silver active" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></li>
+            <li class="green" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></li>
+            <li class="yellow" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></li>
+          </ul>
+        </div>
+        <div class="footer-mid">
+          <input type="text" class="footer-input input-form" readonly="readonly" style="width: 40px;">
+        </div>
+      </div>
+      <div class="case-message vertical hide">
+        <div class="vertical-content"></div>
+      </div> -->
+    </div>
+
+<script type="text/javascript">
+    var fh5 = {
+        bookwebsite: "https://book.yunzhan365.com",
+        website: "https://www.yunzhan365.com",
+        header: "http://stat.yunzhan365.com",
+        hashKey: "yunzhan365",
+    };
+</script>
+</body><loom-container id="lo-engage-ext-container"><div></div><loom-shadow classname="resolved"></loom-shadow></loom-container>
+<script type="text/javascript">
+  console.log('script start')
+  // Bookcase()
+</script>
+</html>
