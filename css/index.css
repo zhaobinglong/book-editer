@@ -1200,3 +1200,15 @@ body {
 .skinfalling {
     background-color: #eb691d
 }
+
+.capture_choose {
+
+}
+.capture_choose .capture_item{
+    line-height: 40px; 
+    text-align: center; 
+    border-bottom: 1px solid #EFEFEF;
+ }
+.capture_choose .capture_item:last-child{
+    border-bottom: none;
+}

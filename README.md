@@ -20,8 +20,12 @@ Gray = R*0.299 + G*0.587 + B*0.114
 ## 后端API记录
 https://baige.w.eolinker.com/#/home/ams/project/inside/api/list?groupID=1007534&projectHashKey=1p1TgW9351875c5c90550139cf822a516e8e2bc71a19f0c&spaceKey=baige
 
-## 本地开发访问域名
-http://127.0.0.1:8000/
+## 开始开发
+cd src
+启动http-server
+
+
+
 
 
 ## css背景色控制
