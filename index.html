@@ -300,7 +300,7 @@
                 </div>
           </el-collapse-item>
 
-          <!-- capture  -->
+          <!-- capture-menu  -->
           <el-collapse-item name="capture">
             <template slot="title">
               <div style="padding-left: 10px">LEAD CAPTURE FROM</div>
@@ -323,34 +323,35 @@
                                 <span class="icon iconfont icontuozhuai" ></span>
                                 <input  class="form-control" :placeholder="item.label"  v-model="form[item.value]" >
                                 <span class="icon iconfont iconxuehua" style="padding: 0 4px; color: rgb(68, 147, 177)" v-if="item.needInput" @click="needInputCapture(item.id)"></span>
-                                <span class="icon iconfont iconxuehua" v-if="!item.needInput" style="padding: 0 4px; color: " @click="needInputCapture(item.id)"></span>
+                                <span class="icon iconfont iconxuehua" v-if="!item.needInput" style="padding: 0 4px; color: #999" @click="needInputCapture(item.id)"></span>
                                 <span class="icon iconfont iconlajitong" @click="delCapture(item)"></span>
                               </div>
                             </div>
                         </draggable>
-                        <div style="text-align: center;">
+                        <div style="text-align: center; border: 1px dashed #4493b1; color: #4493b1;">
                           <el-popover
                           placement="bottom"
                           width="250"
                           v-model="visibleCaptureChoose"
-                          trigger="manual">
+                          trigger="click">
                           <div class='capture_choose'>
                             <div v-for="item in form.capture" class="capture_item"  @click="addCupture(item)" v-if="!item.checked">
                               <span  :class="item.icon + ' icon iconfont'" ></span>
                               {{ item.label }}
                             </div>
                           </div>
-                          <div class="button-save" slot="reference" >
-                            <span @click="toggleCaptureChoose">Add Filed</span>
+                          <div style=" line-height: 35px;" slot="reference" >
+                            <span>+</span>
+                            <span >Add Field</span>
                           </div>
                           </el-popover>
                         </div>
-                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;">
-                            <span>颜色</span>
-                            <button class="brand-btns logo" @click="form.customePolicy = !form.customePolicy">{{ form.customePolicy ? 'On' : 'Off' }} ···</button>
+                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;padding-bottom: 6px">
+                            <span>Title</span>
+                            <span style="color: #999">{{ 128 - form.leadTitle.length }} character left</span>
                         </div>
-                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;" v-if="form.customePolicy">
-                            <input  class="form-control" placeholder="请输入协议链接"  v-model="form.customePolicyLink" >
+                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;" >
+                            <textarea class="form-control" placeholder="请输入"  v-model="form.leadTitle" ></textarea>  
                         </div>  
                         <div class="controls-col" >
                             <div>
@@ -365,7 +366,7 @@
                                 <span>Set on page</span>
                             </div>
                             <div>
-                                <input class="form-control"   v-model="form.setOnPage">
+                                <input class="form-control"   v-model="form.leadPageOn">
                             </div>
                         </div>                   
                     </div> 
@@ -501,9 +502,9 @@
       </div>
 
       <!-- capture输入层 -->
-      <div class="active-password" v-if="(form.captureEnable && currentCollapse == 'capture') || (form.captureEnable && isMobile)">
+      <div class="active-password" v-if="(form.captureEnable && currentCollapse == 'capture') || (form.captureEnable && isMobile)" style="background-color: rgba(0,0,0,.5)">
         <div class="content" style="max-width: 300px">
-          <p style="color: #FFF;margin:20px 0;">XXXXXXXXXXXXX</p>
+          <p style="color: #FFF;margin:20px 0;">{{ form.leadTitle }}</p>
           <div>
              <el-input  :placeholder="item.label" v-model="item.value" v-for="item in form.capture" v-if="item.checked" style="margin-bottom: 10px">
           </div>
@@ -955,8 +956,12 @@ var app = new Vue({
       skin: 'gray',
       customePolicyLink: '',
       AllowToSkip: false,
-      setOnPage: '1',
-      customePolicy: false,
+      leadTitle: '',
+      leadEnable: false,
+      leadSkippble: false,
+      leadPageOn: 1,
+ 
+
       capture: [
         {id:0, icon: 'iconEMAIL', label: 'your eamil', value: '', checked: true, needInput: true},
         {id:1, icon: 'icondizhi', label: '国家/地区', value: '', checked: true, needInput: true},
