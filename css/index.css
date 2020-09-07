@@ -1165,7 +1165,12 @@ body {
     border: 1px solid #EBEEF5;
     line-height: 20px;
 }
+.button-add-field {
 
+}
+.button-add-field>span {
+    display: block;
+}
 .color-picker-item {
     width: 40px;
     height: 40px;
@@ -1208,7 +1213,14 @@ body {
     line-height: 40px; 
     text-align: center; 
     border-bottom: 1px solid #EFEFEF;
+    display: flex
  }
 .capture_choose .capture_item:last-child{
     border-bottom: none;
+}
+.capture_choose .capture_item span {
+    display: inline-block;
+}
+.red-border {
+    border: 2px solid red!important
 }

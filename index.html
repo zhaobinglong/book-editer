@@ -12,7 +12,7 @@
     <script type="text/javascript" src="./js/jquery.min.js"></script>
 
     <!-- 加载icon上的字体图标 -->
-    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1876940_2uvgkvhmmp.css">
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1876940_2uvgkvhmmp.css">
 
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <link rel="stylesheet" type="text/css" href="./css/switch.css">
@@ -56,9 +56,11 @@
     
     <!-- 拖拽插件 -->
     <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
-    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
     <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 
 <body >
@@ -73,6 +75,8 @@
 
 <!-- 隐藏的book页数 -->
 <input type="hidden" value="100" id="bookPageNum">
+
+<input type="hidden" id="pages" value="200" />
 
 <!-- 隐藏的分享链接 -->
 <input type="hidden" value="http://jindo.dev.naver.com/collie" id="shareLink">
@@ -313,31 +317,32 @@
                             <span>Enable</span>
                         </div>
                         <div>
-                            <input class="switch switch-anim" type="checkbox"  v-model="form.captureEnable">
+                            <input class="switch switch-anim" type="checkbox"  v-model="form.leadEnable">
                         </div>
                     </div>
-                    <div v-if="form.captureEnable" :class="form.captureEnable ? 'bottom-line':''">
-                        <draggable v-model="form.capture"  @start="drag=true" @end="drag=false">
-                            <div class="form-group" v-for="(item, index) in form.capture" :key="index" :key="element.id" v-if="item.checked">
+                    <div v-if="form.leadEnable" :class="form.leadEnable ? 'bottom-line':''">
+                        <draggable v-model="capture" @change="draggableChange"  @start="drag=true" @end="drag=false" >
+                            <div class="form-group" v-for="(item, index) in capture" :key="item.id"  v-if="form[item.key + 'Enable']">
                               <div style="display: flex; align-items: center;">
-                                <span class="icon iconfont icontuozhuai" ></span>
-                                <input  class="form-control" :placeholder="item.label"  v-model="form[item.value]" >
-                                <span class="icon iconfont iconxuehua" style="padding: 0 4px; color: rgb(68, 147, 177)" v-if="item.needInput" @click="needInputCapture(item.id)"></span>
-                                <span class="icon iconfont iconxuehua" v-if="!item.needInput" style="padding: 0 4px; color: #999" @click="needInputCapture(item.id)"></span>
-                                <span class="icon iconfont iconlajitong" @click="delCapture(item)"></span>
+                                <span class="icon iconfont icontuozhuai " style="cursor: pointer;" ></span>
+                                <input  class="form-control" :placeholder="item.label || form.leadCustomFeild" >
+                                <span class="icon iconfont iconxuehua" style="padding: 0 4px; color: rgb(68, 147, 177)" v-if="form[item.key + 'Require']" @click="form[item.key + 'Require'] = !form[item.key + 'Require']"></span>
+                                <span class="icon iconfont iconxuehua" v-if="!form[item.key + 'Require']" style="padding: 0 4px; color: #999" @click="form[item.key + 'Require'] = !form[item.key + 'Require']"></span>
+                                <span class="icon iconfont iconlajitong" @click="form[item.key + 'Enable'] = false"></span>
                               </div>
                             </div>
                         </draggable>
-                        <div style="text-align: center; border: 1px dashed #4493b1; color: #4493b1;">
+                        <div style="text-align: center; border: 1px dashed #4493b1; color: #4493b1;" class="button-add-field" >
                           <el-popover
-                          placement="bottom"
+                          ref="capture_choose_popover"
+                          placement="top"
                           width="250"
-                          v-model="visibleCaptureChoose"
                           trigger="click">
-                          <div class='capture_choose'>
-                            <div v-for="item in form.capture" class="capture_item"  @click="addCupture(item)" v-if="!item.checked">
-                              <span  :class="item.icon + ' icon iconfont'" ></span>
-                              {{ item.label }}
+                          <div class='capture_choose' @click="$refs.capture_choose_popover.doClose()">
+                            <div v-for="item in capture" class="capture_item"  @click="addCupture(item)" v-if="!form[item.key + 'Enable']" >
+
+                              <span  :class="item.icon + ' icon iconfont'" style="width: 30%; text-align: right; padding-right: 8px"></span>
+                              <span style="text-align: left; flex-grow: 1">{{ item.label }}</span>
                             </div>
                           </div>
                           <div style=" line-height: 35px;" slot="reference" >
@@ -346,19 +351,19 @@
                           </div>
                           </el-popover>
                         </div>
-                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;padding-bottom: 6px">
+                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;">
                             <span>Title</span>
                             <span style="color: #999">{{ 128 - form.leadTitle.length }} character left</span>
                         </div>
-                        <div style="height: 40px; display: flex; align-items: center; justify-content: space-between;" >
-                            <textarea class="form-control" placeholder="请输入"  v-model="form.leadTitle" ></textarea>  
-                        </div>  
+
+                        <textarea type="text" class="form-control" placeholder="Enter email to read this ebook"  v-model="form.leadTitle" maxlength=128 rows="3"></textarea>
+
                         <div class="controls-col" >
                             <div>
                                 <span>Allow to skip</span>
                             </div>
                             <div>
-                                <input class="switch switch-anim" type="checkbox"  v-model="form.AllowToSkip">
+                                <input class="switch switch-anim" type="checkbox"  v-model="form.leadSkippble">
                             </div>
                         </div>  
                         <div class="controls-col" >
@@ -366,7 +371,7 @@
                                 <span>Set on page</span>
                             </div>
                             <div>
-                                <input class="form-control"   v-model="form.leadPageOn">
+                                <input class="form-control"  v-model="form.leadPageOn" @keyup="checkPageNumber">
                             </div>
                         </div>                   
                     </div> 
@@ -492,7 +497,7 @@
       <div class="active-password" v-if="(form.passwordEnable && currentCollapse == '密码') || (form.passwordEnable && isMobile)">
         <div class="content">
           <p style="color: #FFF;margin:20px 0;">{{ form.title }}</p>
-          <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;">
+          <!-- <img src="https://book-upload-1251142715.cos.ap-shanghai.myqcloud.com/113425e3-35fc-4ebc-a399-927d32683391/1.jpg" style="width: 200px; height: auto;"> -->
           <p style="color: #FFF;margin:20px 0;">该文档为非公开文档，请输入密码打开</p>
           <div style="display: flex;position: relative;">
               <input type="password" placeholder="" v-model="inputPassword">
@@ -501,22 +506,27 @@
         </div>
       </div>
 
+
+
       <!-- capture输入层 -->
-      <div class="active-password" v-if="(form.captureEnable && currentCollapse == 'capture') || (form.captureEnable && isMobile)" style="background-color: rgba(0,0,0,.5)">
-        <div class="content" style="max-width: 300px">
-          <p style="color: #FFF;margin:20px 0;">{{ form.leadTitle }}</p>
-          <div>
-             <el-input  :placeholder="item.label" v-model="item.value" v-for="item in form.capture" v-if="item.checked" style="margin-bottom: 10px">
+      <div class="active-password" v-if="(form.leadEnable && currentCollapse == 'capture') || (form.leadEnable && isMobile)" style="background-color: rgba(0,0,0,.5)">
+        <div class="content" style="width: 50%">
+          <p style="color: #FFF;margin:20px 0; word-break: break-all;">{{ form.leadTitle }}</p>
+          <div v-for="item in capture" :key="item.id" style="width: 100%">
+             <el-input  :placeholder="item.label " v-if="form[item.key + 'Enable']" v-model="item.value" style="margin-bottom: 20px; width: 100%" maxlength=128 :class="item.error ? 'red-border': ''">
           </div>
           <p style="color: #FFF; font-size: 12px; line-height: 50px">通过单击提交，你同意<a :href="form.customePolicyLink" style="color: rgb(68, 147, 177)">隐私协议</a></p>
             <div>
-               <div class="button-save"  @click="captureSubmit" >提交</div>
-               <span style="padding-left: 20px; color: #FFF" v-if="form.AllowToSkip" @click="toSkip">跳过></span>
+               <div class="button-save"  @click="captureSubmit(false)" >提交</div>
+               <span style="padding-left: 20px; color: #FFF; cursor: pointer;" v-if="form.leadSkippble" @click="captureSubmit(true)">跳过></span>
             </div>
         </div>
       </div>
 
     </div>
+
+
+
 
     <!-- skin皮肤选择器 -->
     <el-dialog title="选择皮肤" :visible.sync="dialogSkin" width="400px" :show-close="false">
@@ -844,6 +854,7 @@
 var app = new Vue({
   el: '#app',
   data: {
+    drag: false, // 开始拖拽
     currentPages: [], // 页码数组
     userCloseNavigation: false,
     searchListMoreBtnText: '',
@@ -889,6 +900,16 @@ var app = new Vue({
       {label:'colorBackground', name: '背景颜色'},
       {label:'colorLink', name: '链接颜色'},
     ],
+
+     // 第5个接口参数改为下面这个....@FormParam("userId") long userId ,@FormParam("bookId") long bookId ,  @FormParam("skipped") boolean skipped,@FormParam("name") String name,@FormParam("company") String company,@FormParam("tel") String tel,@FormParam("email") String email,@FormParam("custom") String custom)
+    capture: [
+      {id:0, key:'leadEmail', name: 'email', require: 'leadEmailRequire',icon: 'iconEMAIL', label: 'your eamil', value: '', checked: true, needInput: true, error: false},
+      {id:1, key: 'leadCompany', name: 'company', require: 'leadCompanyRequire', icon: 'icongongsi', label: '公司名称', value: '', checked: true, needInput: true,error: false},
+      {id:2, key: 'leadName', name: 'name', require: 'leadNameRequire', icon: 'iconwo', label: 'name', value: '', checked: false, needInput: false,error: false},
+      {id:3, key: 'leadTel', name: 'tel',require: 'leadTelRequire', icon: 'icondianhua', label: 'phone number', value: '', checked: false, needInput: false,error: false},
+      {id:4, key: 'leadCustom', name: 'custom', require: 'leadCustomRequire', icon: 'iconedit', label: 'custom', value: '', checked: false, needInput: false, type: 'custome',error: false},
+    ],
+
     showMenu: true,
     fileList: [],
     searchKey: '',
@@ -943,7 +964,6 @@ var app = new Vue({
       chat: '',
       contactTel: '',
       contactEnable: false,
-      captureEnable: true,
       emailEnable: false,
       emailWelcome: "1",
       emailPort: 1,
@@ -954,22 +974,34 @@ var app = new Vue({
       password: '',
       passwordEnable: false,
       skin: 'gray',
-      customePolicyLink: '',
-      AllowToSkip: false,
+
+      leadSkippble: false,
       leadTitle: '',
-      leadEnable: false,
+      leadEnable: true,
       leadSkippble: false,
       leadPageOn: 1,
- 
 
-      capture: [
-        {id:0, icon: 'iconEMAIL', label: 'your eamil', value: '', checked: true, needInput: true},
-        {id:1, icon: 'icondizhi', label: '国家/地区', value: '', checked: true, needInput: true},
-        {id:2, icon: 'icongongsi', label: '公司名称', value: '', checked: true, needInput: true},
-        {id:3, icon: 'iconwo', label: 'name', value: '', checked: false, needInput: false},
-        {id:4, icon: 'icondianhua', label: 'phone number', value: '', checked: false, needInput: false},
-        {id:5, icon: 'iconedit', label: 'custome', value: '', checked: false, needInput: false, type: 'custome'},
-      ],
+
+      leadEmailSort: 0,
+      leadEmailEnable: true,
+      leadEmailRequire: true,
+
+      leadCompanySort: 1,
+      leadCompanyEnable: true,
+      leadCompanyRequire: false,
+
+      leadNameSort: 2,
+      leadNameEnable: true,
+      leadNameRequire: false,
+
+      leadTelSort: 3,
+      leadTelEnable: false,
+      leadTelRequire: false,
+
+      leadCustomSort: 4,
+      leadCustomRequire: false,
+      leadCustomEnable: false,
+      leadCustomFeild: '',
     },
     background: {
       url:'',
@@ -1157,6 +1189,7 @@ var app = new Vue({
       },
   },  
   mounted() {   
+
      this.bookPageNum = document.getElementById('bookPageNum').value
      this.form.bookId = document.getElementById('bookId').value
      let data = {bookId:  this.form.bookId }
@@ -1193,6 +1226,11 @@ var app = new Vue({
      this.getCatalog()
 
      console.log('start')
+     
+     // 读取cookie中的capture
+    if(JSON.parse($.cookie('capture'))){
+      this.capture = JSON.parse($.cookie('capture'))
+    }
   },
 
   methods: {
@@ -2043,54 +2081,88 @@ var app = new Vue({
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(({ value }) => {
-          this.form.capture = this.form.capture.map(i => {
-            if (i.type && i.type == 'custome') {
+          this.form.leadCustomFeild = value
+          if(value.length > 128) {
+            this.$message({
+              type: 'warning',
+              message: '输入的字符长度不能超过128'
+            }); 
+            return false
+          }
+          this.form.leadCustomEnable = true
+          this.capture = this.capture.map(i => {
+            if (i.id == item.id) {
               i.label = value
-              i.checked = true
             }
             return i
           })
         }).catch(() => {     
         });
       } else {
-        this.form.capture = this.form.capture.map(i => {
-          if (i.id == item.id) {
-            i.checked = true
-          }
-          return i
-        })
+        this.form[item.key + 'Enable'] = true
       }
       this.visibleCaptureChoose = false
     },
-    delCapture(item) {
-      this.form.capture = this.form.capture.map(i => {
-        if (i.id == item.id) {
-          i.checked = false
+
+    // 点击提交，校验数据长度
+    captureSubmit(skip) {
+      $.cookie('capture',  JSON.stringify(this.capture));
+      for (var i = 0; i < this.capture.length; i++) {
+        if (this.form[this.capture[i].key + 'Require'] && !this.capture[i].value) {
+          this.capture[i].error = true
+        } else {
+          this.capture[i].error = false
         }
-        if (i.type == 'custome') {
-          i.label = 'custome'
-        }
-        return i
-      })      
-    },
-    needInputCapture(id) {
-      this.form.capture = this.form.capture.map(item => {
-        if (id == item.id) {
-          item.needInput = !item.needInput
-        }
+      }
+
+      // 有错误就不要提交
+      var is_error = this.capture.some(item => item.error)
+      if (is_error) {
+        return false
+      }
+
+      // 准备要提交的数据
+      let data = {
+        bookId:  document.getElementById('bookId').value,
+        userId: document.getElementById('userId').value,
+        skipped: skip
+      }
+      this.capture = this.capture.map(item => {
+        data[item.name] = item.value
+        item.error = false
         return item
-      })       
+      })
+
+
+      // 编辑模式下把下面的代码删除
+      axios.post('http://book.baige.me/api/postLead', Qs.stringify(data)).then(res => {
+        console.log(res)
+        if (res) {
+          this.form.leadEnable = false
+        }
+      })
     },
-    toggleCaptureChoose() {
-      this.visibleCaptureChoose = this.form.capture.some(item => !item.checked)
+
+    // 开始拖拽
+    draggableChange() {
+      for (var i = 0; i < this.capture.length; i++) {
+        let name = this.capture[i].key + 'Sort'
+        this.form[name] = i
+      }
     }, 
-    captureSubmit() {
-      console.log(this.form.capture)
-      alert(this.form.capture)
+
+    // 检查page size
+    checkPageNumber() {
+      console.log(this.form.leadPageOn)
+      this.form.leadPageOn = this.form.leadPageOn.replace(/[^0-9]/g,'')
+      var page = document.getElementById('pages').value 
+      if (parseInt(this.form.leadPageOn) > parseInt(page)) {
+        this.$message({
+          type: 'warning',
+          message: '输入的页码不能大于' + page
+        });    
+      }
     },
-    toSkip() {
-      alert('ckick skip')
-    }
   }
 })
 </script>
